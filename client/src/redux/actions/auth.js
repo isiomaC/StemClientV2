@@ -13,6 +13,7 @@ import {
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
+const apiUrl ="https://inphinityapi.herokuapp.com/api"
 
 export  const loadUser = () => dispatch =>
     new Promise( async (resolve, reject) => {
@@ -21,7 +22,7 @@ export  const loadUser = () => dispatch =>
         }
         
         try{
-            const res = await axios.get('/api/auth')
+            const res = await axios.get(`${apiUrl}/auth`)
             dispatch({
                 type: USER_LOADED,
                 payload: res.data
@@ -54,7 +55,7 @@ export const login = (formData) => async dispatch => {
     }
 
     try{
-        const res = await axios.post('/api/auth', formData, config)
+        const res = await axios.post(`${apiUrl}/auth`, formData, config)
         dispatch({
             type: LOGIN_SUCCESS, 
             payload: res.data
@@ -87,7 +88,7 @@ export const register = (formData)=> async dispatch => {
 
     try{
 
-        const res =  await axios.post('/api/users', formData, config)
+        const res =  await axios.post(`${apiUrl}/users`, formData, config)
 
         dispatch({
             type: REGISTER_SUCCESS, 

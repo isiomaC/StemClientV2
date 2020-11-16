@@ -11,12 +11,14 @@ import {
 import axios from 'axios'
 
 //import { uuid } from 'uuid';
+const apiUrl ="https://inphinityapi.herokuapp.com/api"
+
 
 export const addToCart = (product_idx, quantity, image, name, price, benefits, maxVal, category_id) => async dispatch => {
 
     try{
        
-        const res = await axios.get(`/api/categories/${category_id}`);
+        const res = await axios.get(`${apiUrl}/categories/${category_id}`);
 
         let category = res.data.name
 

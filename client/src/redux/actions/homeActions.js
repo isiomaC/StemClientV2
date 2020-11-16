@@ -19,6 +19,7 @@ import {
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
+const apiUrl ="https://inphinityapi.herokuapp.com/api"
 
 export const getProducts = () => async dispatch => {
     // if(localStorage.token){
@@ -32,7 +33,7 @@ export const getProducts = () => async dispatch => {
             payload: true
         })
         
-        const res = await axios.get('/api/products')
+        const res = await axios.get(`${apiUrl}/products`)
         // console.log(res.data)
 
         dispatch({
@@ -69,7 +70,7 @@ export const searchProducts = (text) => async dispatch => {
             payload: true
         })
     
-        let res = await axios.get(`/api/products?filter={"q":${JSON.stringify(text)}}&range=[0,19]&sort=["date","ASC"]`)
+        let res = await axios.get(`${apiUrl}/products?filter={"q":${JSON.stringify(text)}}&range=[0,19]&sort=["date","ASC"]`)
         // console.log(res.data)
 
         dispatch({
@@ -106,7 +107,7 @@ export const getProductByPrice = (price) => async dispatch => {
             payload: true
         })
 
-        let res = await axios.get(`/api/products?filter={"price": ${JSON.stringify(price)}}&range=[0,19]&sort=["date","ASC"]`)
+        let res = await axios.get(`${apiUrl}/products?filter={"price": ${JSON.stringify(price)}}&range=[0,19]&sort=["date","ASC"]`)
 
         dispatch({
             type: SET_LOADING,
@@ -142,7 +143,7 @@ export const getByCategory = (name) => async dispatch => {
             payload: true
         })
 
-        const res = await axios.get(`/api/products?filter={"category_name": ${JSON.stringify(name)}}`)
+        const res = await axios.get(`${apiUrl}/products?filter={"category_name": ${JSON.stringify(name)}}`)
 
         dispatch({
             type: SET_LOADING,
@@ -178,7 +179,7 @@ export const getNewProducts = () => async dispatch => {
             payload: true
         })
 
-        const res = await axios.get(`/api/products?filter={"new": "date"}`)
+        const res = await axios.get(`${apiUrl}/products?filter={"new": "date"}`)
 
         dispatch({
             type: SET_LOADING,
@@ -209,7 +210,7 @@ export const getNewProducts = () => async dispatch => {
 export const getHighestPrice =() => async dispatch => {
     try{
 
-        const res = await axios.get(`/api/products?filter={"getHighest":"price"}`)
+        const res = await axios.get(`${apiUrl}/products?filter={"getHighest":"price"}`)
 
         dispatch({
             type: GET_HIGHEST_PRICE,
@@ -242,7 +243,7 @@ export const getFeaturedProducts = () =>  async dispatch => {
         })
 
         //?filter={"featured":"date"}
-        const res = await axios.get('/api/products')
+        const res = await axios.get(`${apiUrl}/products`)
 
         dispatch({
             type: SET_LOADING,
@@ -281,7 +282,7 @@ export const getReviews = () => async dispatch => {
             payload: true
         })
 
-        const res = await axios.get('/api/reviews')
+        const res = await axios.get(`${apiUrl}/reviews`)
 
         dispatch({
             type: SET_LOADING,
@@ -320,7 +321,7 @@ export const getExtras = () => async dispatch => {
             payload: true
         })
 
-        const res = await axios.get('/api/extra')
+        const res = await axios.get(`${apiUrl}/extra`)
 
         dispatch({
             type: SET_LOADING,

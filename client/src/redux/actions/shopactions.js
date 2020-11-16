@@ -7,6 +7,9 @@ import axios from 'axios'
 
 //import { uuid } from 'uuid';
 
+const apiUrl ="https://inphinityapi.herokuapp.com/api"
+
+
 export const getProduct = (idx) => async dispatch => {
 
     try{
@@ -16,7 +19,7 @@ export const getProduct = (idx) => async dispatch => {
             payload: true
         })
 
-        const res = await axios.get(`/api/products/${idx}`)
+        const res = await axios.get(`${apiUrl}/products/${idx}`)
         // console.log("[SHOPACTIONS]", res.data)
 
         dispatch({
