@@ -1,0 +1,58 @@
+export const SET_ALERT = 'SET_ALERT';
+export const REMOVE_ALERT = 'REMOVE_ALERT';
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+export const REGISTER_FAIL = 'REGISTER_FAIL';
+export const USER_LOADED = 'USER_LOADED';
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAIL = 'LOGIN_FAIL';
+export const LOG_OUT = 'LOG_OUT';
+export const GET_PRODUCT = 'GET_PRODUCT';
+export const GET_PRODUCTS = 'GET_PRODUCTS';
+export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
+export const DELETE_PRODUCT = 'DELETE_PRODUCT';
+export const PRODUCT_ERROR = 'PRODUCT_ERROR';
+export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
+export const GET_BLOG = 'GET_BLOG';
+export const GET_BLOGS = 'GET_BLOGS';
+export const BLOG_ERROR = 'BLOG_ERROR';
+export const UPDATE_BLOG = 'UPDATE_BLOG';
+export const DELETE_BLOG= 'DELETE_BLOG';
+export const ADD_CATEGORY = 'ADD_CATEGORY';
+export const DELETE_CATEGORY = 'DELETE_CATEGORY';
+export const CLEAR_USER = 'CLEAR_USER';
+
+//LANDING PAGE ACTIONS
+export const GET_EXTRAS = 'GET_EXTRAS';
+export const GET_REVIEWS = 'GET_REVIEWS';
+export const GET_FEATURED_PRODUCTS = 'GET_FEATURED_PRODUCTS'
+export const SET_LOADING = 'SET_LOADING';
+export const EXTRAS_ERROR = 'EXTRAS_ERROR';
+export const REVIEWS_ERROR = 'REVIEWS_ERROR';
+
+//SHOPPING CART ACTIONS
+export const ADD_TO_CART = 'ADD_TO_CART';
+export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
+export const CART_ERROR = 'CART_ERROR';
+export const CLEAR_CART = 'CLEAR_CART'
+export const INCREMENT = 'INCREMENT'
+export const DECREMENT = 'DECREMENT'
+
+
+//FILTER ACTIONS
+export const SEARCH_PRODUCTS = 'SEARCH_PRODUCTS'
+export const GET_PRODUCT_BY_PRICE = 'GET_PRODUCT_BY_PRICE'
+export const GET_HIGHEST_PRICE = 'GET_HIGHEST_PRICE'
+export const GET_PRODUCT_BY_CATEGORY = 'GET_PRODUCT_BY_CATEGORY'
+export const GET_NEW_PRODUCTS = 'GET_NEW_PRODUCTS'
+
+
+//for admin
+export const GET_PURCHASES = 'GET_PURCHASES';
+export const GET_CUSTOMERS = 'GET_CUSTOMERS';
+export const CUSTOMER_ERROR = 'CUSTOMER_ERROR';
+export const DELETE_ACCOUNT = 'DELETE_ACCOUNT';
+export const ADD_PRODUCT = 'ADD_PRODUCT';
+//export const ADMIN_LOGIN = 'ADMIN_LOGIN'
+
+
