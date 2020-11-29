@@ -8,11 +8,8 @@ export const ProductInfoCarousel = (props) => {
     const { images } = props
     return (
         <Carousel width='100%' showArrows={false} infiniteLoop={true} transitionTime={400} autoPlay={true} showStatus={false} dynamicHeight={true} showIndicators={false}  style={{ }} >
-            {images && images.map(img => 
-                <div>
-                    <img src={img} width= '20%' alt='alternate text here'  />
-                    <p className="legend">Quick Buy</p>
-                </div>
+            {images && images.map((img, index) => 
+                    <img src={img} key={index} width= '20%' alt={`Image${index} alt text`}/>
             )}
         </Carousel>
     )
@@ -21,7 +18,5 @@ export const ProductInfoCarousel = (props) => {
 ProductInfoCarousel.propTypes = {
     images: PropTypes.array
 }
-
-
 
 export default ProductInfoCarousel

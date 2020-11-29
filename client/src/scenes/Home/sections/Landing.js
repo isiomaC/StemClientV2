@@ -59,12 +59,12 @@ const Landing = ({ extras }) => {
         const featureddestination = document.querySelector('#featureddestination')
         const innerText = event.target.innerText
 
-        if (innerText === "Featured Products"){
+        // if (innerText === "Featured Products"){
           setTimeout(() => { scrollRef.current.scrollIntoView({
             top: featureddestination.offsetTop,
             left: 0,
             behavior: 'smooth'}) })
-        }
+        // }
       }
 
       const isExtrasEmpty = () => {
@@ -82,7 +82,7 @@ const Landing = ({ extras }) => {
             <Box >
                   <Carousel className={classes.carousel} emulateTouch={true} showArrows={false} showIndicators={true} animation='fade'>
                     {
-                       extras.base64.map((item, i) => <CarouselItem bgImage={item} landingText={extras.landingText} key={i}/>)
+                       extras.map(landing => (landing.base64.map((item, i) => <CarouselItem bgImage={item} landingText={extras.landingText} key={i}/>)))
                     }
                   </Carousel>
 
@@ -90,12 +90,11 @@ const Landing = ({ extras }) => {
                       <div>
                         <Typography variant="h5"> Featured Products </Typography>
                         <div style={{ marginBottom: 0}}>
-                          <KeyboardArrowDownIcon/>
+                          <KeyboardArrowDownIcon />
                         </div>
                         <div style={{ marginTop: -15}}>
-                          <KeyboardArrowDownIcon/>
+                          <KeyboardArrowDownIcon />
                         </div>
-                    
                       </div>
                     </Box>
             </Box>

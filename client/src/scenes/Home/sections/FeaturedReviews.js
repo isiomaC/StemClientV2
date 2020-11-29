@@ -26,9 +26,6 @@ const useStyles = makeStyles(theme => ({
     root:{
         flexGrow:1,
         paddingTop: 30,
-        // display:'inline',
-        // marginTop: 20,
-        // height: "100vh",
         width:'100vw',
     },
     slida: {
@@ -42,8 +39,8 @@ const useStyles = makeStyles(theme => ({
 }));
 const FeaturedReviews = ({ reviews, loading, error }) => {
 
-    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
-    const isBig = useMediaQuery(theme => theme.breakpoints.up('md'));
+    const isSmall = useMediaQuery(theme => theme.breakpoints.down('xs'));
+    const isBig = useMediaQuery(theme => theme.breakpoints.up('sm'));
 
     const classes = useStyles();
     const data = [6];
@@ -52,23 +49,24 @@ const FeaturedReviews = ({ reviews, loading, error }) => {
 
     return (
         <div className = {classes.root}>
-            <Grid container justify="center" alignItems="center" style={{ }} spacing={0} >
+            <Grid container justify="center" alignItems="center" style={{ }} spacing={24} >
                 {isSmall && (
                     // data.map(d => 
                     <Grid style={{ display: 'flex', alignItems:'center', justifyContent: 'center'}} container>
                         {reviews.map(review => (
-                            <Grid style={{ marginBottom: '20px' }} item  >
+                            <Grid style={{ margin: '20px' }} item  >
                                  <Review review={review}/>
                             </Grid>
                         ))}
                     </Grid>
                     )}
+
                 {isBig && ( 
                     <CarouselProvider
                         naturalSlideWidth={20}
                         naturalSlideHeight={20}
                         totalSlides={3}
-                        style={{ height: '40vh'}}
+                        // style={{ height: '40vh'}} 
                         isPlaying={true}
                         playDirection="forward"
                         currentSlide={0}
@@ -77,15 +75,10 @@ const FeaturedReviews = ({ reviews, loading, error }) => {
 
                         {
                         reviews.map((review, index) => {
-                            // if (index % 2 == 0){
-                            //     return;
-                            // }
-
                             if (index >= reviews.length){
                                 return (<Spinner/>);
                             }
                             slideIndex++
-                            // console.log(reviews)
                             return (
                                 <Slide index={slideIndex} className={classes.slid}>
                                     <div style={{ display:'flex', justifyContent:'center'}}>

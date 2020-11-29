@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router'
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -36,7 +37,7 @@ const useStyles = makeStyles(theme=> ({
         height: "100%",
         '&:hover': {
             color: 'rgba(255, 255, 255, 0.1)'  
-          },
+        },
     },
     cardContent : {
         display: "flex",
@@ -49,10 +50,13 @@ const useStyles = makeStyles(theme=> ({
 
 const ProductCard = (props) => {
     const classes = useStyles()
+    const { push } = useHistory()
+
+    // console.log(props)
 
     return (
         <Card elevation={0} className={classes.card}>
-            <CardActionArea>
+            <CardActionArea onClick={() => push(`/product/${props.idx}`)} >
                 <CardMedia component="div" 
                         alt="Preview Image"
                         title={props.title}
@@ -88,7 +92,8 @@ ProductCard.prototypes={
     image: PropTypes.any.isRequired,
     description: PropTypes.string,
     price: PropTypes.string,
-    variant: PropTypes.string
+    variant: PropTypes.string,
+    idx: PropTypes.number
 }
 
 export default ProductCard

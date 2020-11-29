@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { useStripe } from "@stripe/react-stripe-js";
 import axios from 'axios'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
-import TextField from '@material-ui/core/TextField'
-import Box from '@material-ui/core/Box'
-import Divider from '@material-ui/core/Divider'
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
 import { clearCart } from '../../../redux/actions/shoppingcart'
-import { useMediaQuery } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button } from "@material-ui/core";
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import QuantityStepper from './QuantityStepper'
-
-import getOrderTotal from '../../../utils/getOrderTotal'
-import approximatePrice from '../../../utils/approximatePrice'
 
 //Contents
-import SimilarProduct from './SimilarProduct'
-import ProductDisplay from './ProductDisplay'
+import ValidateEmail  from "../utils/ValidateEmail";
+
+//Steps
+import ViewCartStep  from "../steps/ViewCartStep";
+import ShippingStep from '../steps/ShippingStep';
+import ReviewDetailsStep from '../steps/ReviewDetailsStep'
+
+import { Container } from "@material-ui/core";
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepButton from '@material-ui/core/StepButton';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+
+import infinity from '../../../img/InFiniC.png'
+import bgLogo from '../../../img/Logo.png'
+
 
 const useStyles = makeStyles(theme => ({
     item: {
         display: 'flex',
-        // height: "100px"
     }, 
     divider: {
         marginLeft: '20px',
@@ -35,47 +38,31 @@ const useStyles = makeStyles(theme => ({
             marginBottom: '10px',
         }
     },
-    checkoutBtn: {
-        background: 'rgba(9, 0, 59, 0.9)',
-        color: 'white',
-        '&:hover': {
-            background: "rgba(9, 0, 59, 0.9)",
-            color: 'red'
-         },
+    instructions:{
+
     },
-    continueShopping: {
-        textDecoration: 'none',
-        color: 'black',
-        '&:hover': {
-            color: 'rgba(9, 0, 59, 0.9)'
-        }
+    stepper: {
+        background: 'transparent',
+        // color: 'rgb(0,255,0)'
+    }, 
+    icon: {
+        background: 'red'
     }
 }))
-
-const ValidateEmail = (mail) => {
- if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
-  {
-    return (true)
-  }
-    alert("You have entered an invalid email address!")
-    return (false)
-}
 
 const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
 
     const classes = useStyles();
     const [message, setMessage] = useState("");
-    const [guest, setGuest] = useState({email: ""});
     const [error, setError] = useState(false)
     const stripe = useStripe();
 
-    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
-    const isBig = useMediaQuery(theme => theme.breakpoints.up('md'));
+    const apiUrl ="https://inphinityapi.herokuapp.com/api"
+    const localHost ="http://localhost:5000/api"
 
     const [similarProducts, setSimilarProducts] = useState([])
 
     useEffect(() => {
-
         // Check to see if this is a redirect back from Checkout
         const query = new URLSearchParams(window.location.search);
         console.log('[QUERY_LOCATION]', window.location.query)
@@ -88,20 +75,20 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
         }
         if (query.get("canceled")) {
             setMessage(
-            "Order canceled -- continue to shop around and checkout when you're ready."
+                "Order canceled -- continue to shop around and checkout when you're ready."
             );
         }
 
         const getRelatedProducts = async () => {
             try{
                 //sample query values = ["Hair", "Accessories","Body"]
+                const categoryNames = shoppingcart.items.map(item => item.category)
+                const excludeIds = shoppingcart.items.map(item => item.product_idx)
+
                 let uniq = a => [...new Set(a)];
-                const categoryNames = shoppingcart.map(item => item.category)
-                const excludeIds = shoppingcart.map(item => item.product_idx)
-                console.log("[EXCLUDE IDS]", excludeIds)
                 let query = uniq(categoryNames)
-                const res = await axios.get(`/api/products?filter={"category_names": ${JSON.stringify(query)}, "excludeIds": ${JSON.stringify(excludeIds)}}`)
-            
+
+                const res = await axios.get(`${localHost}/products?filter={"category_names": ${JSON.stringify(query)}, "excludeIds": ${JSON.stringify(excludeIds)}}`)
                 if (res.data){
                     setSimilarProducts(similarProducts => [...res.data])
                 }
@@ -109,11 +96,9 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
                 console.log(e.message)
             }
         }
-
         (async () =>
             await getRelatedProducts()
         )()
-
     }, []);
 
     const Message = ({ message }) => (
@@ -124,13 +109,11 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
 
     const handleChange = (e) => {
         setError(false)
-        setGuest({ ...guest, 
-            [e.target.name]: e.target.value 
-        })
     }
 
     const handleClick = async (event) => {
-        event.preventDefault()
+        // event.preventDefault()
+        
         const config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -139,25 +122,21 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
 
         try{
             let userEmail
-            const lineitems = shoppingcart.map(cart => ({ 
+            const lineitems = shoppingcart.items.map(cart => ({ 
                     product: cart.product_idx.toString(), 
                     quantity: cart.quantity.toString()
                 })
             )
 
+            console.log(lineitems)
             if (isAuthenticated && user) {
                 userEmail = user.email
             }else{
-                if (guest.email === ''){
+                if (ValidateEmail(shoppingcart.shippingAddress.email) === false){
                     setError(true)
                     return
                 }else{
-                    if (ValidateEmail(guest.email) === false){
-                        setError(true)
-                        return
-                    }else{
-                        userEmail = guest.email
-                    }
+                    userEmail = shoppingcart.shippingAddress.email
                 }
             }
 
@@ -165,15 +144,17 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
                 email: userEmail,
                 items: lineitems
             }
-    
+
+             console.log(formData)
             let response
             if (isAuthenticated){
-                response = await axios.post("/api/create-session", formData, config) 
+                response = await axios.post(`${localHost}/create-session`, formData, config) 
             }else{
-                response = await axios.post("/api/create-session/guest", formData, config)
+                response = await axios.post(`${localHost}/create-session/guest`, formData, config)
             }
-    
+
             const session = response.data;
+
             //When the customer clicks on the button, redirect them to Checkout.
             const result = await stripe.redirectToCheckout({
               sessionId: session.id,
@@ -187,79 +168,129 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
             console.log(e)
         }
     };
+
+    // console.log(localStorage.getItem("Curr"))
+    const [activeStep, setActiveStep] = React.useState(0);
+    const [completed, setCompleted] = React.useState({});
+
+    const getSteps =()=> {
+        return ['View Cart', 'Shipping Address', 'Review Details'];
+    }
+    const steps = getSteps();
+
+    const getStepContent = (step) => {
+        switch (step) {
+          case 0:
+            return (<ViewCartStep shoppingcart={shoppingcart}
+                        similarProducts={similarProducts} user={user} 
+                        isAuthenticated={isAuthenticated} 
+                        error={error} 
+                        handleChange ={handleChange}
+                        handleClick={handleClick}/>
+                    );
+          case 1:
+            return (<ShippingStep user={user}/>)
+          case 2:
+            return (
+                <>
+                    <Typography variant="h5">Review Details</Typography>
+                    <ReviewDetailsStep user={user} 
+                        isAuthenticated={isAuthenticated} 
+                        error={error}
+                        handleChange ={handleChange}
+                        handleClick={handleClick}/>
+                </>
+            );
+        }
+    }
+      /////////////////////////////////////////////////////////
+      const totalSteps = () => {
+        return steps.length;
+      };
+    
+      const completedSteps = () => {
+        return Object.keys(completed).length;
+      };
+    
+      const isLastStep = () => {
+        return activeStep === totalSteps() - 1;
+      };
+    
+      const allStepsCompleted = () => {
+        return completedSteps() === totalSteps();
+      };
+    
+      const handleNext = () => {
+        const newActiveStep =
+          isLastStep() && !allStepsCompleted()
+            ? // It's the last step, but not all steps have been completed,
+              // find the first step that has been completed
+              steps.findIndex((step, i) => !(i in completed))
+            : activeStep + 1;
+        setActiveStep(newActiveStep);
+      };
+    
+      const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+      };
+    
+      const handleStep = (step) => () => {
+        setActiveStep(step);
+      };
+    
+      const handleComplete = () => {
+        const newCompleted = completed;
+        newCompleted[activeStep] = true;
+
+        //save address to db
+        setCompleted(newCompleted);
+        
+        handleNext();
+      };
+      /////////////////////////////////////////////////////////
     
     return message ? (
         <Message message={message} />
-    ) : (
-        <>
-            { isBig && ( 
-                <Grid container >
-                    <Grid item xs={8}>
-
-                        {shoppingcart!== [] ? shoppingcart.map((item, index) => 
-                            <>
-                                <ProductDisplay key={index} cart={item} />
-                            </>
-                        ) : (<p> Shopping Cart Empty</p>)}
-                        <br/>
-                        <br/>
-                        <br/>
-                        <Box style={{ display: 'flex', justifyContent: 'space-between'}}>
-                            <Link className={classes.continueShopping} to={'/shop'}>
-                                <div style={{ display: 'flex', cursor: 'pointer' }}>
-                                        <ArrowBackIcon/>
-                                        <Typography>Continue Shopping</Typography>
-                                </div>
-                            </Link>
-                            <Typography style={{ marginRight: '10px'}}>Total: {approximatePrice(getOrderTotal(shoppingcart))}</Typography>
+    ) : (<div>
+            <Stepper activeStep={activeStep} className={classes.stepper}>
+                {steps.map((label, index) => (
+                <Step style={{ color: 'blue'}} key={label}>
+                    <StepButton 
+                        onClick={handleStep(index)} 
+                        completed={completed[index]}>
+                        {label}
+                    </StepButton>
+                </Step>
+                ))}
+            </Stepper>
+            <Container>
+                {allStepsCompleted() ? (
+                        <div>
+                            <Typography className={classes.instructions}>
+                                Review cart item and submit to stripe
+                            </Typography>
+                        </div>
+                     ) : ( 
+                        <Box>
+                            {getStepContent(activeStep)}
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+                                <Button variant="contained" color="primary" disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+                                    Back
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleNext}
+                                    className={classes.button}
+                                >
+                                    Next
+                                </Button>
+                            </div>
                         </Box>
-                        <Divider style={{ background: 'black'}}/>
-                    </Grid>
-                    <Grid style={{ background: 'rgba(255,255,255,0.7)'}} item xs={4}>
-                    <Typography variant="body1"> Things you might like...</Typography>
-                        {similarProducts.map(item => (
-
-                            <SimilarProduct name={item.name} description={item.description} size={item.size} price={item.price} image={item.base64}/>
-                        ) )}
-                    </Grid>
-                </Grid>
-            )}
-
-            { isSmall && (
-        
-                    <Grid container style={{marginTop: '20px'}}>
-                        <Grid item xs={12}>
-                            {shoppingcart.map((item, index) => 
-                                <ProductDisplay key={index} cart={item} />
-                            )}
-                            <br/>
-                            <br/>
-                            <br/>
-                            <Divider/>
-                        </Grid>
-                    </Grid>
-                
-            )}
-           
-           <Box style={{ margin: '20px', display: 'flex', justifyContent:'center', alignItems: 'flex-end'}} >
-            {!user && isAuthenticated === false &&
-                    <TextField
-                        error={error && true}
-                        id="outlined-textarea"
-                        label="email"
-                        placeholder="email"
-                        type="email"
-                        name ="email"
-                        style={{ width: '250px'}}
-                        value={guest.email}
-                        onChange={e => handleChange(e)}
-                        helperText={error && "Please Input a Valid Email"}
-                />}
-                <Button className={classes.checkoutBtn} onClick={handleClick}>
-                    Checkout
-                </Button>
-            </Box>
-        </>
+                    )
+                }
+            </Container>
+        </div>
     );
 }
 
@@ -278,3 +309,6 @@ const mapStateToProps = state => ({
 
 
 export default connect(mapStateToProps, {clearCart})(PreBuiltCheckOut);
+
+
+

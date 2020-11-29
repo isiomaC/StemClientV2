@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router'
 import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
 import { makeStyles } from '@material-ui/core/styles'
@@ -13,6 +14,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent:'space-between',
         margin: '15px',
         background:'transparent',
+        cursor: 'pointer'
     },
     details: {
         display: 'flex',
@@ -25,31 +27,32 @@ const useStyles = makeStyles(theme => ({
     cover: {
         width: 151,
     }
-
 }))
 
 
-const SimilarProduct = ({name, description, size, price, image }) => {
+const SimilarProduct = ({id, name, description, size, price, image }) => {
 
     const classes = useStyles()
 
+    const { push } = useHistory()
+    
     React.useEffect(() => {
 
     }, [])
 
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} onClick={() => push(`/product/${id}`)}>
             <div className={classes.details}>
                 <CardContent className={classes.content}>
                     <Typography component="Body1" variant="Body1">
                         {name}
                     </Typography>
                     <Typography variant="subtitle1" color="textSecondary">
-                        {description}
+                        {description.split(/\<.*?\>/g)}
                     </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
+                    {/* <Typography variant="subtitle1" color="textSecondary">
                         {size}
-                    </Typography>
+                    </Typography> */}
                     <Typography variant="subtitle1" color="textSecondary">
                         €{approximatePrice(price)} 
                     </Typography>
@@ -65,6 +68,7 @@ const SimilarProduct = ({name, description, size, price, image }) => {
 
 
 SimilarProduct.propTypes = {
+    id: PropTypes.number,
     name: PropTypes.string,
     description: PropTypes.string,
     size: PropTypes.string,

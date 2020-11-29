@@ -15,6 +15,8 @@ import ValueLabelComponent from './ValueLabelComponent'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
+import approximatePrice from '../../../utils/approximatePrice'
+
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core';
@@ -62,6 +64,11 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+
+const valueLabelFormat = (value) => {
+  const newValue = approximatePrice(value)
+  return `€${newValue}`;
+}
 
 const Filters = (props) => {
 
@@ -192,15 +199,15 @@ const Filters = (props) => {
                     
                     <Slider 
                          defaultValue={price}
-                        //  getAriaValueText={handlePriceChange}
+                         getAriaValueText={valueLabelFormat}
+                         aria-labelledby="non-linear-slider"
                          aria-label="custom thumb label"
                          valueLabelDisplay="auto"
-                        ValueLabelComponent={ValueLabelComponent}
-                         step={0.50}
-                        //  marks
-                         min={0.99}
+                         valueLabelFormat={valueLabelFormat}
+                         step={500}
+                         min={100}
                          onChange={handlePriceChange }
-                         style={{ color: 'gray'}}
+                         style={{ color: 'rgba(190,0,0,0.7)'}}
                          max={max + 2000}/>
 
                 </AccordionDetails>

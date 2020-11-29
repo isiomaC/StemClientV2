@@ -19,7 +19,8 @@ import {
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
-const apiUrl ="https://inphinityapi.herokuapp.com/api"
+// const apiUrl ="https://inphinityapi.herokuapp.com/api"
+const apiUrl ="http://localhost:5000/api"
 
 export const getProducts = () => async dispatch => {
     // if(localStorage.token){
@@ -243,7 +244,7 @@ export const getFeaturedProducts = () =>  async dispatch => {
         })
 
         //?filter={"featured":"date"}
-        const res = await axios.get(`${apiUrl}/products`)
+        const res = await axios.get(`${apiUrl}/products?filter={"featured":"abc"}`)
 
         dispatch({
             type: SET_LOADING,
@@ -252,7 +253,7 @@ export const getFeaturedProducts = () =>  async dispatch => {
 
         dispatch({
             type: GET_FEATURED_PRODUCTS,
-            payload: res.data.slice(0, 6)
+            payload: res.data
         })
 
     }catch(err){
@@ -261,6 +262,7 @@ export const getFeaturedProducts = () =>  async dispatch => {
             payload: false
         })
 
+        
         dispatch({
             type: PRODUCT_ERROR,
             payload: {

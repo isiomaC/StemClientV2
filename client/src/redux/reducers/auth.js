@@ -14,7 +14,8 @@ const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     loading: true,
-    user: null
+    user: null,
+    error: null
 }
 
 export default function(state = initialState, action){
@@ -29,6 +30,7 @@ export default function(state = initialState, action){
                 token: payload.jwtToken,
                 isAuthenticated: true,
                 loading: false,
+                error: null
             }
         case REGISTER_SUCCESS: 
             localStorage.setItem('token', payload.jwtToken);
@@ -38,13 +40,15 @@ export default function(state = initialState, action){
                 token: payload.jwtToken,
                 isAuthenticated: true,
                 loading: false,
+                error: null
             }
         case USER_LOADED:
             return {
                 ...state, 
                 user: payload,
                 isAuthenticated: true,
-                loading: false
+                loading: false,
+                error: null
             }
         case REGISTER_FAIL:
         case AUTH_ERROR:
@@ -54,15 +58,16 @@ export default function(state = initialState, action){
                 ...state,
                 isAuthenticated: false,
                 loading: false,
-                user: payload
+                user: payload,
+                error: payload
             }
         case CLEAR_USER: {
             return {
-                ...state, 
                 token: null,
                 isAuthenticated: false,
                 loading: false,
-                user: null
+                user: null,
+                error: null
             }
         }
         case LOG_OUT:
@@ -74,8 +79,9 @@ export default function(state = initialState, action){
             ...state,
             token: null,
             isAuthenticated: false,
-            loading: false
-            }; 
+            loading: false,
+            error: null
+            };
         default:
             return state;
     }

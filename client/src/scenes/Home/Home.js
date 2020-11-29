@@ -22,7 +22,7 @@ const Home = ({ getFeaturedProducts,products, getReviews,reviews, getExtras, ext
     
                 await getFeaturedProducts();
     
-                await getExtras()
+                await getExtras();
 
                 //history.push('/dashboard')
                 console.log(reviews)

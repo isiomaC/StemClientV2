@@ -9,17 +9,22 @@ import Avatar from '@material-ui/core/Avatar';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
+import approximatePrice from '../../../utils/approximatePrice'
 //COmponents
 import ProductCard from '../content/ProductCard';
 
 const useStyles = makeStyles(theme=> ({
     root:{
-        display: 'grid',
         paddingTop: 30,
         width:'100vw',
+        overflow: 'Scroll',
         background:'rgba(255, 255, 255, 0.5)',
-        gridTemplate: '1fr / 1fr',
-        placeItems: 'center',
+        // display: 'grid',
+        // gridTemplate: 'minmax(0, 1fr) / minmax(0, 1fr)',
+        // [theme.breakpoints.down("xs")]:{
+        //     gridTemplate: 'repeat(auto-fit, 100%)/repeat(auto-fit, 1)'
+        // },
+        // placeItems: 'flex-start',
     },
     arrowLeft: {
         display: 'flex',
@@ -40,11 +45,14 @@ const useStyles = makeStyles(theme=> ({
         alignItems: 'center'
     },
     griditem:{
+        // gridColumnStart: 1,
+        // gridColumnEnd: -1,
         gridColumn: '1 / 1',
         gridRow: '1 / 1',
         display:'flex', 
         marginLeft: 0,
-        overflowX: "hidden",
+        // placeItems: 'flex-start',
+        overflowX: "scroll",
         zIndex: 2,
         '&:hover':{
             overflowX: 'scroll'
@@ -101,6 +109,7 @@ const easeInOutQuad =(t, b, c, d) =>{
 };
 
 const scrollLeft = (element, change, duration) => {
+    console.log(element.scrollLeft)
     var start = element.scrollLeft,
         currentTime = 0,
         increment = 20;
@@ -141,9 +150,7 @@ const FeaturedProducts = ({products, variant}) => {
         }
     }
 
-    const showArrows = (val) => {
-        // console.log(e.target.style);
-        
+    const showArrows = () => {
         setShow(val =>!val)
     }
     
@@ -155,12 +162,14 @@ const FeaturedProducts = ({products, variant}) => {
                         <ProductCard variant={variant}
                                      title={product.name} 
                                      description={product.benefits.split(/\<.*?\>/g)} 
-                                     price={product.price} 
-                                     image={product.base64}/>
+                                     price={approximatePrice(product.price)} 
+                                     image={product.base64} 
+                                     idx={product.idx}
+                                     />
                         )
                     )}
                 </Box>
-                <Box style={{ zIndex: 90, 
+                {/* <Box style={{ zIndex: 90, 
                               justifyContent: 'space-between', 
                               gridColumn: '1 / 1',
                               gridRow: '1 / 1', 
@@ -179,7 +188,7 @@ const FeaturedProducts = ({products, variant}) => {
                             className={classes.arrowRight}>
                         {show && <ArrowForwardIosIcon  />}
                     </Avatar>
-                </Box>
+                </Box> */}
             </Box>
     )
 }

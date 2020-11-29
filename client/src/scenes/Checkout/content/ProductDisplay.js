@@ -5,9 +5,19 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/core/styles'
-import QuantityStepper from './QuantityStepper'
 
+//Testing Icons
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
+import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
+import DeleteIcon from '@material-ui/icons/Delete';
+//
+import Box from '@material-ui/core/Box'
+import { connect } from 'react-redux'
+
+import QuantityStepper from './QuantityStepper'
 import approximatePrice from '../../../utils/approximatePrice'
+
+import { removeFromCart } from '../../../redux/actions/shoppingcart'
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,7 +41,7 @@ const useStyles = makeStyles(theme => ({
         }
     }
 }))
-const ProductDisplay = ({ cart }) => {
+const ProductDisplay = ({ cart, dispatch }) => {
 
     const classes = useStyles();
     return (
@@ -44,12 +54,19 @@ const ProductDisplay = ({ cart }) => {
                     />
                 </Grid>
                 <Grid item className={classes.griddescritption} xs={9}>
-                    <div className={ classes.productInfo}>
-                        <Typography variant="body1">{cart.name}</Typography>
-                        <Typography variant="caption">{cart.category}</Typography>
-                        <Typography variant="body2">{cart.category}</Typography>
-                    </div>
+                        <div className={ classes.productInfo}>
+                            <Typography style={{ fontSize: 'medium', fontWeight: 'Bold'}} variant="body1">{cart.name}</Typography>
+                            <Typography style={{ fontSize: 'small'}} variant="caption">{cart.benefits.split(/\<.*?\>/g)}</Typography>
+                            <Typography variant="body2">{cart.category}</Typography>
+                        </div>
                     <div style={{ display: 'block', height: 'inherit' ,marginRight: '0px'}}>
+                        <DeleteIcon 
+                                onClick={() => {dispatch(removeFromCart(cart.product_idx))}} 
+                                style={{ 
+                                    margin: 5, 
+                                    color: 'rgba(255,0,0,0.5)',
+                                    cursor:'pointer'
+                                }}/>
                         <Typography variant="body2">€{approximatePrice(cart.price)}</Typography>
                         <QuantityStepper 
                             amount={cart.quantity} 
@@ -67,5 +84,4 @@ ProductDisplay.propTypes = {
     cart: PropTypes.object
 }
 
-
-export default ProductDisplay;
+export default connect()(ProductDisplay);

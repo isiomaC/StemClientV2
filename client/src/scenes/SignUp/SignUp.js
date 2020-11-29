@@ -23,17 +23,27 @@ import { register } from '../../redux/actions/auth'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        margin: '20px'
+      '& .MuiTextField-root': {
+        margin: theme.spacing(1),
+        width: '45ch',
+        [theme.breakpoints.down('xs')]: {
+          width: 'calc(100% - 20px)'
+        }
+      }
     },
     div:{
         margin: '10px',
         // width : '35ch'
     },
     header:{
-
+      marginTop: '30px'
     },
     btn: {
-        backgroundColor: 'rgba(0,0,180, 0.7)'
+      marginBottom: '20px',
+        '&:hover': {
+          color: 'red',
+          background: 'white'
+        }
     }
 }))
 
@@ -93,7 +103,7 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
         loading === true ? (
             <Spinner />
         ): (
-            <Fragment>
+            <Fragment style={{ }}>
                 <h2 className={classes.header}>Sign Up</h2>
                 <form className={classes.root} onSubmit={e => onSubmit(e)}>
                     <div className={classes.div}>

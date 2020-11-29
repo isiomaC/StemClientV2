@@ -6,13 +6,16 @@ import {
     SET_LOADING,
     CLEAR_CART,
     INCREMENT,
-    DECREMENT
+    DECREMENT,
+    SAVE_ADDRESS,
+    SAVE_ADDRESS_ERROR,
+    GET_ADDRESS,
+    GET_ADDRESS_ERROR
 } from './types';
 import axios from 'axios'
 
 //import { uuid } from 'uuid';
 const apiUrl ="https://inphinityapi.herokuapp.com/api"
-
 
 export const addToCart = (product_idx, quantity, image, name, price, benefits, maxVal, category_id) => async dispatch => {
 
@@ -21,6 +24,8 @@ export const addToCart = (product_idx, quantity, image, name, price, benefits, m
         const res = await axios.get(`${apiUrl}/categories/${category_id}`);
 
         let category = res.data.name
+
+        console.log({ product_idx, quantity, image, name, price, benefits, maxVal, category })
 
         dispatch({
             type: ADD_TO_CART,
@@ -101,5 +106,47 @@ export const clearCart = () => async dispatch => {
         })
 
     }
+}
 
+export const saveAddress = (shipping) => async dispatch=> {
+
+    try{
+
+        const { fullname, address, city, eirCode, country, email } = shipping
+        console.log(shipping)
+
+        dispatch({
+            type: SAVE_ADDRESS,
+            payload: { fullname, address, city, eirCode, country, email }
+        })
+    
+    }catch(e){
+        dispatch({
+            type: SAVE_ADDRESS_ERROR,
+            payload: {}
+        })
+    }
+}
+
+export const getAddress = () => async dispatch => {
+    try{
+
+        const cart = localStorage.getItem("cart")
+        
+        if (cart !== null){
+            cart = JSON.parse(cart)
+            const address = cart.shippingAddress
+
+            dispatch({
+                type: GET_ADDRESS,
+                payload: address
+            })
+        }
+
+    }catch(e){
+        dispatch({
+            type: GET_ADDRESS_ERROR,
+            payload: {}
+        })
+    }
 }

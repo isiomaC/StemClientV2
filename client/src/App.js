@@ -31,6 +31,7 @@ import setAuthToken from './utils/setAuthToken'
 import { loadUser } from './redux/actions/auth'
 
 
+
 const theme = createMuiTheme({
   palette:{
       primary: {
@@ -110,7 +111,6 @@ function App() {
   
   return (
     <Provider store={store}>
-      {/* <PersistGate loading={<Spinner/>} persistor={persistor}> */}
         <BrowserRouter>
           <ThemeProvider  theme={responsiveTheme}>
             <div className = {classes.root} style={{ backgroundAttachment: 'fixed' }} >
@@ -136,7 +136,6 @@ function App() {
             </div>
           </ThemeProvider>
         </BrowserRouter>
-      {/* </PersistGate> */}
     </Provider>
   );
 }

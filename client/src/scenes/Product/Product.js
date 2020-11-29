@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
@@ -26,6 +27,8 @@ import { getProduct } from '../../redux/actions/shopactions'
 import { addToCart, removeFromCart } from '../../redux/actions/shoppingcart'
 
 import ReviewDialog from './content/ReviewDialog'
+
+import approximatePrice from '../../utils/approximatePrice'
 
 
 const useStyles = makeStyles(theme => ({
@@ -68,12 +71,15 @@ const useStyles = makeStyles(theme => ({
       },
 }))
 
+const apiUrl = 'http://localhost:5000/api'
+
 const Product = (props) => {
 
     const { product, loading, getProduct, match, user, addToCart } = props
 
     const [open, setOpen] = React.useState(false);
-    const [rating, setRating] = React.useState(0);
+
+    const [rating, setRating] = React.useState(0);//get product rating from db
 
     const [quantity, setQuantity] = React.useState(1);
 
@@ -81,7 +87,8 @@ const Product = (props) => {
         setOpen(true);
     };
 
-    const handleClose = () => {
+    const handleClose = async () => {
+
         setOpen(false);
     };
 
@@ -119,10 +126,10 @@ const Product = (props) => {
                         <Typography style={{ margin: '0px 5px'}}> 55 reviews </Typography>
                         {"|"}
                         <Typography className={classes.review} onClick={handleOpen}> Write a review </Typography>
-                        <ReviewDialog open={open} handleClose={handleClose}/>
+                        <ReviewDialog open={open} handleClose={handleClose} product_id={product.product.idx}/>
                     </Box>
                     <Box className={classes.rows}>
-                            ${product.product.price}
+                        €{approximatePrice(product.product.price)}
                     </Box> 
                     <Box component='div' className={classes.rows}>  
                         <form className={classes.container} noValidate>
@@ -131,15 +138,23 @@ const Product = (props) => {
                                 id="quantity"
                                 label=""
                                 type="number"
-                                defaultValue="1"
+                                disabled={parseInt(product.product.stock) === 0}
+                                defaultValue={parseInt(product.product.stock) === 0 ? 0 : 1}
                                 className={classes.textField}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                InputProps={{
+                                    inputProps:{
+                                        min: 1, max: parseInt(product.product.stock)
+                                    }
+                                }}
                                 onChange={(e) => handleChange(e)}
                             />
+                            { parseInt(product.product.stock) === 0 && <p style={{color:'red'}}>No Stock</p>}
                         </form> 
                         <Button 
+                            disabled={parseInt(product.product.stock) === 0}
                             variant="contained" 
                             color="secondary" 
                             onClick={() => {
@@ -153,6 +168,9 @@ const Product = (props) => {
                     </Box>
                     <Typography className={classes.rows} variant="body1">
                         {product.product.benefits.split(/\<.*?\>/g)} 
+                    </Typography>
+                    <Typography className={classes.rows} variant="body1">
+                        Ingredients:{" "}{product.product.ingredients} 
                     </Typography>
                     <Typography className={classes.topRows}>
                          {"Share:"} 

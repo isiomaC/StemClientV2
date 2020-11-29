@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
+import axios from 'axios'
 
 //Components
 import Typography  from '@material-ui/core/Typography';
@@ -23,6 +24,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import PublicIcon from '@material-ui/icons/Public';
 import FacebookIcon from '@material-ui/icons/Facebook';
 
+const apiUrl = 'http://localhost:5000/api'
 const useStyles = makeStyles(theme => ({
     stickToBottom: {
         borderTop: `5px solid ${theme.palette.divider}`,
@@ -68,7 +70,45 @@ const useStyles = makeStyles(theme => ({
 const Footer = () => {
     const classes = useStyles();
     const subText = "SUBSCRIBE TO OUR NEWSLETTER";
-    const tt = "Be One of the Fist to know about new releases";
+    const tt = "Be One of the First to know about new releases";
+
+    const [email, setEmail] = React.useState('')
+
+    const handleChange= (e)=> {
+        setEmail(e.target.value)
+    }
+
+    const handleSubmit = async (e)=> {
+        e.preventDefault()
+
+        let form = {}
+        const config ={
+            headers: {
+                "Content-Type":"application/json"
+            }
+        }
+        try{
+            if (email !== ''){
+                form.email = email
+            }else{
+                alert('email address field is empty')
+                return
+            }
+            
+            const res = await axios.post(`${apiUrl}/newsletter`, form, config)
+    
+            if (res.data){
+                if (res.data.success){
+                    alert('Signed up Complete') 
+                    setEmail('')
+                }
+            }
+
+        }catch(e){
+            alert(e.response.data.errors[0].msg)
+            console.log(e.response.data.errors[0].msg)
+        }
+    }
 
     return (
         <Box component="div" className={classes.stickToBottom}>
@@ -79,9 +119,12 @@ const Footer = () => {
                     <InputBase
                         className={classes.input}
                         placeholder="Email Address"
+                        value={email}
+                        type='email'
+                        onChange={handleChange}
                         inputProps={{ 'aria-label': 'newsletter' }}
                     />
-                    <Button style={{ background: 'rgba(151, 212, 136, 0.6)'}} size="small" variant="contained">
+                    <Button style={{ background: 'rgba(151, 212, 136, 0.6)'}} size="small" variant="contained" onClick={handleSubmit}>
                         SUBSCRIBE
                     </Button>
                 </Paper>

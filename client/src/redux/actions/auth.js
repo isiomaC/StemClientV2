@@ -9,11 +9,12 @@ import {
   LOGIN_FAIL,
   LOG_OUT,
   CLEAR_USER, 
-  ADMIN_LOGIN
+  ADMIN_LOGIN,
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
-const apiUrl ="https://inphinityapi.herokuapp.com/api"
+// const apiUrl ="https://inphinityapi.herokuapp.com/api"
+const apiUrl = "http://localhost:5000/api"
 
 export  const loadUser = () => dispatch =>
     new Promise( async (resolve, reject) => {
@@ -33,16 +34,26 @@ export  const loadUser = () => dispatch =>
 
         }catch(error){
 
-            dispatch({
-                type: AUTH_ERROR,
-                payload: {
+            let errorPayload = {}
+   
+            if (typeof error.response === 'undefined'){
+                errorPayload = {
+                    msg: 'Server Not reachable',
+                    status: 500
+                }
+            }else{
+                errorPayload = {
                     msg: error.response.statusText,
                     status: error.response.status
                 }
+            }
+
+            dispatch({
+                type: AUTH_ERROR,
+                payload: errorPayload
             })
             reject(error)
         }
-        
     })
        
 
@@ -55,7 +66,7 @@ export const login = (formData) => async dispatch => {
     }
 
     try{
-        const res = await axios.post(`${apiUrl}/auth`, formData, config)
+        const res = await axios.post(`${apiUrl}/auth`, JSON.stringify(formData), config)
         dispatch({
             type: LOGIN_SUCCESS, 
             payload: res.data
@@ -64,11 +75,15 @@ export const login = (formData) => async dispatch => {
         dispatch(loadUser())
 
     }catch(error){     
+        console.log(Object.keys(error))
+        console.log(error.response)
+
+        dispatch(setAlert(error.response.data.error, 'error'))
 
         dispatch({
             type: LOGIN_FAIL,
             payload: {
-                msg: error.response.statusText,
+                msg: error.response.data.error,
                 status: error.response.status
             }
         })

@@ -15,8 +15,14 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Rating from '@material-ui/lab/Rating';
 
+import PropTypes from 'prop-types'
+import axios from 'axios'
+
 //import Rating from '../../Home/content/cRating'
 
+const apiUrl = 'http://localhost:5000/api'
+
+// const apiUrl = 'https://shrouded-hollows-95980.herokuapp.com/api'
 
 const labels = {
     0.5: 'Useless',
@@ -54,17 +60,46 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DraggableDialog({ open, handleClose}) {
+function DraggableDialog({ open, handleClose, product_id}) {
 
     const [value, setValue] = React.useState(3);
     const [hover, setHover] = React.useState(-1);
+    const [review, setReview] = React.useState({
+      comment: '',
+    })
 
     const classes = useStyles();
 
-  const handleSave = () => {
-    //Save Review to DB, Call Redux action here with params
-    //
+    const handleCommentText = (event) => {
+      setReview({...review, 
+          [event.target.name]: event.target.value 
+      })
+    }
+
+    const handleSave = async () => {
+
+      const { comment } = review
+      const form = {
+          comment: comment ? comment : '',
+          rating: value,
+          id: product_id
+      }
+
+      const config = {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      }
+      try{
+        const res = await axios.post(`${apiUrl}/reviews`, form, config)
+        console.log(res.data)
+
+        handleClose()
+      }catch(e){
+        console.log(e)
+      }
   };
+
 
   return (
       <Dialog
@@ -105,6 +140,8 @@ export default function DraggableDialog({ open, handleClose}) {
             id="comment"
             label="Comment"
             multiline
+            placeholder="Leave a Review(optional)"
+            onChange={handleCommentText}
             // rows={6}
             type="text"
             // variant='filled'
@@ -113,10 +150,19 @@ export default function DraggableDialog({ open, handleClose}) {
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="black">
+          <Button onClick={handleSave} color="black">
             Submit
           </Button>
         </DialogActions>
       </Dialog>
   );
 }
+
+DraggableDialog.propTypes = {
+  open: PropTypes.bool,
+  handleClose : PropTypes.func,
+  product_id: PropTypes.number
+
+}
+
+export default DraggableDialog

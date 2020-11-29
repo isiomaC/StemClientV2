@@ -21,14 +21,18 @@ import Button from '@material-ui/core/Button';
 
 import QuantityStepper from '../scenes/Checkout/content/QuantityStepper'
 import approximatePrice from '../utils/approximatePrice'
-
+import QuickShop from '../Components/QuickShop'
 
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
+import Popover from '@material-ui/core/Popover'
+
+import getOrderTotal from '../utils/getOrderTotal'
 
 //Transition elements
 import Typography from '@material-ui/core/Typography';
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 //Icons
@@ -65,7 +69,7 @@ const options = [
         index: 3,
         name:'Search',
         selector: '#searchdestination'
-    }
+    },
 ]
 
 const drawerWidth = 240;
@@ -124,35 +128,14 @@ const useStyles = makeStyles(theme => ({
         width: '33vw',
         background: '#d2f5e3',
         marginTop: '30px',
-        height: '80vh',
+        // height: '80vh',
+        zIndex: 99999,
         [theme.breakpoints.down('md')]: {
             width: '50vw'
         },
         [theme.breakpoints.down('xs')]: {
             width: '100vw'
         }
-    },
-    checkOutBtn:{
-        background:'rgba(255,255,255)',
-        color: 'rgb(255,0,0)', 
-        marginBottom: '10px'
-    },
-    cart: {
-        cursor: 'pointer',
-        '&:hover': {
-            color : green[400]   
-        }
-    },
-    orderTotal:{
-        height: '10%', 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center'
-    },
-    checkOutContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent:'flex-end'
     },
     arrow: {
         position: 'absolute',
@@ -170,19 +153,18 @@ const useStyles = makeStyles(theme => ({
           borderStyle: 'solid',
         }
     }
-
 }));
 
 const NavBar = (props) => {
+    const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
     // const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'))
     const { isAuthenticated, logout, user, shoppingcart } = props
     const classes = useStyles();
     const theme = useTheme();
 
-    const ITEM_HEIGHT = 100
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [openPopper, setOpenPopper] = React.useState(false)
+    const [menuItems, setMenuItems] = React.useState(options)
+    const ITEM_HEIGHT = 100
 
     const arrowRef = React.useRef()
 
@@ -201,18 +183,7 @@ const NavBar = (props) => {
         setMobileOpen(event.currentTarget)
     }
 
-    const showCart = (event) => {
-        // console.log(event.view)
-        setAnchorEl(event.currentTarget);
-        setOpenPopper(prev => !prev);
-    }
-
-    const handleClickAway = () => {
-        setOpenPopper(false);
-    };
-
-    const goToChechOut = () => {
-        setOpenPopper(false)
+    const goToCheckOut = () => {
         history.push('/checkout')
     }
 
@@ -243,56 +214,42 @@ const NavBar = (props) => {
         }
     }
 
-
-    const getOrderTotal = () => {
-        var total = 0
-        shoppingcart.forEach(item => {
-            const itemTotal = item.price * item.quantity
-            total = total + parseFloat(itemTotal)
-        });
-        return total 
-    }
-
+   
     React.useEffect(() => {
-        // console.log(shoppingcart.length)
-        // console.log(arrowRef.current)
-
+       
     }, [])
 
-    // console.log(arrowRef.current)
-
+    
 
     return (
         <Box style={{ flexGrow: 1}}>
             <HandleScroll {...props}>
                 <AppBar elevation={0} position="fixed" className={classes.appBar}>
-                    <Hidden xsDown>
-                        <Box component="div" style={{ display: 'flex', background: 'black', height: '20', justifyContent: 'flex-end'}}>
-                            <div style={{ color:'white', marginRight: 100 }}> 
-                                {isAuthenticated === true ? (
-                                    user.isAdmin === true ? (
-                                        <>
-                                            <a href={adminLink} style={{ color: '#fff',textDecoration: "none"}}>
-                                                <Typography className={classes.navbarLinks} variant="caption">admin</Typography>
-                                            </a>
-                                            <Typography onClick={logout} className={classes.navbarLinks} variant="caption">log out</Typography>
-                                        </>
-                                    ):(
-                                        <Typography onClick={logout} className={classes.navbarLinks} variant="caption">log out</Typography>
-                                    )
-                                ) : (
+                    <Box component="div" style={{ display: 'flex', background: 'black', height: '20', justifyContent: 'flex-end'}}>
+                        <div style={{ color:'white', marginRight: 100 }}> 
+                            {isAuthenticated === true ? (
+                                user.isAdmin === true ? (
                                     <>
-                                        <a href="/login" style={{ color: '#fff',textDecoration: "none"}}>
-                                            <Typography className={classes.navbarLinks} variant="caption">log in</Typography>
+                                        <a href={adminLink} style={{ color: '#fff',textDecoration: "none"}}>
+                                            <Typography className={classes.navbarLinks} variant="caption">admin</Typography>
                                         </a>
-                                        <a href="/register" style={{ color: '#fff', textDecoration: "none"}}>
-                                            <Typography className={classes.navbarLinks} variant="caption">sign up</Typography>
-                                        </a>
+                                        <Typography onClick={logout} className={classes.navbarLinks} variant="caption">log out</Typography>
                                     </>
-                                )}
-                            </div>
-                        </Box>
-                    </Hidden>
+                                ):(
+                                    <Typography onClick={logout} className={classes.navbarLinks} variant="caption">log out</Typography>
+                                )
+                            ) : (
+                                <>
+                                    <a href="/login" style={{ color: '#fff',textDecoration: "none"}}>
+                                        <Typography className={classes.navbarLinks} variant="caption">log in</Typography>
+                                    </a>
+                                    <a href="/register" style={{ color: '#fff', textDecoration: "none"}}>
+                                        <Typography className={classes.navbarLinks} variant="caption">sign up</Typography>
+                                    </a>
+                                </>
+                            )}
+                        </div>
+                    </Box>
                     <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div className={classes.logoContainer}>
                             <a href="/" style={{ textDecoration: "none"}}>
@@ -321,137 +278,16 @@ const NavBar = (props) => {
                                         About Us
                                     </Typography>
                                 </a>
-                                <Typography className={classes.navbarLinks} variant="h6" >
+                                {/* <Typography className={classes.navbarLinks} variant="h6" >
                                     Search
-                                </Typography>
-                                
-                                <ClickAwayListener onClickAway={handleClickAway}>
-                                <div >
-                                    <Badge badgeContent={shoppingcart.length} color="error">
-                                        <ShoppingCartIcon className={classes.cart} onClick={showCart} />
-                                    </Badge>
-                                    <Popper 
-                                        open={openPopper} 
-                                        anchorEl={anchorEl} 
-                                        placement='bottom'
-                                        transition 
-                                        modifiers={{
-                                        flip: {
-                                          enabled: true,
-                                        },
-                                        preventOverflow: {
-                                          enabled: true,
-                                          boundariesElement: 'scrollParent',
-                                        },
-                                        arrow: {
-                                          enabled: true,
-                                        //   element: arrowRef,
-                                        },
-                                      }}>
-                                    {({ TransitionProps }) => (
-                                        <Fade {...TransitionProps} timeout={350}>
-                                            {/* <span className={classes.arrow} ref={arrowRef} /> */}
-                                            <Paper elevation={1} className={classes.paperCart}>
-                                                <Box style={{ display: 'flex', textAlign: 'center', flexDirection: 'column'}}>
-                                                    <Container>
-                                                        <h4>Shopping Cart</h4>
-                                                        <p>({shoppingcart.length} items)</p>
-                                                    </Container>
-                                                </Box>
-                                                {shoppingcart.map((item, index) =>(
-                                                    <Container key={index}>
-                                                        <Divider/>
-                                                        <ShoppingCart cart={item} key={index} />
-                                                    </Container>
-                                                ))}
-                                                <Divider/>
-                                                <Container className={classes.orderTotal}>
-                                                    <Typography style={{ height: '50%'}}>
-                                                        Order Total: €{approximatePrice(getOrderTotal())} 
-                                                    </Typography>
-                                                </Container>
-                                                <Divider style={{ marginBottom: '20px'}}/>
-                                                <Container className={classes.checkOutContainer}>
-                                                    <Button 
-                                                     disabled= {shoppingcart.length === 0 && true} 
-                                                     variant='contained' 
-                                                     onClick={()=> goToChechOut()} 
-                                                     className={classes.checkOutBtn}> 
-                                                        CheckOut
-                                                    </Button>
-                                                </Container>
-                                            </Paper>
-                                        </Fade>
-                                    )}
-                                    </Popper>
-                                 </div>
-                                </ClickAwayListener>
+                                </Typography> */}
+                                <QuickShop shoppingcart={shoppingcart} goToCheckOut={goToCheckOut} getOrderTotal={getOrderTotal} />
                             </div>
                         </Hidden> 
                         <Hidden smUp>
                             <Box component='div'>
                                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                    
-                                    <ClickAwayListener onClickAway={handleClickAway}>
-                                    <div >
-                                        <Badge badgeContent={shoppingcart.length} color="error">
-                                            <ShoppingCartIcon onClick={showCart} />
-                                        </Badge>
-                                        <Popper 
-                                            open={openPopper} 
-                                            anchorEl={anchorEl} 
-                                            placement='bottom'
-                                            transition 
-                                            modifiers={{
-                                                flip: { enabled: true,},
-                                                preventOverflow: {
-                                                    enabled: true,
-                                                    boundariesElement: 'scrollParent',
-                                                },
-                                                arrow: {
-                                                    enabled: true,
-                                                    // element: arrowRef,
-                                                },
-                                            }}
-                                        >
-                                        {({ TransitionProps }) => (
-                                            <Fade {...TransitionProps} timeout={350}>
-                                                {/* <span className={classes.arrow} ref={setArrowRef} /> : null} */}
-                                                <Paper elevation={2} className={classes.paperCart}>
-                                                    <Box style={{ display: 'flex', textAlign: 'center', flexDirection: 'column'}}>
-                                                        <Container>
-                                                            <h4>Shopping Cart</h4>
-                                                            <p>({shoppingcart.length} items)</p>
-                                                        </Container>
-                                                    </Box>
-                                                    {shoppingcart.map((item, index) =>(
-                                                        <Container key={index}>
-                                                            <Divider/>
-                                                            <ShoppingCart cart={item} key={index} />
-                                                        </Container>
-                                                    ))}
-                                                    <Divider/>
-                                                    <Container className={classes.orderTotal}>
-                                                        <Typography style={{ height: '50%'}}>
-                                                            Order Total: €{getOrderTotal()}
-                                                        </Typography>
-                                                    </Container>
-                                                    <Divider style={{ marginBottom: '20px'}}/>
-                                                    <Container component='div' className={classes.checkOutContainer}>
-                                                        <Button
-                                                         disabled={shoppingcart.length === 0 && true}
-                                                         variant='contained' 
-                                                         onClick={()=> goToChechOut()} 
-                                                         className={classes.checkOutBtn}> 
-                                                            CheckOut
-                                                         </Button>
-                                                    </Container>
-                                                </Paper>
-                                            </Fade>
-                                        )}
-                                        </Popper>
-                                    </div>
-                                    </ClickAwayListener>
+                                    <QuickShop shoppingcart={shoppingcart} goToCheckOut={goToCheckOut} getOrderTotal={getOrderTotal} />
                                     <IconButton
                                         style={{ marginLeft: '10px'}}
                                         aria-label="more"
@@ -475,7 +311,7 @@ const NavBar = (props) => {
                                         {options.map(option => (
                                             <MenuItem name={'menu-' + option.name} className={classes.MenuItemList} key={option.index} selected={option === ''} onClick={handleClose}>
                                                     {/* <option.image className={classes.MenuItemListIcons}/>  */}
-                                                        <a href={`${option.link}`} style={{ textDecoration: "none"}}>{option.name}</a>
+                                                        <a href={`${option.link}`} style={{ textDecoration: "none", color:'black'}}>{option.name}</a>
                                             </MenuItem>
                                         ))}
                                 </Menu>
@@ -493,7 +329,7 @@ NavBar.propTypes = {
     isAuthenticated : PropTypes.bool,
     logout: PropTypes.func,
     user: PropTypes.object,
-    shoppingcart: PropTypes.arrayOf(PropTypes.object),
+    shoppingcart: PropTypes.object,
     produc: PropTypes.object
 }
 
