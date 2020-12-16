@@ -99,14 +99,20 @@ const Footer = () => {
     
             if (res.data){
                 if (res.data.success){
-                    alert('Signed up Complete') 
+                    alert('Sign up Complete') 
                     setEmail('')
                 }
             }
 
         }catch(e){
-            alert(e.response.data.errors[0].msg)
-            console.log(e.response.data.errors[0].msg)
+
+            if(e.response.data.subscribed){
+                alert('Already Subcribed')
+                setEmail('')
+            }else if (e.response.data.errors[0].msg){
+                alert(e.response.data.errors[0].msg)
+                setEmail('')
+            }
         }
     }
 

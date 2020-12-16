@@ -11,7 +11,7 @@ import { Typography } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 
-import Rating from '@material-ui/lab/Rating';
+// import Rating from '@material-ui/lab/Rating';
 
 //Icons
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -19,7 +19,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 
 //Content
-// import Rating from '../Home/content/cRating'
+import Rating from '../Home/content/cRating'
 import Spinner from '../../Components/layout/Spinner'
 
 //actions
@@ -71,8 +71,6 @@ const useStyles = makeStyles(theme => ({
       },
 }))
 
-const apiUrl = 'http://localhost:5000/api'
-
 const Product = (props) => {
 
     const { product, loading, getProduct, match, user, addToCart } = props
@@ -82,6 +80,8 @@ const Product = (props) => {
     const [rating, setRating] = React.useState(0);//get product rating from db
 
     const [quantity, setQuantity] = React.useState(1);
+
+    const classes = useStyles()
 
     const handleOpen = () => {
         setOpen(true);
@@ -106,10 +106,10 @@ const Product = (props) => {
 
     }, []);
 
-    const classes = useStyles()
-
     return product === null ? (
-        <Spinner/>
+        <div style={{ display: 'flex', alignItem: 'center', width: '100vw', height: '80vh'}}>
+            <Spinner/>
+        </div>
     ):(
         <Box style={{ flexGrow: 1}}>
             <Grid container style={{ height: ''}} spacing={0}>
@@ -121,12 +121,12 @@ const Product = (props) => {
                         {product.product.name}
                     </Typography>
                     <Box className={classes.rows}>
-                        <Rating rating={rating}/>
+                        <Rating rating={parseInt(product.product.reviewAverage, 10)}/>
                         
-                        <Typography style={{ margin: '0px 5px'}}> 55 reviews </Typography>
+                        <Typography style={{ margin: '0px 5px'}}> {product.product.reviewCount} reviews </Typography>
                         {"|"}
                         <Typography className={classes.review} onClick={handleOpen}> Write a review </Typography>
-                        <ReviewDialog open={open} handleClose={handleClose} product_id={product.product.idx}/>
+                        <ReviewDialog open={open} handleClose={handleClose} product_id={product.product.idx} user={user}/>
                     </Box>
                     <Box className={classes.rows}>
                         €{approximatePrice(product.product.price)}

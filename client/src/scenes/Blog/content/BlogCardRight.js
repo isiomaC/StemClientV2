@@ -14,7 +14,6 @@ import moment from 'moment'
 
 import logo from '../../../img/Logo.png'
 
-
 const useStyles = makeStyles(theme=> ({
     card: {
         margin: '10px 20px',
@@ -65,24 +64,26 @@ const useStyles = makeStyles(theme=> ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         display: '-webkit-box',
-        textAlign: 'left',
+        textAlign : 'left',
         '-webkit-line-clamp': 2,
          /* number of lines to show */
         '-webkit-box-orient': 'vertical',
     }
 }));
 
-const BlogCard = (props) => {
+const BlogCardRight = (props) => {
     const classes = useStyles()
 
-    const { push } = useHistory()
+    const { push }  = useHistory()
     return (
             <Card elevation={0} className={classes.card}>
-
-                <Grid className={classes.gridContainer}  container>  
-                    <Grid item style={{ display: 'inline-block'}} sm={8} xs={12}>
+                <Grid className={classes.gridContainer}  container> 
+                    <Grid item style={{ display: 'inline-block'}} sm={4} xs={12}>
+                        <img alt="Avatar Sharp" className={classes.bigAvatar} src={props.image} />
+                    </Grid>
+                    <Grid item sm={8} xs={12}>
                         <CardContent className={classes.content}>
-                            <div style={{display: 'block', textAlign:'left', }} >
+                            <div style={{ display: 'block', textAlign:'left', }} >
                                 <Typography component="h5" variant="h5">
                                     {props.title}
                                 </Typography>
@@ -90,7 +91,7 @@ const BlogCard = (props) => {
                                     {moment(props.date).format('YYYY/MM/DD')}
                                 </Typography>
                             </div>
-                            <Typography className={classes.teaser}>
+                             <Typography className={classes.teaser}>
                                 {props.blogtext}
                             </Typography>
                             <div style={{ textAlign: 'right'}}>
@@ -98,21 +99,20 @@ const BlogCard = (props) => {
                                     variant="outlined"
                                     className={classes.button}
                                     onClick={() => push(`/blog/${props.id}`)}
+                                    // startIcon={<ShoppingBasketIcon/>}>
                                     >
                                         READ MORE
                                 </Button>
                             </div>
                         </CardContent>
                     </Grid>
-                    <Grid item style={{ display: 'inline-block'}}  sm={4} xs={12}>
-                        <img alt="Avatar Sharp" className={classes.bigAvatar} src={props.image} />
-                    </Grid>
                 </Grid>
             </Card>
     )
 }
 
-BlogCard.prototypes={
+
+BlogCardRight.prototypes={
     title: PropTypes.string,
     date: PropTypes.string,
     image: PropTypes.any.isRequired,
@@ -121,4 +121,4 @@ BlogCard.prototypes={
     id: PropTypes.number
 }
 
-export default BlogCard
+export default BlogCardRight

@@ -18,6 +18,7 @@ import NavBar from './Components/NavBar'
 import Login from './scenes/Login'
 import Home from './scenes/Home'
 import Blog from './scenes/Blog'
+import ViewBlog from './scenes/ViewBlog'
 import Shop from './scenes/Shop'
 import Product from './scenes/Product';
 import Checkout from './scenes/Checkout';
@@ -123,9 +124,10 @@ function App() {
                 <Route  path='/login' component={Login}/>
                 <Route  path='/register' component={SignUp}/>
                 <Route  path='/shop' render={(props) => <Shop {...props}/>}/>
-                <Route  path='/blog' render={(props) => <Blog {...props}/>}/>
+                <Route  path='/blogs' render={(props) => <Blog {...props}/>}/>
+                <Route  path='/blog/:idx' render={(props) => <ViewBlog {...props}/>}/>
                 <Route  path='/checkout' render={(props) => <Checkout {...props}/>}/>
-                <Route path='/aboutus' render={(props) => <About {...props}/>}/>
+                <Route  path='/aboutus' render={(props) => <About {...props}/>}/>
                 
                 {/* <PrivateRoute exact path='/admin/addproduct' component={AddBlog}/> */}
                 {/* <PrivateRoute exact path='/admin/addblog' component={AddBlog}/> */}

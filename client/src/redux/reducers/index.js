@@ -4,6 +4,7 @@ import auth from './auth';
 import homeActions from './homeActions';
 import shopactions from './shopactions';
 import shoppingcart from './shoppingcart';
+import blogactions from './blogactions';
 
 
 export default combineReducers({
@@ -11,5 +12,6 @@ export default combineReducers({
   alert,
   homeActions,
   shopactions,
-  shoppingcart
+  shoppingcart,
+  blogactions
 });

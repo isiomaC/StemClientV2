@@ -7,7 +7,8 @@ import axios from 'axios'
 
 //import { uuid } from 'uuid';
 
-const apiUrl ="https://inphinityapi.herokuapp.com/api"
+// const apiUrl ="https://inphinityapi.herokuapp.com/api"
+const apiUrl = "http://localhost:5000/api"
 
 
 export const getProduct = (idx) => async dispatch => {

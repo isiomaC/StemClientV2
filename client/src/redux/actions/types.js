@@ -13,9 +13,7 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const PRODUCT_ERROR = 'PRODUCT_ERROR';
 export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
-export const GET_BLOG = 'GET_BLOG';
-export const GET_BLOGS = 'GET_BLOGS';
-export const BLOG_ERROR = 'BLOG_ERROR';
+
 export const UPDATE_BLOG = 'UPDATE_BLOG';
 export const DELETE_BLOG= 'DELETE_BLOG';
 export const ADD_CATEGORY = 'ADD_CATEGORY';
@@ -44,6 +42,10 @@ export const SAVE_ADDRESS_ERROR = 'SAVE_ADDRESS_ERROR'
 export const GET_ADDRESS = 'GET_ADDRESS'
 export const GET_ADDRESS_ERROR = 'GET_ADDRESS_ERROR'
 
+//BLOG ACTIONS
+export const GET_BLOGS = 'GET_BLOGS'
+export const GET_BLOG = 'GET_BLOG'
+export const BLOG_ERROR = 'BLOG_ERROR'
 
 //FILTER ACTIONS
 export const SEARCH_PRODUCTS = 'SEARCH_PRODUCTS'

@@ -20,6 +20,7 @@ import { connect } from 'react-redux'
 
 import Spinner from '../../Components/layout/Spinner';
 import { register } from '../../redux/actions/auth'
+import ValidateEmail from '../Checkout/utils/ValidateEmail';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,12 +52,12 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
 
     const classes = useStyles()
     const [formData, setFormData] = useState({
-        firstname: '',
-        lastname: '',
         email: '',
         password: '',
         password2: ''
     });
+
+    const [errors, setErrors] = useState(null)
 
     const [showPassword, setShowPassword] = useState(false)
 
@@ -69,7 +70,9 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
     const onChange = e =>{
       setFormData({ ...formData, 
           [e.target.name]: e.target.value 
-        });
+      });
+
+      setErrors(null)
     }
 
     const handleClickShowPassword = () => {
@@ -83,6 +86,38 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
     const onSubmit = async e => {
       e.preventDefault();
   
+      if (email === '' && password === '' && password2 === ''){
+        setErrors({
+          password: 'password field is empty',
+          password2: 'password field is empty',
+          email: 'email field is empty'
+        })
+        return
+      }
+      if (email === '' || !email){
+        setErrors({...errors,
+          email: 'email field is empty'
+        })
+        return
+      }else if(ValidateEmail(email) === false){
+        setErrors({
+          email: 'please input a valid email'
+        })
+        return
+      }
+      if (password === '' || !password){
+        setErrors({...errors,
+          password: 'password field is empty'
+        })
+        return
+      }
+      if (password2 === '' || !password2){
+        setErrors({...errors,
+          password2: 'password field is empty'
+        })
+        return
+      }
+
       let form = JSON.stringify(formData);
 
       try {
@@ -106,8 +141,8 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
             <Fragment style={{ }}>
                 <h2 className={classes.header}>Sign Up</h2>
                 <form className={classes.root} onSubmit={e => onSubmit(e)}>
-                    <div className={classes.div}>
-                        <TextField
+                    {/* <div className={classes.div}> */}
+                        {/* <TextField
                             id="outlined-textarea"
                             label="First name"
                             // placeholder="email"
@@ -125,11 +160,11 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
                                 endAdornment: (
                                     <InputAdornment position="start">
                                       {/* <VisibilityOffIcon /> */}
-                                    </InputAdornment>
-                                  ),
-                              }}
-                        />
-                    </div>
+                                    {/* </InputAdornment> */}
+                                  {/* ), */}
+                              {/* }}
+                        /> */}
+                    {/* </div>
                     <div className={classes.div}>
                         <TextField
                             id="outlined-textarea"
@@ -148,13 +183,15 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
                                 ),
                               }}
                         />
-                    </div>
+                    </div> */} 
                     <div className={classes.div}>
                          <TextField
+                             error={(errors && errors.email) && true}
+                             helperText={(errors && errors.email) && errors.email}
                             id="outlined-textarea"
                             label="Email"
                             // placeholder="email"
-                            type="email"
+                            type="text"
                             name ="email"
                             value={email}
                             onChange={e => onChange(e)}
@@ -175,6 +212,8 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
                     </div>
                     <div className={classes.div}>
                          <TextField
+                             error={(errors && errors.password) && true}
+                             helperText={(errors && errors.password) && errors.password}
                             id="outlined-textarea"
                             label="Password"
                             // placeholder="email"
@@ -205,6 +244,8 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
                     </div>
                     <div className={classes.div}>
                          <TextField
+                            error={(errors && errors.password2) && true}
+                            helperText={(errors && errors.password2) && errors.password2}
                             id="outlined-textarea"
                             label="Password Again"
                             // placeholder="email"

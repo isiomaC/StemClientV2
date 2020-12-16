@@ -60,12 +60,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function DraggableDialog({ open, handleClose, product_id}) {
+function ReviewDialog({ open, handleClose, product_id, user}) {
 
     const [value, setValue] = React.useState(3);
     const [hover, setHover] = React.useState(-1);
     const [review, setReview] = React.useState({
-      comment: '',
+      comment: null,
     })
 
     const classes = useStyles();
@@ -79,12 +79,24 @@ function DraggableDialog({ open, handleClose, product_id}) {
     const handleSave = async () => {
 
       const { comment } = review
-      const form = {
+      let form = {}
+
+      if(user && user.email){
+        form = {
+          user: user._id,
           comment: comment ? comment : '',
           rating: value,
           id: product_id
+        }
+      }else{
+        form = {
+          comment: comment ? comment : '',
+          rating: value,
+          id: product_id
+        }
       }
 
+      console.log(form)
       const config = {
           headers: {
               'Content-Type': 'application/json'
@@ -144,6 +156,7 @@ function DraggableDialog({ open, handleClose, product_id}) {
             onChange={handleCommentText}
             // rows={6}
             type="text"
+            name="comment"
             // variant='filled'
             fullWidth
           />
@@ -158,11 +171,11 @@ function DraggableDialog({ open, handleClose, product_id}) {
   );
 }
 
-DraggableDialog.propTypes = {
+ReviewDialog.propTypes = {
   open: PropTypes.bool,
   handleClose : PropTypes.func,
-  product_id: PropTypes.number
-
+  product_id: PropTypes.number,
+  user: PropTypes.object
 }
 
-export default DraggableDialog
+export default ReviewDialog

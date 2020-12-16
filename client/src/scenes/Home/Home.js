@@ -40,9 +40,9 @@ const Home = ({ getFeaturedProducts,products, getReviews,reviews, getExtras, ext
 
     //stemclient (pid 12787) 
     return loading === true ? (
-        <Box style={{margin: '50px' }}>
+        <div style={{ display: 'flex', alignItem: 'center', width: '100vw', height: '80vh'}}>
             <Spinner/>
-        </Box>
+        </div>
         ):(
             <div style={{display: "block"}}>
                 {/* <NavBar/> */}

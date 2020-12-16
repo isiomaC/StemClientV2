@@ -71,7 +71,8 @@ export default function(state = initialState, action){
             }
         }
         case LOG_OUT:
-            localStorage.removeItem('token');
+            localStorage.clear()
+            // localStorage.removeItem('token');
             return state;
         case ACCOUNT_DELETED:
             localStorage.removeItem('token');

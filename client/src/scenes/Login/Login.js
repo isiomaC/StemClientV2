@@ -16,15 +16,8 @@ import IconButton from '@material-ui/core/IconButton';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
+import ValidateEmail from '../Checkout/utils/ValidateEmail'
 
-
-const validateEmail = (email)=> {
-  if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
-    return true;
-  }else{
-    return false;
-  }
-}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const Login = ({ alert, error, login, isAuthenticated, user , loading}) => {
+const Login = ({ alert, login, isAuthenticated, user , loading}) => {
 
   const [formData, setFormData] = useState({
     email: '',
@@ -89,12 +82,19 @@ const Login = ({ alert, error, login, isAuthenticated, user , loading}) => {
   const onSubmit = async e => {
     e.preventDefault();
 
+    if (email === '' && password === ''){
+      setErrors({
+        password: 'password field is empty',
+        email: 'email field is empty'
+      })
+      return
+    }
     if (email === ''){
       setErrors({...errors,
         email: 'email field is empty'
       })
       return
-    }else if(validateEmail(email) === false){
+    }else if(ValidateEmail(email) === false){
       setErrors({...errors,
         email: 'Please include a valid email'
       })
@@ -108,8 +108,6 @@ const Login = ({ alert, error, login, isAuthenticated, user , loading}) => {
       return
     }
 
-    // var str = JSON.stringify(formData);
-    // str = str.replace(/email/g, 'username'); //replace email key with username
     const formDataObject = {
       username: email,
       password: password,
@@ -142,7 +140,7 @@ const Login = ({ alert, error, login, isAuthenticated, user , loading}) => {
       <Typography className={classes.headerText}>
         <i className='fas fa-user' /> Sign Into Your Account
       </Typography>
-      {alert.length !== 0 && <Typography>{alert[0].msg}</Typography>}
+      {alert.length !== 0 && <Typography style={{ fontSize: '0.9rem', color: 'red'}}>{alert[0].msg}</Typography>}
       <form className={classes.root} onSubmit={e => onSubmit(e)}>
         <div className={classes.div}>
           <TextField
@@ -213,7 +211,6 @@ Login.propTypes = {
   isAuthenticated: PropTypes.bool,
   user: PropTypes.object,
   loading: PropTypes.bool,
-  error: PropTypes.object,
   alert: PropTypes.array,
 };
 
@@ -221,7 +218,6 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   user: state.auth.user,
   loading: state.auth.loading,
-  error: state.auth.error,
   alert: state.alert
 });
 

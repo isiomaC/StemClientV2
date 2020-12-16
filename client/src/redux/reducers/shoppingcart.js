@@ -7,7 +7,9 @@ import {
     CLEAR_CART, DECREMENT,
     INCREMENT, CART_ERROR,
     SAVE_ADDRESS,
-    SAVE_ADDRESS_ERROR
+    SAVE_ADDRESS_ERROR,
+    GET_ADDRESS_ERROR,
+    GET_ADDRESS
  } from '../actions/types';
 
 const initialState = JSON.parse(localStorage.getItem('cart')) || {
@@ -108,25 +110,30 @@ export default function(state = initialState, action) {
         let mCart = JSON.parse(localStorage.getItem("cart"))
 
         if (mCart !== null){
-            const { fullname, address, city , eirCode, country, email } = payload  
-            let add = {}
-            add.fullname = fullname ? fullname : address.fullname
-            add.address = address ? address : address.address
-            add.city = city ? city : address.city
-            add.eirCode = eirCode ? eirCode : address.eirCode
-            add.country = country ? country : address.country
-            add.email = email ? email : address.email
-            mCart = {...state, shippingAddress: add}
+            const { firstname, lastname, address, city , eirCode, country, email } = payload  
 
-            console.log(email)
+            let add = {}
+            add.firstname = firstname ? firstname : mCart.shippingAddress.firstname
+            add.lastname = lastname ? lastname : mCart.shippingAddress.lastname
+            add.address = address ? address : mCart.shippingAddress.address
+            add.city = city ? city : mCart.shippingAddress.city
+            add.eirCode = eirCode ? eirCode : mCart.shippingAddress.eirCode
+            add.country = country ? country : mCart.shippingAddress.country
+            add.email = email ? email : mCart.shippingAddress.email
+            mCart = {...state, shippingAddress: add}
 
             localStorage.setItem("cart", JSON.stringify(mCart))
             return {...state, shippingAddress: add }
         }
     case SAVE_ADDRESS_ERROR:
-      localStorage.setItem("cart", JSON.stringify({...state, shippingAddress: []}))
+      localStorage.setItem("cart", JSON.stringify({ ...state, shippingAddress: {} }))
       return {...state, shippingAddress: {}}
-
+    case GET_ADDRESS:
+      localStorage.setItem("cart", JSON.stringify({ ...state, shippingAddress: payload }))
+      return { ...state, shippingAddress: payload} 
+    case GET_ADDRESS_ERROR:
+      localStorage.setItem("cart", JSON.stringify({ ...state, shippingAddress: {} }))
+      return {...state, shippingAddress: {}}
     default:
         return state;
   }

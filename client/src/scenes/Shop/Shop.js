@@ -199,7 +199,7 @@ const Shop = ({products, getProducts, loading, shoppingcart}) => {
             try{
                 await getProducts()
             }catch(error){
-                console.log(error.message)
+                console.log(error)
             }
         }
 

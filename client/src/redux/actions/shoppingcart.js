@@ -15,7 +15,8 @@ import {
 import axios from 'axios'
 
 //import { uuid } from 'uuid';
-const apiUrl ="https://inphinityapi.herokuapp.com/api"
+// const apiUrl ="https://inphinityapi.herokuapp.com/api"
+const apiUrl ="http://localhost:5000/api"
 
 export const addToCart = (product_idx, quantity, image, name, price, benefits, maxVal, category_id) => async dispatch => {
 
@@ -112,12 +113,13 @@ export const saveAddress = (shipping) => async dispatch=> {
 
     try{
 
-        const { fullname, address, city, eirCode, country, email } = shipping
+        const { firstname, lastname, address, city, eirCode, country, email } = shipping
         console.log(shipping)
 
+        const fullname = firstname + ' '+ lastname
         dispatch({
             type: SAVE_ADDRESS,
-            payload: { fullname, address, city, eirCode, country, email }
+            payload: { firstname, lastname, address, city, eirCode, country, email }
         })
     
     }catch(e){
@@ -131,17 +133,24 @@ export const saveAddress = (shipping) => async dispatch=> {
 export const getAddress = () => async dispatch => {
     try{
 
-        const cart = localStorage.getItem("cart")
-        
-        if (cart !== null){
-            cart = JSON.parse(cart)
-            const address = cart.shippingAddress
+        dispatch({
+            type: SET_LOADING,
+            payload: true
+        })
 
-            dispatch({
-                type: GET_ADDRESS,
-                payload: address
-            })
-        }
+        const res = await axios.get(`${apiUrl}/customers/my/address`)
+        console.log('[ADDRESS]', res)
+
+        // const cart = localStorage.getItem("cart")
+        dispatch({
+            type: SET_LOADING,
+            payload: false
+        })
+
+        dispatch({
+            type: GET_ADDRESS,
+            payload: res.data.data
+        })
 
     }catch(e){
         dispatch({

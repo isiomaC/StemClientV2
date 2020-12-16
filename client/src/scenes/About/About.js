@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     inner: {
         width: "100vw",
         height: "60vh",
-        backgroundSize:'cover',
+        backgroundSize: 'cover',
         background: `url(${andrea})`
     },
     inner2: {
@@ -48,11 +48,7 @@ const useStyles = makeStyles(theme => ({
      const classes = useStyles()
     return (
         <Box className={classes.root} >
-            <Box className={classes.inner}>
-
-                {/* <img src={andrea} alt="" width="100%" height="100%"/> */}
-
-            </Box>
+            <Box className={classes.inner}/>
             <Container className={classes.inner2}>
                 <Box className={classes.aboutUsHeader}>
                     <div className={classes.ImgBg} >

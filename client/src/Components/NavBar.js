@@ -57,7 +57,7 @@ const options = [
         index: 1,
         name:'Blog',
         selector: '#blogdestination',
-        link: '/blog'
+        link: '/blogs'
     },
     {
         index: 2,
@@ -268,7 +268,7 @@ const NavBar = (props) => {
                                         Shop
                                     </Typography>
                                 </a>
-                                <a href="/blog" className={classes.navbarLinks}>
+                                <a href="/blogs" className={classes.navbarLinks}>
                                     <Typography className={classes.navbarLinks} variant="h6" >
                                         Blog
                                     </Typography>

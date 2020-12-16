@@ -52,13 +52,24 @@ export const getProducts = () => async dispatch => {
             type: SET_LOADING,
             payload: false
         })
-        dispatch({
-            type:  PRODUCT_ERROR,
-            payload: { 
-                msg: err.response.statusText,
-                status: err.response.status 
-            }
-        })
+
+        if (typeof err.response == "undefined" || err.response === undefined){
+            dispatch({
+                type: PRODUCT_ERROR,
+                payload: {
+                    msg: 'Service Unavailable',
+                    status: 503
+                }
+            })
+        }else{
+            dispatch({
+                type:  PRODUCT_ERROR,
+                payload: { 
+                    msg: err.response.statusText,
+                    status: err.response.status 
+                }
+            })
+        }
     }
 } 
 
@@ -93,8 +104,8 @@ export const searchProducts = (text) => async dispatch => {
         dispatch({
             type: PRODUCT_ERROR,
             payload: {
-                msg: err.response.statusText,
-                status: err.response.status
+                // msg: err.response.statusText,
+                // status: err.response.status
             }
         })
     }
@@ -126,13 +137,23 @@ export const getProductByPrice = (price) => async dispatch => {
             payload: false
         })
 
-        dispatch({
-            type: PRODUCT_ERROR,
-            payload: {
-                msg: err.response.statusText,
-                status: err.response.status
-            }
-        })
+        if (typeof err.response == "undefined" || err.response === undefined){
+            dispatch({
+                type: PRODUCT_ERROR,
+                payload: {
+                    msg: 'Service Unavailable',
+                    status: 503
+                }
+            })
+        }else{
+            dispatch({
+                type: PRODUCT_ERROR,
+                payload: {
+                    msg: err.response.statusText,
+                    status: err.response.status
+                }
+            })
+        }
     }
 } 
 
@@ -198,13 +219,23 @@ export const getNewProducts = () => async dispatch => {
             payload: false
         })
 
-        dispatch({
-            type: PRODUCT_ERROR,
-            payload: {
-                msg: err.response.statusText,
-                status: err.response.status
-            }
-        })
+        if (typeof err.response == "undefined" || err.response === undefined){
+            dispatch({
+                type: PRODUCT_ERROR,
+                payload: {
+                    msg: 'Service Unavailable',
+                    status: 503
+                }
+            })
+        }else{
+            dispatch({
+                type: PRODUCT_ERROR,
+                payload: {
+                    msg: err.response.statusText,
+                    status: err.response.status
+                }
+            })
+        }
     }
 }
 
@@ -224,13 +255,23 @@ export const getHighestPrice =() => async dispatch => {
             payload: false
         })
 
-        dispatch({
-            type: PRODUCT_ERROR,
-            payload: {
-                msg: err.response.statusText,
-                status: err.response.status
-            }
-        })
+        if (typeof err.response == "undefined" || err.response === undefined){
+            dispatch({
+                type: PRODUCT_ERROR,
+                payload: {
+                    msg: 'Service Unavailable',
+                    status: 503
+                }
+            })
+        }else{
+            dispatch({
+                type: PRODUCT_ERROR,
+                payload: {
+                    msg: err.response.statusText,
+                    status: err.response.status
+                }
+            })
+        }
     }
 }
 
@@ -262,15 +303,24 @@ export const getFeaturedProducts = () =>  async dispatch => {
             payload: false
         })
 
-        
-        dispatch({
-            type: PRODUCT_ERROR,
-            payload: {
-                resource: 'FeaturedProducts',
-                msg: err.response.statusText,
-                status: err.response.status
-            }
-        })
+        if (typeof err.response == "undefined" || err.response === undefined){
+            dispatch({
+                type: PRODUCT_ERROR,
+                payload: {
+                    msg: 'Service Unavailable',
+                    status: 503
+                }
+            })
+        }else{
+            dispatch({
+                type: PRODUCT_ERROR,
+                payload: {
+                    resource: 'FeaturedProducts',
+                    msg: err.response.statusText,
+                    status: err.response.status
+                }
+            })
+        }
     }
 
 }
