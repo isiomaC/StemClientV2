@@ -4,12 +4,21 @@ import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
 import { useMediaQuery } from '@material-ui/core'
-import Card from '@material-ui/core/Card'
 import { makeStyles } from '@material-ui/core/styles'
-import ShoppingCart from '../../../Components/ShoppingCart'
 import SimilarProduct from '../content/SimilarProduct'
-import TextField from '@material-ui/core/TextField'
+
+import axios from 'axios'
+import approximatePrice from '../../../utils/approximatePrice'
+
+//Icons
+import PhoneIcon from '@material-ui/icons/Phone';
+import EmailIcon from '@material-ui/icons/Email';
+import PersonIcon from '@material-ui/icons/Person';
+
+import PropTypes from 'prop-types'
+import TableDisplay from '../content/TableDisplay'
 
 
 const useStyles = makeStyles(theme => ({
@@ -17,7 +26,8 @@ const useStyles = makeStyles(theme => ({
 
     },
     typo:{
-        textAlign: 'left'
+        textAlign: 'left',
+        marginLeft: '10px'
     },  
     checkoutBtn: {
         background: 'rgba(9, 0, 59, 0.9)',
@@ -27,61 +37,105 @@ const useStyles = makeStyles(theme => ({
             color: 'red'
          },
     },
+    paper:{
+        margin: '15px',
+        background: 'transparent'
+    }, 
+    layer:{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        margin: '20px 0px'
+    },
+    deliveryInfo:{
+        border:'1px solid rgba(204, 246, 200, 1)',
+    }
 }))
 
-const ReviewDetailsStep = ({ handleClick }) => {
+const ReviewDetailsStep = ({ handleClick, user, cart }) => {
 
     const classes = useStyles()
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'))
+    const [shipping, setShipping] = useState(process.env.REACT_APP_SHIPPING_PRICE)
+    const [error, setError] = useState(null)
 
-    const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || {})
+    const apiRoute = process.env.REACT_APP_API_URL
 
     useEffect(()=> {
-        console.log(cart.shippingAddress)
+        const fetchShipping = async () => {
+            try{
+                const res = await axios.get(`${apiRoute}/products?filter={"shipping": "yes"}`)
+                setShipping(res.data.price)
+                setError(null)
+            }catch(e){
+                setError(e.message)
+            }
+        }
+
+        fetchShipping()
+
     }, [])
 
     return (
         <Container>
             <Grid container>
                 <Grid className={classes.gridItem} item xs={isSmall ? 12 : 6}>
-                    <Typography className={classes.typo}>Email: {cart.shippingAddress.email}</Typography>
-
-                    <Typography className={classes.typo}>Fullname: {cart.shippingAddress.fullname}</Typography>
-                    <Typography className={classes.typo}>Address: {cart.shippingAddress.address}</Typography>
-                    <Typography className={classes.typo}>City: {cart.shippingAddress.city}</Typography>
-                    <Typography className={classes.typo}>Country: {cart.shippingAddress.country}</Typography>
-                    <Typography className={classes.typo}>eirCode: {cart.shippingAddress.eirCode}</Typography>
+                    <Paper className={classes.paper}>
+                        <Container className={classes.layer}>
+                            <EmailIcon/>
+                            <Typography className={classes.typo}>{user.email ? user.email : cart.shippingAddress.email}</Typography>
+                        </Container>
+                        <Container className={classes.layer}>
+                            <PersonIcon/>
+                            <Typography className={classes.typo}> {cart.shippingAddress.firstname}</Typography>
+                        </Container>
+                        <Container className={classes.layer}> 
+                            <PersonIcon/>
+                            <Typography className={classes.typo}> {cart.shippingAddress.lastname}</Typography>
+                        </Container>
+                        <Container className={classes.layer}>
+                            <PhoneIcon/>
+                            <Typography className={classes.typo}> {cart.shippingAddress.phonenumber}</Typography>
+                        </Container>
+                    </Paper>
                 </Grid>
                 <Grid className={classes.gridItem} item xs={isSmall ? 12 : 6}>
-                   {cart.items && cart.items.map(item => (
-                       //shows products currently in cart
-                    <SimilarProduct 
-                        id={item.product_idx} 
-                        name={item.name} 
-                        description={item.benefits}
-                        size={item.size} 
-                        price={item.price} 
-                        image={item.image} />)
-                    )}
+                    {shipping &&  
+                        <Container className={classes.deliveryInfo}>
+                            <Typography style={{ fontWeight: 'bold', marginBottom: '8px'}}>Delivery</Typography>
+
+                            <Typography>€{approximatePrice(shipping)} for Orders Under €65.</Typography>
+
+                            <Typography>Free shipping on all orders over €65 in Ireland.</Typography>
+
+                            <Typography>Deliveries within Ireland can take between 2 to 5 working days.</Typography>
+
+                            <Typography>Deliveries outside of Ireland can take 7 to 12 working days.</Typography>
+                        </Container>
+                    }
+                   {( cart && cart.items)  && <TableDisplay rows={cart.items}/> }
+                   
+                   
+                {/* //    cart.items.map((item, index) => (
+                //        //shows products currently in cart
+                //     <SimilarProduct 
+                //         key={index}
+                //         id={item.product_idx} 
+                //         name={item.name} 
+                //         description={item.benefits}
+                //         size={item.size} 
+                //         price={item.price} 
+                //         image={item.image} />)
+                //     )} */}
                 </Grid>
             </Grid>
             <Box style={{ margin: '20px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
-            {/* { (!user || (user && !user.email)) &&
-                <TextField
-                    error={error && true}
-                    id="outlined-textarea"
-                    label="email"
-                    placeholder="email"
-                    type="email"
-                    name="email"
-                    style={{ width: '250px' }}
-                    value={guest.email}
-                    onChange={e => handleChange(e)}
-                    helperText={error && "Please Input a Valid Email"} />} */}
-            <Button className={classes.checkoutBtn} onClick={e => { 
-                    console.log("Click answered ") 
+            <Button 
+                className={classes.checkoutBtn} 
+                onClick={e => { 
                     handleClick(e)
-                }}>
+                }
+                }>
                 CheckOut
             </Button>
         </Box>
@@ -89,5 +143,9 @@ const ReviewDetailsStep = ({ handleClick }) => {
     )
 }
 
+ReviewDetailsStep.propTypes = {
+    user: PropTypes.object,
+    cart: PropTypes.object
+}
 
 export default ReviewDetailsStep;

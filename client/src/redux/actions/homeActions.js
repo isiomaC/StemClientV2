@@ -6,7 +6,6 @@ import {
   GET_REVIEWS,
   SET_LOADING,
   GET_EXTRAS,
-  CUSTOMER_ERROR,
   PRODUCT_ERROR, 
   DELETE_ACCOUNT,
   SEARCH_PRODUCTS,
@@ -17,10 +16,12 @@ import {
   EXTRAS_ERROR,
   REVIEWS_ERROR
 } from './types';
-import setAuthToken from '../../utils/setAuthToken';
+
+import setDispatchError from '../../utils/setDispatchError'
+
 
 // const apiUrl ="https://inphinityapi.herokuapp.com/api"
-const apiUrl ="http://localhost:5000/api"
+const apiUrl =process.env.REACT_APP_API_URL
 
 export const getProducts = () => async dispatch => {
     // if(localStorage.token){
@@ -35,7 +36,6 @@ export const getProducts = () => async dispatch => {
         })
         
         const res = await axios.get(`${apiUrl}/products`)
-        // console.log(res.data)
 
         dispatch({
             type: SET_LOADING,
@@ -47,29 +47,13 @@ export const getProducts = () => async dispatch => {
             payload: res.data
         })
 
-    }catch(err){
+    }catch(error){
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        if (typeof err.response == "undefined" || err.response === undefined){
-            dispatch({
-                type: PRODUCT_ERROR,
-                payload: {
-                    msg: 'Service Unavailable',
-                    status: 503
-                }
-            })
-        }else{
-            dispatch({
-                type:  PRODUCT_ERROR,
-                payload: { 
-                    msg: err.response.statusText,
-                    status: err.response.status 
-                }
-            })
-        }
+        setDispatchError(dispatch, error,PRODUCT_ERROR )
     }
 } 
 
@@ -83,7 +67,6 @@ export const searchProducts = (text) => async dispatch => {
         })
     
         let res = await axios.get(`${apiUrl}/products?filter={"q":${JSON.stringify(text)}}&range=[0,19]&sort=["date","ASC"]`)
-        // console.log(res.data)
 
         dispatch({
             type: SET_LOADING,
@@ -95,19 +78,15 @@ export const searchProducts = (text) => async dispatch => {
             payload: res.data
         })
         
-    }catch(err){
+    }catch(error){
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        dispatch({
-            type: PRODUCT_ERROR,
-            payload: {
-                // msg: err.response.statusText,
-                // status: err.response.status
-            }
-        })
+        setDispatchError(dispatch, error, PRODUCT_ERROR)
+
+       
     }
 } 
 
@@ -131,29 +110,14 @@ export const getProductByPrice = (price) => async dispatch => {
             payload: res.data
         })
 
-    }catch(err){
+    }catch(error){
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        if (typeof err.response == "undefined" || err.response === undefined){
-            dispatch({
-                type: PRODUCT_ERROR,
-                payload: {
-                    msg: 'Service Unavailable',
-                    status: 503
-                }
-            })
-        }else{
-            dispatch({
-                type: PRODUCT_ERROR,
-                payload: {
-                    msg: err.response.statusText,
-                    status: err.response.status
-                }
-            })
-        }
+        setDispatchError(dispatch, error, PRODUCT_ERROR)
+       
     }
 } 
 
@@ -177,19 +141,14 @@ export const getByCategory = (name) => async dispatch => {
             payload: res.data
         })
 
-    }catch(err){
+    }catch(error){
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        dispatch({
-            type: PRODUCT_ERROR,
-            payload: {
-                msg: err.response.statusText,
-                status: err.response.status
-            }
-        })
+        setDispatchError(dispatch, error, PRODUCT_ERROR)
+
     }
 }
 
@@ -209,33 +168,17 @@ export const getNewProducts = () => async dispatch => {
         })
 
         dispatch({
-            type: GET_PRODUCT_BY_CATEGORY,
+            type: GET_NEW_PRODUCTS,
             payload: res.data
         })
 
-    }catch(err){
+    }catch(error){
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        if (typeof err.response == "undefined" || err.response === undefined){
-            dispatch({
-                type: PRODUCT_ERROR,
-                payload: {
-                    msg: 'Service Unavailable',
-                    status: 503
-                }
-            })
-        }else{
-            dispatch({
-                type: PRODUCT_ERROR,
-                payload: {
-                    msg: err.response.statusText,
-                    status: err.response.status
-                }
-            })
-        }
+        setDispatchError(dispatch, error, PRODUCT_ERROR)
     }
 }
 
@@ -249,29 +192,15 @@ export const getHighestPrice =() => async dispatch => {
             payload: res.data
         })
 
-    }catch(err){
+    }catch(error){
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        if (typeof err.response == "undefined" || err.response === undefined){
-            dispatch({
-                type: PRODUCT_ERROR,
-                payload: {
-                    msg: 'Service Unavailable',
-                    status: 503
-                }
-            })
-        }else{
-            dispatch({
-                type: PRODUCT_ERROR,
-                payload: {
-                    msg: err.response.statusText,
-                    status: err.response.status
-                }
-            })
-        }
+        setDispatchError(dispatch, error, PRODUCT_ERROR)
+
+       
     }
 }
 
@@ -297,30 +226,14 @@ export const getFeaturedProducts = () =>  async dispatch => {
             payload: res.data
         })
 
-    }catch(err){
+    }catch(error){
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        if (typeof err.response == "undefined" || err.response === undefined){
-            dispatch({
-                type: PRODUCT_ERROR,
-                payload: {
-                    msg: 'Service Unavailable',
-                    status: 503
-                }
-            })
-        }else{
-            dispatch({
-                type: PRODUCT_ERROR,
-                payload: {
-                    resource: 'FeaturedProducts',
-                    msg: err.response.statusText,
-                    status: err.response.status
-                }
-            })
-        }
+        setDispatchError(dispatch, error, PRODUCT_ERROR)
+
     }
 
 }
@@ -353,14 +266,9 @@ export const getReviews = () => async dispatch => {
             payload: false
         })
 
-        dispatch({
-            type: REVIEWS_ERROR,
-            payload: {
-                resource: 'Reviews',
-                msg: error.response.statusText,
-                status: error.response.status
-            }
-        })
+        setDispatchError(dispatch, error, REVIEWS_ERROR)
+
+        
     }
 }
 
@@ -392,32 +300,26 @@ export const getExtras = () => async dispatch => {
             payload: false
         })
 
-        dispatch({
-            type: EXTRAS_ERROR,
-            payload: {
-                resource: 'Extras',
-                msg: error.response.statusText,
-                status: error.response.status
-            }
-        })    
+        setDispatchError(dispatch, error, EXTRAS_ERROR)
+
     }
 }
 
-export const GetAll = () => async dispatch => {
-    try {
+// export const GetAll = () => async dispatch => {
+//     try {
 
         
 
-    }catch(error){
-        dispatch({
-            type: PRODUCT_ERROR,
-            payload: {
-                msg: error.response.statusText,
-                status: error.response.status
-            }
-        })
-    }
-}
+//     }catch(error){
+//         dispatch({
+//             type: PRODUCT_ERROR,
+//             payload: {
+//                 msg: error.response.statusText,
+//                 status: error.response.status
+//             }
+//         })
+//     }
+// }
 
 export const deleteAccount = () => async dispatch => {
     dispatch({

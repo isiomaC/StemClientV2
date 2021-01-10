@@ -4,6 +4,7 @@ import Container from '@material-ui/core/Container'
 import TextField from '@material-ui/core/TextField'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import AccountCircle from '@material-ui/icons/AccountCircle'
@@ -45,6 +46,22 @@ const useStyles = makeStyles(theme => ({
           color: 'red',
           background: 'white'
         }
+    },
+    container: {
+      width: '100vw',
+      height: '60vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      [theme.breakpoints.down('xs')]: {
+        height: '80vh'
+      }
+    }, 
+    paper: {
+      background: 'transparent',
+      [theme.breakpoints.down('xs')]: {
+        width: 'calc(100vw - 30px)'
+      }
     }
 }))
 
@@ -120,12 +137,8 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
 
       let form = JSON.stringify(formData);
 
-      try {
-        await register(form);
+      await register(form);
   
-      }catch(e){
-        console.log(e.message)
-      }
     };
   
     if (isAuthenticated) {
@@ -138,7 +151,8 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
         loading === true ? (
             <Spinner />
         ): (
-            <Fragment style={{ }}>
+            <Box className={classes.container}>
+              <Paper className={classes.paper}>
                 <h2 className={classes.header}>Sign Up</h2>
                 <form className={classes.root} onSubmit={e => onSubmit(e)}>
                     {/* <div className={classes.div}> */}
@@ -202,11 +216,11 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
                                     <EmailIcon />
                                   </InputAdornment>
                                 ),
-                                endAdornment: (
-                                  <InputAdornment position="start">
-                                    {/* <VisibilityOffIcon /> */}
-                                  </InputAdornment>
-                                ),
+                                // endAdornment: ()
+                                  // <InputAdornment position="start">
+                                  //   {/* <VisibilityOffIcon /> */}
+                                  // </InputAdornment>
+                                
                               }}
                         />
                     </div>
@@ -277,7 +291,8 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
                         Create Account 
                     </Button>
                 </form>
-            </Fragment>
+                </Paper>
+            </Box>
         )
     )
 }

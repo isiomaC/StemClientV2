@@ -9,7 +9,7 @@ import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import { red, green } from '@material-ui/core/colors'
+import { green } from '@material-ui/core/colors'
 
 import ShoppingCart from '../Components/ShoppingCart'
 
@@ -98,7 +98,7 @@ const QuickShop = ({ shoppingcart, goToCheckOut, getOrderTotal }) => {
                 <Divider/>
                 <Container className={classes.orderTotal}>
                     <Typography style={{ height: '50%'}}>
-                        Order Total: €{approximatePrice(getOrderTotal(shoppingcart))}
+                        Total: €{approximatePrice(getOrderTotal(shoppingcart))}
                     </Typography>
                 </Container>
                 <Divider style={{ marginBottom: '20px'}}/>

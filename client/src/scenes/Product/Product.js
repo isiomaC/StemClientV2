@@ -11,12 +11,16 @@ import { Typography } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 
+import Snackbar from '@material-ui/core/Snackbar'
+import MuiAlert from '@material-ui/lab/Alert';
+
 // import Rating from '@material-ui/lab/Rating';
 
 //Icons
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import YouTubeIcon from '@material-ui/icons/YouTube';
+import ShareIcon from '@material-ui/icons/Share';
 
 //Content
 import Rating from '../Home/content/cRating'
@@ -25,13 +29,27 @@ import Spinner from '../../Components/layout/Spinner'
 //actions
 import { getProduct } from '../../redux/actions/shopactions'
 import { addToCart, removeFromCart } from '../../redux/actions/shoppingcart'
+import { setAlert } from '../../redux/actions/alert'
 
 import ReviewDialog from './content/ReviewDialog'
 
 import approximatePrice from '../../utils/approximatePrice'
 
+const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(theme => ({
+    root:{
+        width: '100vw',
+        height: '60vh',
+        dispplay: 'flex',
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        [theme.breakpoints.down('xs')]: {
+            height: '100vh'
+        }
+    },
     rows: {
         display: 'flex',
         alignitems: 'flex-start',
@@ -69,13 +87,21 @@ const useStyles = makeStyles(theme => ({
         // boxShadow: theme.shadows[3],
         padding: theme.spacing(2, 4, 3),
       },
+      shareIcon: {
+          color: 'red',
+          '&:hover': {
+              cursor: 'pointer'
+          }
+      }
 }))
 
 const Product = (props) => {
 
-    const { product, loading, getProduct, match, user, addToCart } = props
+    const { product, loading, getProduct, match, user, addToCart, alert, setAlert } = props
 
     const [open, setOpen] = React.useState(false);
+
+    const [snackOpen, setSnackOpen] = React.useState(false);
 
     const [rating, setRating] = React.useState(0);//get product rating from db
 
@@ -88,7 +114,6 @@ const Product = (props) => {
     };
 
     const handleClose = async () => {
-
         setOpen(false);
     };
 
@@ -96,6 +121,19 @@ const Product = (props) => {
         setQuantity(event.target.value)
     }
 
+    const handleSnackbarClose = (e, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackOpen(false)
+    }
+
+    const copyToClipBoard = () => {
+        setSnackOpen(true)
+        navigator.clipboard.writeText(window.location.href)
+        setAlert('Url Copied to ClipBoard', 'info')
+    }
+   
     React.useEffect(() => {
        
         (async () => {
@@ -106,12 +144,33 @@ const Product = (props) => {
 
     }, []);
 
+    // if (alert.length > 0){
+    //     setSnackOpen(true)
+    // }
+
     return product === null ? (
         <div style={{ display: 'flex', alignItem: 'center', width: '100vw', height: '80vh'}}>
             <Spinner/>
         </div>
     ):(
-        <Box style={{ flexGrow: 1}}>
+        <Box className={classes.root} style={{ flexGrow: 1}}>
+
+            { (alert.length > 0 && alert[0].msg.success) &&
+                <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                    <Alert onClose={handleSnackbarClose} severity="success">
+                        {alert[0].msg.message}
+                    </Alert>
+                </Snackbar>
+            }
+
+            { (alert.length > 0 && alert[0].msg.success === false) &&
+                <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                    <Alert onClose={handleSnackbarClose} severity="error">
+                        {alert[0].msg.message}
+                    </Alert>
+                </Snackbar>
+            }
+
             <Grid container style={{ height: ''}} spacing={0}>
                 <Grid item style={{ padding: 70 }} xs lg={5}>
                     <ProductInfoCarousel images={product.product.base64Images}/>
@@ -125,7 +184,7 @@ const Product = (props) => {
                         
                         <Typography style={{ margin: '0px 5px'}}> {product.product.reviewCount} reviews </Typography>
                         {"|"}
-                        <Typography className={classes.review} onClick={handleOpen}> Write a review </Typography>
+                        <Typography className={classes.review} onClick={handleOpen}> Leave a review </Typography>
                         <ReviewDialog open={open} handleClose={handleClose} product_id={product.product.idx} user={user}/>
                     </Box>
                     <Box className={classes.rows}>
@@ -158,9 +217,7 @@ const Product = (props) => {
                             variant="contained" 
                             color="secondary" 
                             onClick={() => {
-                                // console.log(product.product)
                                 const { idx, base64Images, name, price, benefits, stock, category_id } = product.product
-                                // if (user === undefined || user.idx === null){
                                 addToCart(idx, quantity, base64Images[0], name, price, benefits, stock, category_id)
                             }} >
                             Add To Cart
@@ -174,9 +231,14 @@ const Product = (props) => {
                     </Typography>
                     <Typography className={classes.topRows}>
                          {"Share:"} 
-                         <FacebookIcon style={{ marginLeft: 20, color: 'Blue'}}/> 
-                         <TwitterIcon style={{ marginLeft: 10, color: 'lightBlue'}}/>
-                         <YouTubeIcon style={{ marginLeft: 10, color: 'red'}} />
+                         
+                          <ShareIcon onClick={() => copyToClipBoard() } style={{ marginLeft: 20}} className={classes.shareIcon}/> 
+                          { alert.length > 0 &&  <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                                                    <Alert onClose={handleSnackbarClose} >
+                                                        {alert[0].msg}
+                                                    </Alert>
+                                                </Snackbar> }
+                        
                      </Typography>
                 </Grid>
             </Grid>
@@ -188,13 +250,15 @@ Product.propTypes = {
     product: PropTypes.object,
     loading: PropTypes.bool,
     getProduct: PropTypes.func,
-    user: PropTypes.object
+    user: PropTypes.object,
+    alert: PropTypes.object,
 }
 
 const mapStateToProps = state => ({
     product: state.shopactions.product,
     loading: state.shopactions.loading,
-    user: state.auth.user
+    user: state.auth.user,
+    alert: state.alert
 })
 
-export default connect(mapStateToProps, { getProduct, addToCart })(Product);
+export default connect(mapStateToProps, { getProduct, addToCart, setAlert })(Product);

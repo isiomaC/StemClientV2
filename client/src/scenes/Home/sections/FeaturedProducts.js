@@ -109,7 +109,7 @@ const easeInOutQuad =(t, b, c, d) =>{
 };
 
 const scrollLeft = (element, change, duration) => {
-    console.log(element.scrollLeft)
+    // console.log(element.scrollLeft)
     var start = element.scrollLeft,
         currentTime = 0,
         increment = 20;
@@ -156,16 +156,18 @@ const FeaturedProducts = ({products, variant}) => {
     
     return (
         <Box component='div' id='featureddestination'  className={ classes.root } >
-                <Box direction="row" ref={nextPrevRef} className={classes.griditem} item>
-                    {products.map(product => 
+                <Box direction="row" ref={nextPrevRef} className={classes.griditem}>
+                    {products.map((product, i) => 
                         (      
-                        <ProductCard variant={variant}
-                                     title={product.name} 
-                                     description={product.benefits.split(/\<.*?\>/g)} 
-                                     price={approximatePrice(product.price)} 
-                                     image={product.base64} 
-                                     idx={product.idx}
-                                     />
+                        <ProductCard
+                            key={i}
+                            variant={variant}
+                            title={product.name} 
+                            description={product.benefits.split(/\<.*?\>/g)} 
+                            price={approximatePrice(product.price)} 
+                            image={product.base64} 
+                            idx={product.idx}
+                            />
                         )
                     )}
                 </Box>

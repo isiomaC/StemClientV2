@@ -5,7 +5,7 @@ import { useStripe } from "@stripe/react-stripe-js";
 import axios from 'axios'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
-import { clearCart } from '../../../redux/actions/shoppingcart'
+import { clearCart, getDetails } from '../../../redux/actions/shoppingcart'
 import { makeStyles } from '@material-ui/core/styles'
 
 //Contents
@@ -15,6 +15,7 @@ import ValidateEmail  from "../utils/ValidateEmail";
 import ViewCartStep  from "../steps/ViewCartStep";
 import ShippingStep from '../steps/ShippingStep';
 import ReviewDetailsStep from '../steps/ReviewDetailsStep'
+import ConfirmationPage from '../steps/ConfirmationPage'
 
 import { Container } from "@material-ui/core";
 import Stepper from '@material-ui/core/Stepper';
@@ -24,6 +25,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
+import { encrypt } from '../../../utils/cryptoWrapper'
 import infinity from '../../../img/InFiniC.png'
 import bgLogo from '../../../img/Logo.png'
 
@@ -47,36 +49,45 @@ const useStyles = makeStyles(theme => ({
     }, 
     icon: {
         background: 'red'
+    },
+    message: {
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 }))
 
-const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
+const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, getDetails, shoppingcart}) => {
 
     const classes = useStyles();
+
     const [message, setMessage] = useState("");
+    const [outcome, setOutcome] = useState(null)
+
     const [error, setError] = useState(false)
+    const [chkError, setchkError] = useState(false)
     const stripe = useStripe();
 
-    const apiUrl ="https://inphinityapi.herokuapp.com/api"
-    const localHost ="http://localhost:5000/api"
+    const apiUrl = process.env.REACT_APP_API_URL 
 
     const [similarProducts, setSimilarProducts] = useState([])
 
     useEffect(() => {
+        
         // Check to see if this is a redirect back from Checkout
         const query = new URLSearchParams(window.location.search);
-        console.log('[QUERY_LOCATION]', window.location.query)
 
+        // setMessage('Testing this component')
         if (query.get("success")) {
-            ( async () =>
-                await clearCart()
-            )()
-            setMessage("Order placed! You will receive an email confirmation.");
+            setOutcome({"success": query.get("success")})
+            setMessage("IT'S ORDERED!!!");
         }
+
         if (query.get("canceled")) {
-            setMessage(
-                "Order canceled -- continue to shop around and checkout when you're ready."
-            );
+            setOutcome({"cancelled": query.get("canceled")})
+            setMessage("Order Canceled!!");
         }
 
         const getRelatedProducts = async () => {
@@ -88,21 +99,25 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
                 let uniq = a => [...new Set(a)];
                 let query = uniq(categoryNames)
 
-                const res = await axios.get(`${localHost}/products?filter={"category_names": ${JSON.stringify(query)}, "excludeIds": ${JSON.stringify(excludeIds)}}`)
+                const res = await axios.get(`${apiUrl}/products?filter={"category_names": ${JSON.stringify(query)}, "excludeIds": ${JSON.stringify(excludeIds)}}`)
                 if (res.data){
                     setSimilarProducts(similarProducts => [...res.data])
                 }
             }catch(e){
-                console.log(e.message)
+                setSimilarProducts([])
             }
         }
-        (async () =>
-            await getRelatedProducts()
+        (async () => {
+                await getRelatedProducts()
+                // if (isAuthenticated) {
+                //     await getDetails()
+                // }
+            }
         )()
     }, []);
 
     const Message = ({ message }) => (
-        <section>
+        <section className={classes.message}>
           <p>{message}</p>
         </section>
     );
@@ -111,7 +126,7 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
         setError(false)
     }
 
-    const handleClick = async (event) => {
+    const handleCheckOut = async (event) => {
         // event.preventDefault()
         
         const config = {
@@ -128,7 +143,6 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
                 })
             )
 
-            console.log(lineitems)
             if (isAuthenticated && user) {
                 userEmail = user.email
             }else{
@@ -142,40 +156,49 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
 
             const formData = { 
                 email: userEmail,
-                items: lineitems
+                items: lineitems,
+                details: shoppingcart.shippingAddress
             }
 
-             console.log(formData)
             let response
+
             if (isAuthenticated){
-                response = await axios.post(`${localHost}/create-session`, formData, config) 
+                response = await axios.post(`${apiUrl}/create-session`, formData, config) 
             }else{
-                response = await axios.post(`${localHost}/create-session/guest`, formData, config)
+                response = await axios.post(`${apiUrl}/create-session/guest`, formData, config)
             }
 
             const session = response.data;
 
-            //When the customer clicks on the button, redirect them to Checkout.
+            const encryptedSession = encrypt(session.id)
+           
+            localStorage.setItem('sId', encryptedSession)
+
+            localStorage.setItem('email', shoppingcart.shippingAddress.email)
+
+            await clearCart();
+
+            // When the customer clicks on the button, redirect them to Checkout.
             const result = await stripe.redirectToCheckout({
               sessionId: session.id,
             });
         
             if (result.error) {
                 //redirect failed - do something
-                console.log(result.error.message)
+                setchkError(result.error.message)
             }
         }catch(e){
-            console.log(e)
+            setchkError(e.message)
         }
     };
 
-    // console.log(localStorage.getItem("Curr"))
     const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState({});
 
     const getSteps =()=> {
-        return ['View Cart', 'Shipping Address', 'Review Details'];
+        return ['View Cart', 'Your Details', 'Review Order'];
     }
+
     const steps = getSteps();
 
     const getStepContent = (step) => {
@@ -186,21 +209,28 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
                         isAuthenticated={isAuthenticated} 
                         error={error} 
                         handleChange ={handleChange}
-                        handleClick={handleClick}/>
+                        handleClick={handleCheckOut}/>
                     );
           case 1:
-            return (<ShippingStep user={user}/>)
+            return (<ShippingStep user={user} getDetails={getDetails}/>)
           case 2:
             return (
                 <>
-                    <Typography variant="h5">Review Details</Typography>
+                    <Typography variant="h5" style={{ marginBottom: '15px'}}>Review Details</Typography>
                     <ReviewDetailsStep user={user} 
-                        isAuthenticated={isAuthenticated} 
                         error={error}
+                        cart={shoppingcart}
                         handleChange ={handleChange}
-                        handleClick={handleClick}/>
+                        handleClick={handleCheckOut}/>
                 </>
             );
+          default:
+              return (<ViewCartStep shoppingcart={shoppingcart}
+                similarProducts={similarProducts} user={user} 
+                isAuthenticated={isAuthenticated} 
+                error={error} 
+                handleChange ={handleChange}
+                handleClick={handleCheckOut}/>)
         }
     }
       /////////////////////////////////////////////////////////
@@ -228,6 +258,7 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
               steps.findIndex((step, i) => !(i in completed))
             : activeStep + 1;
         setActiveStep(newActiveStep);
+        // handleComplete()
       };
     
       const handleBack = () => {
@@ -250,8 +281,15 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
       /////////////////////////////////////////////////////////
     
     return message ? (
-        <Message message={message} />
-    ) : (<div>
+        <>
+         <ConfirmationPage 
+            auth={isAuthenticated}
+            outcome={outcome} 
+            message={message} 
+            activeUser={user} />
+        </>
+        
+    ) : ( <div>
             <Stepper activeStep={activeStep} className={classes.stepper}>
                 {steps.map((label, index) => (
                 <Step style={{ color: 'blue'}} key={label}>
@@ -274,10 +312,27 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
                         <Box>
                             {getStepContent(activeStep)}
                             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-                                <Button variant="contained" color="primary" disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+                                <Button 
+                                    variant="contained" 
+                                    color="primary" 
+                                    disabled={activeStep === 0} 
+                                    onClick={handleBack} 
+                                    className={classes.button}>
                                     Back
                                 </Button>
+                                {/* {activeStep !== steps.length &&
+                                    (completed[activeStep] ? (
+                                        <Typography variant="caption" className={classes.completed}>
+                                            Step {activeStep + 1} already completed
+                                        </Typography>
+                                    ) : (
+                                        <Button variant="contained" color="primary" onClick={handleComplete}>
+                                            {completedSteps() === totalSteps() - 1 ? 'Finish' : 'Complete Step'}
+                                        </Button>
+                                ))} */}
                                 <Button
+                                    disabled={activeStep === 1 && shoppingcart.details_complete === false ? true : (activeStep === 2) && true }
+                                    // disabled={true}
                                     variant="contained"
                                     color="primary"
                                     onClick={handleNext}
@@ -285,6 +340,7 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, shoppingcart}) => {
                                 >
                                     Next
                                 </Button>
+                                
                             </div>
                         </Box>
                     )
@@ -298,7 +354,9 @@ PreBuiltCheckOut.propTypes = {
     user: PropTypes.object,
     shoppingcart: PropTypes.object,
     isAuthenticated: PropTypes.bool,
-    clearCart: PropTypes.func
+    clearCart: PropTypes.func,
+    getDetails: PropTypes.func,
+    // saveAddress: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -308,7 +366,7 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps, {clearCart})(PreBuiltCheckOut);
+export default connect(mapStateToProps, {clearCart, getDetails})(PreBuiltCheckOut);
 
 
 

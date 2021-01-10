@@ -1,6 +1,5 @@
 import {
     ADD_TO_CART,
-    CHECKOUT,
     REMOVE_FROM_CART,
     CART_ERROR,
     SET_LOADING,
@@ -9,14 +8,15 @@ import {
     DECREMENT,
     SAVE_ADDRESS,
     SAVE_ADDRESS_ERROR,
-    GET_ADDRESS,
-    GET_ADDRESS_ERROR
+    GET_DETAILS,
+    GET_DETAILS_ERROR,
+    DETAILS_COMPLETE
 } from './types';
 import axios from 'axios'
 
 //import { uuid } from 'uuid';
-// const apiUrl ="https://inphinityapi.herokuapp.com/api"
-const apiUrl ="http://localhost:5000/api"
+
+const apiUrl = process.env.REACT_APP_API_URL
 
 export const addToCart = (product_idx, quantity, image, name, price, benefits, maxVal, category_id) => async dispatch => {
 
@@ -26,14 +26,12 @@ export const addToCart = (product_idx, quantity, image, name, price, benefits, m
 
         let category = res.data.name
 
-        console.log({ product_idx, quantity, image, name, price, benefits, maxVal, category })
 
         dispatch({
             type: ADD_TO_CART,
             payload: { product_idx, quantity, image, name, price, benefits, maxVal, category }
         })
       
-        // console.log("[CARTADD]", {product_idx, quantity, image, name, price, benefits, maxVal, category})
 
     }catch(error){
         dispatch({
@@ -109,28 +107,65 @@ export const clearCart = () => async dispatch => {
     }
 }
 
-export const saveAddress = (shipping) => async dispatch=> {
+export const saveDetails = (shipping, user) => async dispatch=> {
 
     try{
 
-        const { firstname, lastname, address, city, eirCode, country, email } = shipping
-        console.log(shipping)
+       
+        const { firstname, lastname, email, phonenumber } = shipping
+        if (user && user.email){
 
-        const fullname = firstname + ' '+ lastname
-        dispatch({
-            type: SAVE_ADDRESS,
-            payload: { firstname, lastname, address, city, eirCode, country, email }
-        })
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            const body = {
+                firstname,
+                lastname,
+                phonenumber,
+            }
+           
+            const res = await axios.put(`${apiUrl}/customers`, JSON.stringify(body), config )
+
+            if (res.data.success){
+                dispatch({
+                    type: SAVE_ADDRESS,
+                    payload: { firstname, lastname, phonenumber, email: user.email }
+                })
+
+                dispatch({
+                    type: DETAILS_COMPLETE,
+                    payload: res.data.success
+                })
+            }
+        }else{
+            dispatch({
+                type: SAVE_ADDRESS,
+                payload: { firstname, lastname, phonenumber, email}
+            })
+
+            dispatch({
+                type: DETAILS_COMPLETE,
+                payload: true
+            })
+        }
     
     }catch(e){
         dispatch({
             type: SAVE_ADDRESS_ERROR,
             payload: {}
         })
+
+        dispatch({
+            type: DETAILS_COMPLETE,
+            payload: false
+        })
     }
 }
 
-export const getAddress = () => async dispatch => {
+export const getDetails = () => async dispatch => {
     try{
 
         dispatch({
@@ -138,24 +173,35 @@ export const getAddress = () => async dispatch => {
             payload: true
         })
 
-        const res = await axios.get(`${apiUrl}/customers/my/address`)
-        console.log('[ADDRESS]', res)
+        const res = await axios.get(`${apiUrl}/customers/my/details`)
 
-        // const cart = localStorage.getItem("cart")
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        dispatch({
-            type: GET_ADDRESS,
-            payload: res.data.data
-        })
+        if (res.data.success){
+            dispatch({
+                type: GET_DETAILS,
+                payload: res.data.details
+            })
+
+            dispatch({
+                type: DETAILS_COMPLETE,
+                payload: res.data.success
+            })
+        }
+        
 
     }catch(e){
         dispatch({
-            type: GET_ADDRESS_ERROR,
+            type: GET_DETAILS_ERROR,
             payload: {}
+        })
+
+        dispatch({
+            type: DETAILS_COMPLETE,
+            payload: false
         })
     }
 }

@@ -43,6 +43,11 @@ const useStyles = makeStyles(theme=> ({
         display: "flex",
         justifyContent: "space-between"
         // alignItems: "flex-start"
+    },
+    title:{
+        // [theme.breakpoints.down('xs')]:{
+        //     fontSize: '0.83em'
+        // }
     }
 }));
 
@@ -52,7 +57,6 @@ const ProductCard = (props) => {
     const classes = useStyles()
     const { push } = useHistory()
 
-    // console.log(props)
 
     return (
         <Card elevation={0} className={classes.card}>
@@ -65,14 +69,14 @@ const ProductCard = (props) => {
                 </CardMedia>
                 <CardContent className={classes.cardContent}>
                     <div style={{ display: "block"}}>
-                        <Typography variant="h5"  align="left" component="h3" >
+                        <Typography variant="h6"  align="left" className={classes.title} >
                             {props.title}
                         </Typography>
                         <Typography variant="body2"  align="left" component="p"  component="p">
                             {props.description}
                         </Typography>
                     </div>
-                    <Typography>€{props.price}</Typography>
+                    <Typography variant="body2">€{props.price}</Typography>
                 </CardContent>
 
             </CardActionArea>

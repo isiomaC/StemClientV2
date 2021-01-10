@@ -20,7 +20,7 @@ const initialState = {
     reviews: [],
     featured_products: [],
     products: [],
-    extras: {},
+    extras: [],
     max: 0
 }
 

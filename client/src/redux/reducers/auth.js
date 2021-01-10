@@ -7,13 +7,19 @@ import {
     USER_LOADED,
     LOG_OUT,
     CLEAR_USER,
-    AUTH_ERROR
+    AUTH_ERROR,
+    RESET_PASSWORD_EMAIL_SENT,
+    RESET_PASSWORD_EMAIL_SENT_ERROR,
+    RESET_PASSWORD_FINISH,
+    RESET_PASSWORD_FINISH_ERROR
 } from '../actions/types'
+
+import { encrypt } from '../../utils/cryptoWrapper'
 
 const initialState = {
     token: localStorage.getItem('token'),
-    isAuthenticated: null,
-    loading: true,
+    isAuthenticated: false,
+    loading: false,
     user: null,
     error: null
 }
@@ -23,7 +29,7 @@ export default function(state = initialState, action){
 
     switch (type) {
         case LOGIN_SUCCESS:
-            localStorage.setItem('token', payload.jwtToken);
+            localStorage.setItem('token', encrypt(payload.jwtToken))
             return {
                 ...state,
                 user: payload.user,
@@ -33,7 +39,7 @@ export default function(state = initialState, action){
                 error: null
             }
         case REGISTER_SUCCESS: 
-            localStorage.setItem('token', payload.jwtToken);
+            localStorage.setItem('token', encrypt(payload.jwtToken));
             return {
                 ...state,
                 user: payload.user,
@@ -52,6 +58,12 @@ export default function(state = initialState, action){
             }
         case REGISTER_FAIL:
         case AUTH_ERROR:
+            localStorage.removeItem('token')
+            return {
+                ...state,
+                user: payload,
+                error: payload
+            }
             // return state;
         case LOGIN_FAIL:
             return{

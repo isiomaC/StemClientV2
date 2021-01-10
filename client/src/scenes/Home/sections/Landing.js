@@ -14,9 +14,6 @@ import Spinner from '../../../Components/layout/Spinner'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 //carousel Images
-import g5 from '../../../img/Carousel/g5.jpeg';
-import nappy2 from '../../../img/Carousel/andrea.jpeg';
-import nappy from '../../../img/Carousel/nappy.jpeg';
 
 
 const useStyles = makeStyles(theme => ({
@@ -52,7 +49,6 @@ const Landing = ({ extras }) => {
       }, [])
 
       const classes = useStyles();
-      const carItems = [nappy, nappy2, g5];
 
       const HandleScrolling = (event) =>{
         event.preventDefault();
@@ -103,7 +99,7 @@ const Landing = ({ extras }) => {
 }
 
 Landing.propTypes = {
-  extras: PropTypes.object
+  extras: PropTypes.arrayOf(PropTypes.object),
 }
 
 

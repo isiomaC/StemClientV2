@@ -4,11 +4,10 @@ import {
     SET_LOADING,
 } from './types';
 import axios from 'axios'
-
-//import { uuid } from 'uuid';
+import setDispatchError from '../../utils/setDispatchError'
 
 // const apiUrl ="https://inphinityapi.herokuapp.com/api"
-const apiUrl = "http://localhost:5000/api"
+const apiUrl = process.env.REACT_APP_API_URL
 
 
 export const getProduct = (idx) => async dispatch => {
@@ -21,8 +20,7 @@ export const getProduct = (idx) => async dispatch => {
         })
 
         const res = await axios.get(`${apiUrl}/products/${idx}`)
-        // console.log("[SHOPACTIONS]", res.data)
-
+ 
         dispatch({
             type: SET_LOADING,
             payload: false
@@ -33,19 +31,13 @@ export const getProduct = (idx) => async dispatch => {
         })
 
     }catch(error){
-        console.log(error)
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        dispatch({
-            type: PRODUCT_ERROR,
-            payload: {
-                msg: error.response.statusText,
-                status: error.response.status
-            }
-        })
+        setDispatchError(dispatch, error, PRODUCT_ERROR )
+       
     }
   };
   

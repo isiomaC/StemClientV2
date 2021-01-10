@@ -1,20 +1,19 @@
 import { 
-    SET_ALERT, 
-    REMOVE_ALERT,
     ADD_TO_CART,
     REMOVE_FROM_CART,
-    CHECKOUT,
     CLEAR_CART, DECREMENT,
     INCREMENT, CART_ERROR,
     SAVE_ADDRESS,
     SAVE_ADDRESS_ERROR,
-    GET_ADDRESS_ERROR,
-    GET_ADDRESS
+    GET_DETAILS_ERROR,
+    GET_DETAILS,
+    DETAILS_COMPLETE
  } from '../actions/types';
 
 const initialState = JSON.parse(localStorage.getItem('cart')) || {
   user: '',
   items: [],
+  details_complete: false,
   shippingAddress: {}
 }
 
@@ -25,8 +24,6 @@ export default function(state = initialState, action) {
   var cart 
   switch (type) {
     case ADD_TO_CART:
-        try{
-
           cart = JSON.parse(localStorage.getItem('cart'));
           
           if (cart === null ){
@@ -34,17 +31,17 @@ export default function(state = initialState, action) {
 
             //////
             // newCart.items = [payload]
-            newCart = {...cart, items: [payload]}
+            newCart = {...state, items: [payload]}
             /////
 
             localStorage.setItem('cart', JSON.stringify(newCart));
             state = newCart
-            return state;
+            return state
+
           }else{
             
             var flag = false;
             cart.items.forEach((item) => {
-              // console.log(`${typeof(item.product_idx)} - ${typeof(payload.product_idx)} `)
               if (item.product_idx === payload.product_idx){
                 flag = true
                 item.quantity = payload.quantity
@@ -55,20 +52,15 @@ export default function(state = initialState, action) {
               cart.items.push(payload)
             }
             
-          localStorage.setItem('cart', JSON.stringify(cart))
-          state = cart
-          return state
+            localStorage.setItem('cart', JSON.stringify(cart))
+            state = cart
+            return state
         }
-      }
-      catch(e){
-        console.log(e)
-      }
+     
     case REMOVE_FROM_CART:
         cart = JSON.parse(localStorage.getItem('cart'))
-        console.log(cart)
         let newItems = cart.items.filter((item) => item.product_idx !== payload)
         cart.items = newItems
-        console.log(cart)
 
         localStorage.setItem('cart', JSON.stringify(cart))
         return {...state, items: state.items.filter((item) => item.product_idx !== payload) }
@@ -110,28 +102,34 @@ export default function(state = initialState, action) {
         let mCart = JSON.parse(localStorage.getItem("cart"))
 
         if (mCart !== null){
-            const { firstname, lastname, address, city , eirCode, country, email } = payload  
+            const { firstname, lastname, phonenumber, email } = payload  
 
             let add = {}
             add.firstname = firstname ? firstname : mCart.shippingAddress.firstname
             add.lastname = lastname ? lastname : mCart.shippingAddress.lastname
-            add.address = address ? address : mCart.shippingAddress.address
-            add.city = city ? city : mCart.shippingAddress.city
-            add.eirCode = eirCode ? eirCode : mCart.shippingAddress.eirCode
-            add.country = country ? country : mCart.shippingAddress.country
+            // add.address = address ? address : mCart.shippingAddress.address
+            // add.city = city ? city : mCart.shippingAddress.city
+            // add.eirCode = eirCode ? eirCode : mCart.shippingAddress.eirCode
+            add.phonenumber = phonenumber ? phonenumber : mCart.shippingAddress.phonenumber
             add.email = email ? email : mCart.shippingAddress.email
             mCart = {...state, shippingAddress: add}
 
             localStorage.setItem("cart", JSON.stringify(mCart))
             return {...state, shippingAddress: add }
         }
+
+    case DETAILS_COMPLETE:
+      return {
+        ...state,
+        details_complete: payload,
+      }
     case SAVE_ADDRESS_ERROR:
       localStorage.setItem("cart", JSON.stringify({ ...state, shippingAddress: {} }))
       return {...state, shippingAddress: {}}
-    case GET_ADDRESS:
+    case GET_DETAILS:
       localStorage.setItem("cart", JSON.stringify({ ...state, shippingAddress: payload }))
       return { ...state, shippingAddress: payload} 
-    case GET_ADDRESS_ERROR:
+    case GET_DETAILS_ERROR:
       localStorage.setItem("cart", JSON.stringify({ ...state, shippingAddress: {} }))
       return {...state, shippingAddress: {}}
     default:

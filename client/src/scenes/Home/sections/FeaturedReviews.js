@@ -16,25 +16,29 @@ import { useMediaQuery } from '@material-ui/core';
 import Review from '../content/Review';
 
 // Static Product Images
-import pro1 from '../../../img/Pro1.jpg';
-import pro2 from '../../../img/Pro2.jpg';
-import pro3 from '../../../img/Pro3.jpg';
 import Spinner from '../../../Components/layout/Spinner';
 
 
 const useStyles = makeStyles(theme => ({
     root:{
-        flexGrow:1,
-        paddingTop: 30,
-        width:'100vw',
+        // flexGrow:1,
+        // paddingTop: 30,
+        // width:'100vw',
     },
     slida: {
-        height: '40vh', 
+        height: '30vh', 
+        [theme.breakpoints.down('xs')]:{
+            height: 'inherit' //"inherit" | "initial" | "revert" | "unset";
+        }
     },
     slid: {
-        height: '40vh', 
-        marginTop: 40
+        // height: '40vh', 
+        marginTop: '80px',
+        // marginBottom: '60px'
     },
+    container:{
+        margin: '10px'
+    }
 
 }));
 const FeaturedReviews = ({ reviews, loading, error }) => {
@@ -45,51 +49,45 @@ const FeaturedReviews = ({ reviews, loading, error }) => {
     const classes = useStyles();
     const data = [6];
 
-    var slideIndex = 0
-
     return (
         <div className = {classes.root}>
-            <Grid container justify="center" alignItems="center" style={{ }} spacing={24} >
-                {isSmall && (
+            <Grid container justify="center"  alignItems="center" style={{  }} >
+                {/* {isSmall && (
                     // data.map(d => 
                     <Grid style={{ display: 'flex', alignItems:'center', justifyContent: 'center'}} container>
-                        {reviews.map(review => (
-                            <Grid style={{ margin: '20px' }} item  >
+                        {reviews.map((review, i) => (
+                            <Grid key={i} style={{ margin: '20px' }} item xs="12" >
                                  <Review review={review}/>
                             </Grid>
                         ))}
                     </Grid>
-                    )}
+                )}
 
-                {isBig && ( 
+                {isBig && (  */}
                     <CarouselProvider
+                    className={classes.container}
                         naturalSlideWidth={20}
                         naturalSlideHeight={20}
-                        totalSlides={3}
+                        totalSlides={reviews.length}
                         // style={{ height: '40vh'}} 
                         isPlaying={true}
                         playDirection="forward"
                         currentSlide={0}
                     >
-                    <Slider className={classes.slida}>
+                        <Slider className={classes.slida}>
 
-                        {
-                        reviews.map((review, index) => {
-                            if (index >= reviews.length){
-                                return (<Spinner/>);
+                            {reviews.map((review, index) => {
+                                return (
+                                    <Slide key={index} index={index} className={classes.slid}>
+                                        <div style={{ display:'flex', justifyContent:'center'}}>
+                                            <Review review = {review}/>
+                                            {/* <Review review = {reviews[index + 1]}/> */}
+                                        </div>
+                                    </Slide>
+                                )
                             }
-                            slideIndex++
-                            return (
-                                <Slide index={slideIndex} className={classes.slid}>
-                                    <div style={{ display:'flex', justifyContent:'center'}}>
-                                        <Review review = {review}/>
-                                        {/* <Review review = {reviews[index + 1]}/> */}
-                                    </div>
-                                </Slide>
-                            )
-                        }
-                        )}
-                    </Slider>
+                            )}
+                        </Slider>
 
                         {/* <Slide index={0} className={classes.slid}>
                             <div style={{ display:'flex', justifyContent:'center'}}>
@@ -109,10 +107,10 @@ const FeaturedReviews = ({ reviews, loading, error }) => {
                                 <Review/>
                             </div>
                         </Slide> */}
-                     {/* <ButtonBack>Back</ButtonBack>
-                    <ButtonNext>Next</ButtonNext>  */}
+                        {/* <ButtonBack>Back</ButtonBack>
+                        <ButtonNext>Next</ButtonNext>  */}
                  </CarouselProvider> 
-                )}     
+                {/* )}      */}
             </Grid>
         </div>
     )

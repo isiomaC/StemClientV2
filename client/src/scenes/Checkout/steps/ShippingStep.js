@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import Box from '@material-ui/core/Box'
 import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core'
 import  Typography  from '@material-ui/core/Typography'
 import  Button  from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import { connect } from 'react-redux'
-import shoppingcart from '../../../redux/reducers/shoppingcart'
 import PropTypes from 'prop-types'
-import { saveAddress, getAddress } from '../../../redux/actions/shoppingcart'
+import { saveDetails } from '../../../redux/actions/shoppingcart'
 import ValidateEmail from '../utils/ValidateEmail'
 
 const useStyles = makeStyles(theme => ({
@@ -39,29 +37,29 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const ShippingStep = ({ shoppingcart, dispatch, user, getAddress}) => {
+const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) => {
 
     const classes = useStyles()
 
     const [shipping, setShipping] = useState(shoppingcart.shippingAddress || {
         firstname: '',
         lastname: '',
-        address: '',
-        city: '',
-        eirCode: '',
-        country: '',
-        email:''
+        email:'',
+        phonenumber: ''
     });
 
     const [errors, setErrors] = useState(null)
 
-    const { firstname, lastname, address, city, eirCode, country, email } = shipping
+    const { firstname, lastname, email, phonenumber } = shipping
 
     useEffect(()=> {
-        ( async ()=> {
-            await getAddress()
-        })()
-    }, [])
+        const getDet = async () => {
+            if (user && user.email){
+               await getDetails()
+            }
+        }
+        getDet()
+    }, [user])
 
     const onChange = e =>{
         setShipping({ ...shipping, 
@@ -71,22 +69,23 @@ const ShippingStep = ({ shoppingcart, dispatch, user, getAddress}) => {
         setErrors(null)
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         try{
 
-            if (email === '' && firstname === '' && lastname === '' && address === '' && city === '' &&eirCode === '' && country === '') {
+            if (email === '' && firstname === '' && lastname === '' && phonenumber === '') {
                 setErrors({
                   firstname: 'firstname field is empty',
                   lastname: 'lastname field is empty',
                   email: 'email field is empty',
-                  address: 'address field is empty',
-                  city: 'city field is empty',
-                  eirCode: 'eirCode field is empty',
-                  country: 'country field is empty'
+                  phonenumber: 'Phone number field is empty'
                 })
                 return
             }
+
+            // if(user && user.msg){
+
+            // }
 
             if (!email || email === '' ){
                 setErrors({...errors,
@@ -114,34 +113,16 @@ const ShippingStep = ({ shoppingcart, dispatch, user, getAddress}) => {
                 return
             }
 
-            if (!address || address === '' ){
+            if (!phonenumber || phonenumber === '' ){
                 setErrors({...errors,
                     address: 'address field is empty'
                 })
                 return
             }
 
-            if (!city || city === '' ){
-                setErrors({...errors,
-                    city: 'city field is empty'
-                })
-                return
-            }
+            
+            await saveDetails(shipping, user)
 
-            if (!eirCode || eirCode === '' ){
-                setErrors({...errors,
-                    eirCode: 'eirCode field is empty'
-                })
-                return
-            }
-
-            if (!country || country === '' ){
-                setErrors({...errors,
-                    country: 'country field is empty'
-                })
-                return
-            }
-            dispatch(saveAddress(shipping))
         }catch(e){
             setErrors(e.message)
         }
@@ -151,7 +132,8 @@ const ShippingStep = ({ shoppingcart, dispatch, user, getAddress}) => {
 
     return (
         <Container>
-            <Typography> Shipping/Delivery Address </Typography>
+            <Typography variant='h5'> Enter your details </Typography>
+            <Typography variant='body2'> Please include thesame name that will be used for checkout </Typography>
             <form className={classes.div} onSubmit={e => handleSubmit(e)}>
                 <TextField
                 className={classes.textField}
@@ -182,7 +164,7 @@ const ShippingStep = ({ shoppingcart, dispatch, user, getAddress}) => {
                 
                 />
                 {
-                   user === null || user.msg && <TextField
+                   !user || user.msg && <TextField
                     className={classes.textField}
                     id="outlined-textarea-1"
                     label="Email"
@@ -198,17 +180,17 @@ const ShippingStep = ({ shoppingcart, dispatch, user, getAddress}) => {
                 <TextField
                     className={classes.textField}
                     id="outlined-textarea-2"
-                    label="Address"
-                    placeholder="Address"
+                    label="Phone Number"
+                    placeholder="Phone Number"
                     type="text"
-                    name="address"
-                    value={address}
+                    name="phonenumber"
+                    value={phonenumber}
                     onChange={e => onChange(e)}
                     variant="outlined"
-                    error={(errors && errors.address) && true}
-                    helperText={(errors && errors.address) && errors.address}
+                    error={(errors && errors.phonenumber) && true}
+                    helperText={(errors && errors.phonenumber) && errors.phonenumber}
                 />
-                <TextField
+                {/* <TextField
                     className={classes.textField}
                     id="outlined-textarea-3"
                     label="City"
@@ -246,7 +228,7 @@ const ShippingStep = ({ shoppingcart, dispatch, user, getAddress}) => {
                     variant="outlined"
                     error={(errors && errors.country) && true}
                     helperText={(errors && errors.country) && errors.country}
-                />
+                /> */}
                 <div>
                     <Button variant="outlined" className={classes.btn} type='submit' value='Login' disableElevation>
                         Save Address 
@@ -260,7 +242,9 @@ const ShippingStep = ({ shoppingcart, dispatch, user, getAddress}) => {
 
 ShippingStep.propTypes ={
     shoppingcart: PropTypes.object,
-    getAddress: PropTypes.object
+    // getAddress: PropTypes.func,
+    saveDetails: PropTypes.func,
+    user: PropTypes.object
 }
 
 const mapStateToProps = state => ({
@@ -268,4 +252,4 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps, { getAddress })(ShippingStep)
+export default connect(mapStateToProps, { saveDetails })(ShippingStep)

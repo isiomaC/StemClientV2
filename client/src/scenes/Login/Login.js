@@ -6,8 +6,12 @@ import { login } from '../../redux/actions/auth';
 
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import Box from '@material-ui/core/Box'
+import Paper from '@material-ui/core/Paper'
 import Spinner from '../../Components/layout/Spinner';
 import InputAdornment from '@material-ui/core/InputAdornment'
+
+//Icons
 import LockIcon from '@material-ui/icons/Lock'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import PersonIcon from '@material-ui/icons/Person';
@@ -43,6 +47,22 @@ const useStyles = makeStyles(theme => ({
   linkSignUP:{
     margin: theme.spacing(1)
   },
+  container: {
+    width: '100vw',
+    height: '60vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    [theme.breakpoints.down('xs')]: {
+      height: '80vh'
+    }
+  }, 
+  paper: {
+    background: 'transparent', 
+    [theme.breakpoints.down('xs')]: {
+      width: 'calc(100vw - 30px)'
+    }
+  }
 }))
 
 
@@ -64,7 +84,7 @@ const Login = ({ alert, login, isAuthenticated, user , loading}) => {
   const onChange = e =>{
     setFormData({ ...formData, 
         [e.target.name]: e.target.value 
-      });
+    });
     
     setErrors({ ...errors,
       [e.target.name]: null
@@ -113,15 +133,9 @@ const Login = ({ alert, login, isAuthenticated, user , loading}) => {
       password: password,
     }
 
-    console.log(formDataObject)
-
-    try {
-      await login(formDataObject);
+    await login(formDataObject);
       //history.push('/dashboard')
 
-    }catch(e){
-      console.log(e)
-    }
   };
 
   if (isAuthenticated ) {
@@ -135,7 +149,8 @@ const Login = ({ alert, login, isAuthenticated, user , loading}) => {
   return loading === true ? (
     <Spinner />
   ): (
-    <Fragment>
+    <Box className={classes.container}>
+      <Paper className={classes.paper}>
       <h2 className={classes.header}>Log In</h2>
       <Typography className={classes.headerText}>
         <i className='fas fa-user' /> Sign Into Your Account
@@ -202,7 +217,11 @@ const Login = ({ alert, login, isAuthenticated, user , loading}) => {
       <Typography component='p' className={classes.linkSignUP}>
         Don't have an account? <Link to='/register'>Sign Up</Link>
       </Typography>
-    </Fragment>
+      <Typography component='p' className={classes.linkSignUP}>
+        <Link to='/resetpassword'> Forgot password? </Link>
+      </Typography>
+      </Paper>
+    </Box>
   );
 };
 

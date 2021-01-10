@@ -64,12 +64,7 @@ const options = [
         name:'AboutUs',
         selector: '#aboutusdestination',
         link: '/aboutus'
-    },
-    {
-        index: 3,
-        name:'Search',
-        selector: '#searchdestination'
-    },
+    }
 ]
 
 const drawerWidth = 240;

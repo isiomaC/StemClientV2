@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
+import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
@@ -11,7 +12,10 @@ import Icon from '@material-ui/core/Icon';
 
 import { Divider, useMediaQuery } from '@material-ui/core'
 import Spinner from '../../Components/layout/Spinner'
+
+//actions
 import { getProducts } from '../../redux/actions/homeActions'
+import { addToCart } from '../../redux/actions/shoppingcart'
 
 //content
 import ShopCard from './content/ShopCard'
@@ -19,64 +23,20 @@ import Filters from './content/Filters'
 import PropTypes from 'prop-types'
 
 //img
-import pro1 from '../../img/Pro1.jpg';
 import twoby from '../../img/icons/squares.png'
 import threeby from '../../img/icons/grid3x3.png'
 import fourby from '../../img/icons/grid4x4.png'
+import ViewAgendaOutlinedcIon from '@material-ui/icons/ViewAgendaOutlined';
 
 import { makeStyles } from '@material-ui/core/styles'
 import useInfiniteScroll from '../../utils/useInfiniteScroll'
 import approximatePrice from '../../utils/approximatePrice'
 
+
+
 //Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 
 const asideWidth = 400;
-
-const stub = [
-    {
-        image: pro1,
-        title: 'Title',
-        description: 'Hair product which is good',
-        price:90
-    },
-    {
-        image: pro1,
-        title: 'Title 90',
-        description: 'Short description here',
-        price: 159
-    },
-    {
-        image: pro1,
-        title: 'title 4',
-        description: ' description twenty 2',
-        price: 20
-    },
-    {
-        image: pro1,
-        title: 'this is the title',
-        description: 'this is the description',
-        price: 30
-    },
-    {
-        image: pro1,
-        title: 'this is the title',
-        description: 'this is the description',
-        price: 30
-    },
-    {
-        image: pro1,
-        title: 'this is the title',
-        description: 'this is the description',
-        price: 30
-    },
-    {
-        image: pro1,
-        title: 'this is the title',
-        description: 'this is the description',
-        price: 30
-    },
-]
-
 
 const useStyles = makeStyles(theme => ({
 
@@ -150,20 +110,23 @@ const useStyles = makeStyles(theme => ({
         marginRight: 20,
         marginTop: 30,
        
+      },
+      singleIcon: {
+          cursor: 'pointer'
       }
 
 }));
 
-const Shop = ({products, getProducts, loading, shoppingcart}) => {
+const Shop = ({products, getProducts, loading, shoppingcart, getProduct, addToCart}) => {
 
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const isBig = useMediaQuery(theme => theme.breakpoints.up('md'));
 
     const classes = useStyles();
 
-    const [productList, setProductList] = React.useState(stub)
+    const [productList, setProductList] = React.useState([])
 
-    const [grid, setGrid] = React.useState(4)
+    const [grid, setGrid] = React.useState(6)
     const [checked, setChecked] = React.useState(null)
 
     const twobyRef = React.createRef(); 
@@ -172,11 +135,7 @@ const Shop = ({products, getProducts, loading, shoppingcart}) => {
 
     const fetchMoreListItems = () => {
         setTimeout(async() => {
-            try{
-                 await getProducts()
-            }catch(error){
-                console.log(error)
-            }
+            await getProducts()
             //setProductList(prevState => ([...prevState, ...newData]));
           setIsFetching(false);
         }, 2000);
@@ -194,20 +153,13 @@ const Shop = ({products, getProducts, loading, shoppingcart}) => {
     }
 
     React.useEffect(() => {
-
         const fetchData = async () => {
-            try{
-                await getProducts()
-            }catch(error){
-                console.log(error)
-            }
+            await getProducts()
         }
-
         fetchData()
-
     }, [])
 
-    
+
     return (
         <Box  className={classes.root}>
             <Box className={classes.topsection} component="div">
@@ -219,11 +171,12 @@ const Shop = ({products, getProducts, loading, shoppingcart}) => {
                     <Grid container className={classes.filters} spacing={3}>
                         <Grid item xs={12}>
                             <Box component='div' className={classes.gridButtonContainer}>
-                                <IconButton onClick={(e) => {changeGrid(6)}}  size="small">
-                                <img width='20px' height='20px' alt='2x2' src={twoby}/>
-                                </IconButton>
-                                <IconButton onClick={(e) => {changeGrid(4)}} size="small">
+                                {/* <IconButton onClick={(e) => {changeGrid(4)}} size="small">
                                     <img width='20px' height='20px'alt='3x3' src={threeby}/>
+                                </IconButton> */}
+                                <ViewAgendaOutlinedcIon className={classes.singleIcon} onClick={(e) => {changeGrid(12)}}/>
+                                <IconButton onClick={(e) => {changeGrid(6)}}  size="small">
+                                    <img width='20px' height='20px' alt='2x2' src={twoby}/>
                                 </IconButton>
                             </Box>
                             <Grid container style={{ display:'flex', alignItems: 'center', marginBottom: '10px'}}  spacing={2}>
@@ -236,7 +189,9 @@ const Shop = ({products, getProducts, loading, shoppingcart}) => {
                                             title={stu.name} 
                                             description={stu.benefits.split(/\<.*?\>/g)} 
                                             price={approximatePrice(stu.price)} 
-                                            image={ stu.base64 }/>         
+                                            image={ stu.base64 }
+                                            product={stu}
+                                            />         
                                     </Grid>
                                 )}
                                 {isFetching && 
@@ -268,10 +223,12 @@ const Shop = ({products, getProducts, loading, shoppingcart}) => {
                             </Box>
                             <Grid container style={{ display:'flex', alignItems: 'center', marginBottom: '10px'}}  spacing={2}>
 
-                               { loading === true ? (
-                                    <Spinner/>
+                               { (loading === true) ? (
+                                   <Container style={{ width: '100%', height: '50vh'}}>
+                                        <Spinner/>
+                                    </Container>
                                 ) : (
-                                    products.length === 0 ? ( <div style={{ textAlign: 'center'}}> Product Not Found</div>)  :
+                                    products.length === 0 ? ( <Container style={{ height: '60vh', textAlign: 'center'}}> Product Not Found</Container>)  :
                                     products.map((stu, i) => 
                                         (<Grid item key={i} xs={grid}>
                                             <ShopCard 
@@ -281,7 +238,9 @@ const Shop = ({products, getProducts, loading, shoppingcart}) => {
                                                 title={stu.name} 
                                                 description={stu.benefits.split(/\<.*?\>/g)} 
                                                 price={approximatePrice(stu.price)} 
-                                                image={ stu.base64 }/>         
+                                                image={ stu.base64 }
+                                                product={stu}
+                                            />         
                                         </Grid>)
                                 ))}
                                 {isFetching && 
@@ -302,7 +261,8 @@ Shop.propTypes = {
     products: PropTypes.arrayOf(PropTypes.object),
     getProducts: PropTypes.func,
     loading: PropTypes.bool,
-    shoppingcart: PropTypes.arrayOf(PropTypes.object)
+    shoppingcart: PropTypes.object,
+    addToCart: PropTypes.func,
 }
 
 const mapStateToProps = state => ({
@@ -311,4 +271,4 @@ const mapStateToProps = state => ({
     shoppingcart: state.shoppingcart
 })
 
-export default connect(mapStateToProps, {getProducts})(Shop);
+export default connect(mapStateToProps, { getProducts, addToCart })(Shop);

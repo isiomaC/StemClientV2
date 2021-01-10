@@ -1,11 +1,12 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
-import Divider from '@material-ui/core/Divider'
+
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import {connect} from 'react-redux'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -15,7 +16,6 @@ import { removeFromCart } from '../redux/actions/shoppingcart'
 
 import approximatePrice from '../utils/approximatePrice'
 
-import pro3 from '../img/Pro3.jpg'
 import QuantityStepper from '../scenes/Checkout/content/QuantityStepper'
 
 const useStyles = makeStyles((theme) => ({
@@ -34,12 +34,12 @@ const useStyles = makeStyles((theme) => ({
             width : 'calc(100%)'
         }
     }
-
 }))
 
 const ShoppingCart = ({ cart, removeFromCart }) => {
 
     const classes = useStyles()
+    const isXSmall = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
     return (
         <Box className={classes.root}>
@@ -49,9 +49,10 @@ const ShoppingCart = ({ cart, removeFromCart }) => {
                 </Grid>
                 <Grid item style={{ display: 'flex', alignItems: 'center'}} xs={8}>
                     <Container style={{  }}>
-                        <Box style={{  display: 'flex', justifyContent: 'space-between',}}>
+                        <Box style={{ display: 'flex', justifyContent: 'space-between',}}>
                             <div>
-                                <Typography style={{ fontSize: 'medium', fontWeight: 'Bold'}} > {cart.name}</Typography>
+                            <Typography style={{ fontSize: `${isXSmall ? 'small' : 'medium'}`, fontWeight: 'Bold'}} > {cart.name}</Typography>
+                                {/* <Typography style={{ fontSize: 'medium'}} > {cart.name}</Typography> */}
                                 <Typography style={{ fontSize: 'small'}} > {cart.benefits.split(/\<.*?\>/g)} </Typography>
                             </div>
                             <DeleteIcon 
@@ -64,7 +65,7 @@ const ShoppingCart = ({ cart, removeFromCart }) => {
                         <Box style={{ display: 'flex', justifyContent:'space-between'}}>
                             <div style={{ width: '45%', fontSize: 'small'}}>
                                 <QuantityStepper 
-                                    amount={cart.quantity} 
+                                    amount={parseInt(cart.quantity, 10)} 
                                     product_id={cart.product_idx} 
                                     max={parseInt(cart.maxVal)} />
                             </div>

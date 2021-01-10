@@ -1,8 +1,6 @@
 import {
     ADD_REVIEWS,
-    ADD_REVIEWS_ERROR,
-    GET_PRODUCT, 
-    PRODUCT_ERROR, 
+    ADD_REVIEWS_ERROR, 
     SET_LOADING,
 } from './types';
 import axios from 'axios'
@@ -10,7 +8,7 @@ import axios from 'axios'
 //import { uuid } from 'uuid';
 
 // const apiUrl ="https://inphinityapi.herokuapp.com/api"
-const apiUrl ="http://localhost:5000/api"
+const apiUrl = process.env.REACT_APP_API_URL
 
 
 export const addReviews = (rating, product_id, comment) => async dispatch => {
@@ -36,8 +34,6 @@ export const addReviews = (rating, product_id, comment) => async dispatch => {
         }
         const res = await axios.post(`${apiUrl}/reviews/`, form, config)
 
-        console.log(res.data)
-
         dispatch({
             type: ADD_REVIEWS,
             payload: {success: true}
@@ -48,19 +44,13 @@ export const addReviews = (rating, product_id, comment) => async dispatch => {
         })
 
     }catch(error){
-        console.log(error)
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        dispatch({
-            type: PRODUCT_ERROR,
-            payload: {
-                msg: error.response.statusText,
-                status: error.response.status
-            }
-        })
+        setDispatchError(dispatch, error, ADD_REVIEWS_ERROR)
+       
     }
   };
   

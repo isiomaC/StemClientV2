@@ -11,7 +11,6 @@ import moment from 'moment'
 import Rating from './cRating';
 import { makeStyles } from '@material-ui/core';
 
-import imag from '../../../img/Carousel/g1.jpeg';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -41,6 +40,16 @@ const useStyles = makeStyles(theme => ({
         minHeight: 'inherit'
         // minWidth: 150,
     },
+    comment:{
+        padding: '0px 0px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        textAlign : 'left',
+        '-webkit-line-clamp': 2,
+         /* number of lines to show */
+        '-webkit-box-orient': 'vertical',
+    }
 }));
 
 const Review = ({review}) => {
@@ -50,7 +59,7 @@ const Review = ({review}) => {
             <Card elevation={0} className={classes.root}>
                 <Box component="div" className={classes.detailText}>
                     <CardContent >
-                        <Typography style={{ padding: '0px 0px' }}variant='subtitle1'  color="textSecondary">
+                        <Typography className={classes.comment} variant='subtitle1'  color="textSecondary">
                             {review.comment}
                         </Typography>
                         <div style={{marginTop: 10, textAlign: 'left', }}>

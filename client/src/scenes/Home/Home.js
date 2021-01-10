@@ -1,43 +1,39 @@
-import React from 'react'
+import React, { createRef} from 'react'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
-import Box from '@material-ui/core/Box'
 
 import FeatureProducts from './sections/FeaturedProducts'
 import FeaturedReviews from './sections/FeaturedReviews'
 import Landing from './sections/Landing'
-import Test from './sections/Test'
 
 import { getFeaturedProducts, getReviews, getExtras } from '../../redux/actions/homeActions'
 import Spinner from '../../Components/layout/Spinner';
 
+import { Container } from '@material-ui/core';
+
 
 const Home = ({ getFeaturedProducts,products, getReviews,reviews, getExtras, extras, loading, error }) => {
+
+    const elem = createRef()
 
     React.useEffect(() => {
 
         const fetchData = async () => {
-            try {
-                await getReviews();
-    
-                await getFeaturedProducts();
-    
-                await getExtras();
+            await getReviews();
 
-                //history.push('/dashboard')
-                console.log(reviews)
-                console.log(extras)
-          
-              }catch(e){
-                console.log(e.message)
-              }
+            await getFeaturedProducts();
+
+            await getExtras();
+
+            //history.push('/dashboard')
         }
         fetchData()
-       
+
         window.scrollTo(0,0)
-    }, [ 0 ]);
+    }, [  ]);
 
-
+   
+    
     //stemclient (pid 12787) 
     return loading === true ? (
         <div style={{ display: 'flex', alignItem: 'center', width: '100vw', height: '80vh'}}>
@@ -48,9 +44,10 @@ const Home = ({ getFeaturedProducts,products, getReviews,reviews, getExtras, ext
                 {/* <NavBar/> */}
                 {/* <Test extras={extras}/>  */}
 
-                <Landing extras={extras} loading={loading} />  
+                { extras && <Landing extras={extras} loading={loading} />  }
                 <FeatureProducts products={products} variant='rounded'/>
                 <FeaturedReviews reviews={reviews} loading={loading}/>
+               
             </div>
         )
 }
@@ -61,7 +58,7 @@ Home.propTypes = {
     getReviews: PropTypes.func,
     reviews: PropTypes.arrayOf(PropTypes.object),
     getExtras: PropTypes.func,
-    extras: PropTypes.object,
+    extras: PropTypes.arrayOf(PropTypes.object),
     loading: PropTypes.bool,
     error: PropTypes.any
 }

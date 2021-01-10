@@ -6,8 +6,9 @@ import PropTypes from 'prop-types'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        width: '100vw',
-        margin: '20px 0px'
+        // width: '100vw',
+        // margin: '20px 0px'
+        marginBottom:'20px'
     },
     sectionText: {
 
@@ -48,7 +49,7 @@ const Section = ({ section, side }) => {
                   justifyContent: `${getSide(side)}`,
                   marginLeft: `${side === "left" ? '30px' : 0 }`,
                   marginRight: `${side === "right" ? '30px' : 0 }`
-             }}>
+            }}>
                 <div 
                     className={classes.ImgBg} 
                     style={{ 

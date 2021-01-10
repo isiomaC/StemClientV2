@@ -24,6 +24,7 @@ import Product from './scenes/Product';
 import Checkout from './scenes/Checkout';
 import About from './scenes/About';
 import SignUp from './scenes/SignUp';
+import ResetPassword from './scenes/ResetPassword';
 
 import { Provider } from 'react-redux';
 import  store  from './store';
@@ -93,7 +94,6 @@ function App() {
   })
  
   function handleResize() {
-    console.log("RESIZE called")
     setDimensions({       
        height: window.innerHeight,
        width: window.innerWidth
@@ -101,13 +101,12 @@ function App() {
   }
 
   useEffect(() => {
-    handleResize()
+    // handleResize()
     store.dispatch(loadUser())
-    .then(data => {
-      console.log("[APP]", data)
-    });
+    // .then(data => {
+    //   // console.log("[APP]", data)
+    // });
 
-    console.log("[STORE]",store)
   }, []);
   
   return (
@@ -128,6 +127,7 @@ function App() {
                 <Route  path='/blog/:idx' render={(props) => <ViewBlog {...props}/>}/>
                 <Route  path='/checkout' render={(props) => <Checkout {...props}/>}/>
                 <Route  path='/aboutus' render={(props) => <About {...props}/>}/>
+                <Route  path='/resetpassword/:token?' render={(props) => <ResetPassword {...props}/>}/>
                 
                 {/* <PrivateRoute exact path='/admin/addproduct' component={AddBlog}/> */}
                 {/* <PrivateRoute exact path='/admin/addblog' component={AddBlog}/> */}

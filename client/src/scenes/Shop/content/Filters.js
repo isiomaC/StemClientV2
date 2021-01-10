@@ -10,8 +10,6 @@ import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
 import Slider from '@material-ui/core/Slider';
 
-import ValueLabelComponent from './ValueLabelComponent'
-
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -74,9 +72,8 @@ const Filters = (props) => {
 
     const classes = useStyles();
 
-    const [error, setError] = React.useState(null)
     const [searchTerm, setSearchTerm] = React.useState("")
-    const [price, setPrice] = React.useState(0.99)
+    const [price, setPrice] = React.useState(1)
 
     const { max, products, searchProducts, getProductByPrice, getHighestPrice, getProducts, getByCategory, getNewProducts } = props
 
@@ -87,6 +84,7 @@ const Filters = (props) => {
 
     const handlePriceChange = async (e) => {
         setPrice(e.target.ariaValueNow)
+
 
         // console.log(e.target.ariaValueNow)
         await getProductByPrice(price)
@@ -162,23 +160,23 @@ const Filters = (props) => {
                 <AccordionDetails style={{ width: 'inherit'}}>
                     <FormGroup style={{width: '100%'}}>
                         <FormControlLabel 
-                            control={<RedCheckbox {...props} onChange={e => handleChange(e)} name="checkedAll" />}
+                            control={<RedCheckbox  onChange={e => handleChange(e)} name="checkedAll" />}
                             label="Shop All"
                         />
                         <FormControlLabel
-                            control={<RedCheckbox {...props} onChange={e => handleChange(e)} name="checkedNew" />}
+                            control={<RedCheckbox  onChange={e => handleChange(e)} name="checkedNew" />}
                             label="New"
                         />
                         <FormControlLabel
-                            control={<RedCheckbox {...props} onChange={e => handleChange(e)} name="checkedHair" />}
+                            control={<RedCheckbox  onChange={e => handleChange(e)} name="checkedHair" />}
                             label="Hair"
                         />
                         <FormControlLabel
-                            control={<RedCheckbox {...props} onChange={e => handleChange(e)} name="checkedBody" />}
+                            control={<RedCheckbox  onChange={e => handleChange(e)} name="checkedBody" />}
                             label="Body"
                         />
                         <FormControlLabel
-                            control={<RedCheckbox {...props} onChange={e => handleChange(e)} name="checkedAcc" />}
+                            control={<RedCheckbox  onChange={e => handleChange(e)} name="checkedAcc" />}
                             label="Accessories"
                         />
                     </FormGroup>
@@ -198,7 +196,7 @@ const Filters = (props) => {
                     </Typography> */}
                     
                     <Slider 
-                         defaultValue={price}
+                         defaultValue={parseInt(price, 10)}
                          getAriaValueText={valueLabelFormat}
                          aria-labelledby="non-linear-slider"
                          aria-label="custom thumb label"
@@ -208,7 +206,7 @@ const Filters = (props) => {
                          min={100}
                          onChange={handlePriceChange }
                          style={{ color: 'rgba(190,0,0,0.7)'}}
-                         max={max + 2000}/>
+                         max={parseInt(max, 10) + 2000}/>
 
                 </AccordionDetails>
             </Accordion>

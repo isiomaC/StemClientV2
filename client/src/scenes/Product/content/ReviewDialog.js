@@ -2,6 +2,8 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import {makeStyles} from '@material-ui/core/styles';
 
+import { connect } from 'react-redux'
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -15,14 +17,14 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Rating from '@material-ui/lab/Rating';
 
+
+import { setAlert } from '../../../redux/actions/alert'
+
 import PropTypes from 'prop-types'
 import axios from 'axios'
 
 //import Rating from '../../Home/content/cRating'
 
-const apiUrl = 'http://localhost:5000/api'
-
-// const apiUrl = 'https://shrouded-hollows-95980.herokuapp.com/api'
 
 const labels = {
     0.5: 'Useless',
@@ -60,13 +62,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ReviewDialog({ open, handleClose, product_id, user}) {
+function ReviewDialog({ open, handleClose, product_id, setAlert, user}) {
 
     const [value, setValue] = React.useState(3);
     const [hover, setHover] = React.useState(-1);
     const [review, setReview] = React.useState({
       comment: null,
     })
+
+    const apiUrl = process.env.REACT_APP_API_URL
 
     const classes = useStyles();
 
@@ -96,7 +100,6 @@ function ReviewDialog({ open, handleClose, product_id, user}) {
         }
       }
 
-      console.log(form)
       const config = {
           headers: {
               'Content-Type': 'application/json'
@@ -104,11 +107,14 @@ function ReviewDialog({ open, handleClose, product_id, user}) {
       }
       try{
         const res = await axios.post(`${apiUrl}/reviews`, form, config)
-        console.log(res.data)
+        if (res.data.success){
+          setAlert(res.data, 'info') //get custom message from AYY
+        }
 
         handleClose()
       }catch(e){
-        console.log(e)
+        setAlert({ success: false, message: 'Ooops!! Something went wrong, please try again'}, 'error')
+        handleClose()
       }
   };
 
@@ -163,7 +169,7 @@ function ReviewDialog({ open, handleClose, product_id, user}) {
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSave} color="black">
+          <Button onClick={handleSave} style={{color:"black"}}>
             Submit
           </Button>
         </DialogActions>
@@ -178,4 +184,5 @@ ReviewDialog.propTypes = {
   user: PropTypes.object
 }
 
-export default ReviewDialog
+
+export default connect(null, { setAlert })(ReviewDialog)

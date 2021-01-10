@@ -20,8 +20,9 @@ import VisibilitySensor from "react-visibility-sensor";
 
 import { getBlogs } from '../../redux/actions/blogactions'
 
-
-import andrea from '../../img/Carousel/andrea.jpeg'
+//Statci Images 
+import blog from '../../img/blog.jpeg'
+import screen_3x from '../../img/screen_3x.jpeg'
 import Spinner from '../../Components/layout/Spinner';
 
 const useStyles = makeStyles(theme => ({
@@ -57,8 +58,9 @@ const useStyles = makeStyles(theme => ({
     inner: {
         width: "100%",
         height: "100%",
+        backgroundRepeat: 'no-repeat',
         backgroundSize:'cover',
-        background: `url(${andrea})`
+        background: `url(${screen_3x})`
     },
     headerContainer: {
         display: 'flex',
@@ -105,7 +107,6 @@ const Blog = ({ blogs, getBlogs, loading, error}) => {
     }, [])
 
     if (error){
-        console.log(error)
         return (<div style={{ width: '100vw', 
                               height: '100vh', 
                               display: 'flex', 
@@ -125,7 +126,7 @@ const Blog = ({ blogs, getBlogs, loading, error}) => {
                     <div className={classes.innerContainer}>
                         <Box className={classes.inner}/>
                     </div>
-                    <Container className={classes.headerContainer}>
+                    <Container >
                         {/* <img src={logo} width='134px' height='69px'></img> */}
                         {/* <div className={classes.ImgBg} >
                             <div className={classes.InnerImgBg}> */}
@@ -136,6 +137,7 @@ const Blog = ({ blogs, getBlogs, loading, error}) => {
                     <Container>
                         {blogs.map((blog, i) => 
                         (<BlogCardRight 
+                            key={i}
                             id={blog.idx}
                             image={blog.image_chunk}
                             title={blog.title} 
@@ -149,7 +151,7 @@ const Blog = ({ blogs, getBlogs, loading, error}) => {
                 <div className={classes.innerContainer}>
                     <Box className={classes.inner}/>
                 </div>
-                <Container className={classes.headerContainer}>
+                <Container >
                     {/* <img src={logo} width='134px' height='69px'></img> */}
                     {/* <div className={classes.ImgBg} >
                         <div className={classes.InnerImgBg}> */}
@@ -161,7 +163,7 @@ const Blog = ({ blogs, getBlogs, loading, error}) => {
                     i % 2 ===  0 ?
                     //even
                     (
-                        <VisibilitySensor>
+                        <VisibilitySensor key={i}> 
                             {({ isVisible }) => (
                             <Spring
                                 config={{ delay: 300 }}
@@ -187,7 +189,7 @@ const Blog = ({ blogs, getBlogs, loading, error}) => {
                     :
                     //odd
                     (
-                        <VisibilitySensor>
+                        <VisibilitySensor key={i}>
                              {({ isVisible }) => (
                                 <Spring
                                     config={{ delay: 300 }}

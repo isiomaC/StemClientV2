@@ -10,11 +10,15 @@ import {
   LOG_OUT,
   CLEAR_USER, 
   ADMIN_LOGIN,
+  RESET_PASSWORD_EMAIL_SENT,
+  RESET_PASSWORD_EMAIL_SENT_ERROR,
+  RESET_PASSWORD_FINISH,
+  RESET_PASSWORD_FINISH_ERROR
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
 // const apiUrl ="https://inphinityapi.herokuapp.com/api"
-const apiUrl = "http://localhost:5000/api"
+const apiUrl = process.env.REACT_APP_API_URL
 
 export  const loadUser = () => dispatch =>
     new Promise( async (resolve, reject) => {
@@ -30,7 +34,6 @@ export  const loadUser = () => dispatch =>
             });
 
             resolve(res.data)
-            // console.log("[LOADUSER]", res.data)
 
         }catch(error){
 
@@ -66,7 +69,7 @@ export const login = (formData) => async dispatch => {
     }
 
     try{
-        const res = await axios.post(`${apiUrl}/auth`, JSON.stringify(formData), config)
+        const res = await axios.post(`${apiUrl}/auth`, formData, config)
         dispatch({
             type: LOGIN_SUCCESS, 
             payload: res.data
@@ -75,10 +78,10 @@ export const login = (formData) => async dispatch => {
         dispatch(loadUser())
 
     }catch(error){     
-        console.log(Object.keys(error))
-        console.log(error.response)
 
-        dispatch(setAlert(error.response.data.error, 'error'))
+        if (Object.keys(error.response.data.error).length !== 0){
+            dispatch(setAlert(error.response.data.error, 'error'))
+        }
 
         dispatch({
             type: LOGIN_FAIL,
@@ -121,6 +124,8 @@ export const register = (formData)=> async dispatch => {
         })
     }
 }
+
+
 
 export const logout = () => dispatch => {
     dispatch({ type: CLEAR_USER });

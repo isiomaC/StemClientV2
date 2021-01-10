@@ -2,17 +2,21 @@ import React from 'react'
 import { useHistory } from 'react-router'
 import PropTypes from 'prop-types';
 
+import { connect } from 'react-redux';
+
 import { makeStyles } from '@material-ui/core/styles';
 
 //Components
 import Typography from '@material-ui/core/Typography'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
+
+import { addToCart } from '../../../redux/actions/shoppingcart'
 
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
@@ -48,32 +52,44 @@ const useStyles = makeStyles(theme=> ({
         marginTop: 20
     },
     cardContent : {
-        // display: "flex",
-        // justifyContent: "space-between"
-        // alignItems: "flex-start"
+
     },
     div: {
         display: 'flex', 
         justifyContent: 'space-around'
+    },
+    description:{
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        textAlign: 'left',
+        '-webkit-line-clamp': 2,
+         /* number of lines to show */
+        '-webkit-box-orient': 'vertical',
     }
 }));
 
 const ShopCard = (props) => {
     const classes = useStyles()
     const id = props.idx
+
+    const product = props.product
+    const addToCart = props.addToCart
+
+    const isXSmall = useMediaQuery(theme => theme.breakpoints.down('xs'));
     
     const { push } = useHistory()
 
     return (
         <Card elevation={0} className={classes.card}>
-            <CardActionArea >
+            {/* <CardActionArea > */}
                 <CardMedia component="div" 
                         alt="Preview Image"
                         title={props.title}
                         className={classes.cardMedia}
                         onClick={() => {
                             push(`/product/${id}`)
-                            }}>
+                        }}>
                             <Avatar  variant={props.variant} alt="Remy Sharp" className={classes.bigAvatar} src={props.image} />
                 </CardMedia>
                 <CardContent className={classes.cardContent}>
@@ -82,11 +98,11 @@ const ShopCard = (props) => {
 
                         <Grid item style={{ display: 'inline'}} xs={12}>
                             <div style={{display: 'flex', alignItems: 'flex-start'}}>
-                                <Typography variant="caption" align="left">
+                                <Typography variant={isXSmall ? 'caption' : 'body1' } align="left">
                                     {props.title}
                                 </Typography>
                             </div>
-                            <Typography variant="body2" align="left" component="p">
+                            <Typography className={classes.description} variant="body2" align="left" component="p">
                                 {props.description}
                             </Typography>
                         </Grid>
@@ -97,21 +113,14 @@ const ShopCard = (props) => {
                     <div style={{ display: 'flex', justifyContent: 'center'}}>
                         <Button
                             variant="outlined"
-                            onClick={() => console.log("ADD TO CART HERE")}
+                            onClick={() =>
+                                 addToCart(product.idx, 1, product.base64, product.name, product.price, product.benefits, parseInt(product.stock, 10), product.category_id )
+                            }
                             className={classes.button}
                             startIcon={<ShoppingBasketIcon/>}>
                         </Button>
                     </div>
                 </CardContent>
-
-            </CardActionArea>
-                {/* <CardActions>
-                    <Link style={{ textDecoration: 'none'}} to={'/ProductInfo'}>
-                        <Button size='small' color='black'>    
-                            Details                   
-                        </Button>
-                    </Link>
-                </CardActions> */}
         </Card>
     )
 }
@@ -122,7 +131,9 @@ ShopCard.prototypes={
     image: PropTypes.any.isRequired,
     description: PropTypes.string,
     price: PropTypes.string,
-    variant: PropTypes.string
+    variant: PropTypes.string,
+    product: PropTypes.object,
+    addToCart: PropTypes.func
 }
 
-export default ShopCard
+export default connect(null, { addToCart })(ShopCard)

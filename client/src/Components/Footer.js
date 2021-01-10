@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import axios from 'axios'
@@ -23,6 +23,8 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import PublicIcon from '@material-ui/icons/Public';
 import FacebookIcon from '@material-ui/icons/Facebook';
+
+import PoliciesDialog from './PoliciesDialog'
 
 const apiUrl = 'http://localhost:5000/api'
 const useStyles = makeStyles(theme => ({
@@ -63,7 +65,8 @@ const useStyles = makeStyles(theme => ({
     bottom:{
         margin: '0px 20px',
         textDecoration: 'none',
-        color: 'grey'
+        color: 'grey',
+        cursor: 'pointer'
     }
 }));
 
@@ -72,10 +75,22 @@ const Footer = () => {
     const subText = "SUBSCRIBE TO OUR NEWSLETTER";
     const tt = "Be One of the First to know about new releases";
 
-    const [email, setEmail] = React.useState('')
+    const [email, setEmail] = useState('')
+    const [open, setOpen] = useState(false)
+    const [section, setSection] = useState('')
 
     const handleChange= (e)=> {
         setEmail(e.target.value)
+    }
+
+    const handleOpen = (sect)=> {
+        setSection(sect)
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+        setSection('')
     }
 
     const handleSubmit = async (e)=> {
@@ -148,18 +163,18 @@ const Footer = () => {
             </Box>
             <Box style={{  marginTop: '30px'  }} display='flex' justifyContent='center' color='textSecondary' component="div">
                 <Hidden xsDown>
-                    <Link to={"/"} className={classes.bottom} ><Typography variant="caption"> &copy; 2020 jfk</Typography></Link>
-                    <Link to={"/"} className={classes.bottom}><Typography variant="caption"> Privacy </Typography></Link>
-                    <Link to={"/"} className={classes.bottom}><Typography variant="caption"> Shipping&Gurantee</Typography></Link>
-                    <Link to={"/"} className={classes.bottom}><Typography variant="caption"> Returns </Typography></Link>
-                    <Link to={"/"} className={classes.bottom}><Typography variant="caption"> Terms&Conditions</Typography></Link>
-                    <Link to={"/"} className={classes.bottom}><Typography variant="caption"> Cookies Policy</Typography></Link>
-                    <Link to={"/"} className={classes.bottom}><Typography variant="caption"> Websites by jfkmo3s</Typography></Link>
+                   <Typography style={{ color: 'grey',  margin: '0px 20px',}} variant="caption" > &copy; 2020 jfk</Typography>
+                   <div onClick={e => handleOpen('Privacy')}><Typography variant="caption" className={classes.bottom}> Privacy </Typography></div>
+                   <div onClick={e => handleOpen('Shipping')}><Typography variant="caption" className={classes.bottom} > Shipping&Gurantee</Typography></div>
+                   <div onClick={e => handleOpen('Returns')}><Typography variant="caption" className={classes.bottom}> Returns </Typography> </div>
+                   <div onClick={e => handleOpen('Terms')}><Typography variant="caption" className={classes.bottom}> Terms&Conditions</Typography></div>
+                   {/* <div onClick={e => handleOpen('Cookies')}><Typography variant="caption" className={classes.bottom}> Cookies Policy</Typography></div> */}
+                   <Typography style={{  color: 'grey',  margin: '0px 20px', }} variant="caption"> Websites by jfkmo3s</Typography>
+                   {open && <PoliciesDialog open={open} handleClose={handleClose} section={section}/>}
                 </Hidden>
             </Box>
         </Box>
     )
 }
-
 
 export default Footer;

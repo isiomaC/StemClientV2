@@ -44,7 +44,7 @@ const SimilarProduct = ({id, name, description, size, price, image }) => {
         <Card className={classes.root} onClick={() => push(`/product/${id}`)}>
             <div className={classes.details}>
                 <CardContent className={classes.content}>
-                    <Typography component="Body1" variant="Body1">
+                    <Typography variant="body1">
                         {name}
                     </Typography>
                     <Typography variant="subtitle1" color="textSecondary">

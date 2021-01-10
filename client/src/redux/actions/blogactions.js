@@ -8,7 +8,9 @@ import axios from 'axios'
 
 //import { uuid } from 'uuid';
 
-const apiUrl ="http://localhost:5000/api"
+import setDispatchError from '../../utils/setDispatchError'
+
+const apiUrl = process.env.REACT_APP_API_URL
 
 export const getBlogs = () => async dispatch => {
 
@@ -20,7 +22,6 @@ export const getBlogs = () => async dispatch => {
         })
 
         const res = await axios.get(`${apiUrl}/blogs`)
-        console.log("[GET_BLOGS]", res.data)
 
         dispatch({
             type: SET_LOADING,
@@ -33,19 +34,13 @@ export const getBlogs = () => async dispatch => {
         })
 
     }catch(error){
-        console.log(error)
         dispatch({
             type: SET_LOADING,
             payload: false
         })
 
-        dispatch({
-            type: BLOG_ERROR,
-            payload: {
-                msg: error.response.statusText,
-                status: error.response.status
-            }
-        })
+        setDispatchError(dispatch, error, BLOG_ERROR)
+        
     }
   };
   
@@ -80,13 +75,8 @@ export const getBlog = (id) => async dispatch => {
             payload: false
         })
 
-        dispatch({
-            type: BLOG_ERROR,
-            payload: {
-                msg: error.response.statusText,
-                status: error.response.status
-            }
-        })
+        setDispatchError(dispatch, error, BLOG_ERROR)
+        
     }
 };
   

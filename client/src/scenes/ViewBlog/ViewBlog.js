@@ -51,7 +51,8 @@ const useStyles = makeStyles(theme => ({
         // // backgroundColor: 'rgba(255,255,255, 0.7)'
     },
     title:{
-        color: 'rgb(0,0,0)'
+        color: 'rgb(0,0,0)',
+        alignItem: 'center'
     }
 }))
 
@@ -62,7 +63,7 @@ const ViewBlog = (props) => {
 
     useEffect(() => {
         window.scrollTo(0,0)
-        const fetchBlog = async() => {
+        const fetchBlog = async () => {
             await getBlog(match.params.idx)
         }
         fetchBlog()
@@ -84,7 +85,7 @@ const ViewBlog = (props) => {
         <Box className={classes.root}>
             {/* <Box className={classes.inner} style={{  background: `url(${blog.images_chunk})` }}/> */}
             <img src={blog.images_chunk} alt="alt text" className={classes.inner}/>
-            <Container className={classes.headerContainer}>
+            <Container>
                 {/* <img src={logo} width='134px' height='69px'></img> */}
                 {/* <div className={classes.ImgBg} >
                     <div className={classes.InnerImgBg}> */}
@@ -98,9 +99,9 @@ const ViewBlog = (props) => {
             <Divider/>
             {blog.sections.map((section, i) => (
                 i % 2 !== 0 ?
-                    <Section section={section} side="right"/>
+                    <Section section={section} key={i} side="right"/>
                 :
-                    <Section section={section} side="left"/>
+                    <Section section={section} key={i} side="left"/>
             ))}
         </Box>
     )

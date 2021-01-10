@@ -43,11 +43,10 @@ const QuantityStepper = ({ amount, max, product_id, increment, decrement}) => {
 
     const classes = useStyles()
     React.useState(() => {
-        console.log("MOUNTED QUNATITY STEPPER", product_id)
     }, [])
     
     return (
-        <Box className={classes.root} container>
+        <Box className={classes.root}>
             <div className={classes.iconBg} >
                 <AddIcon onClick={() => increment(product_id, max)}/>
             </div>
@@ -57,6 +56,7 @@ const QuantityStepper = ({ amount, max, product_id, increment, decrement}) => {
                 id="outlined-number"
                 type="number"
                 value={amount}
+                readOnly
             />
             </div>
             <div className={classes.iconBg} >
