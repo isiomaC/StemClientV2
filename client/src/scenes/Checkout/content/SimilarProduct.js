@@ -25,7 +25,16 @@ const useStyles = makeStyles(theme => ({
         flex: '1 0 auto',
     },
     cover: {
-        width: 151,
+        minWidth: 151,
+    },
+    description: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        textAlign: 'left',
+        '-webkit-line-clamp': 2,
+         /* number of lines to show */
+        '-webkit-box-orient': 'vertical',
     }
 }))
 
@@ -47,7 +56,7 @@ const SimilarProduct = ({id, name, description, size, price, image }) => {
                     <Typography variant="body1">
                         {name}
                     </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
+                    <Typography className={classes.description} variant="subtitle1" color="textSecondary">
                         {description.split(/\<.*?\>/g)}
                     </Typography>
                     {/* <Typography variant="subtitle1" color="textSecondary">
@@ -61,7 +70,7 @@ const SimilarProduct = ({id, name, description, size, price, image }) => {
             <CardMedia
                 className={classes.cover}
                 image={image ? image : "https://i.imgur.com/EHyR2nP.png"}
-                title="Live from space album cover"/>
+                title={name}/>
         </Card>
     )
 }

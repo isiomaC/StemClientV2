@@ -10,27 +10,27 @@ import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia'
 import CardContent from '@material-ui/core/CardContent'
 import { makeStyles } from '@material-ui/core/styles'
-import { Grid } from '@material-ui/core'
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
 
 import approximatePrice  from '../../../utils/approximatePrice'
 import TableDisplay from '../content/TableDisplay'
+
 
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import moment from 'moment'
 
-import { decrypt } from '../../../utils/cryptoWrapper'
 
 //Icons
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Spinner from '../../../Components/layout/Spinner'
+import StorefrontIcon from '@material-ui/icons/Storefront';
 
 
 const useStyles =  makeStyles(theme => ({
     root: {
         display: 'block',
-        height: '70vh',
-        
+        minHeight: '70vh',
     },
     box: {
         textAlign: "left"
@@ -171,10 +171,12 @@ const ConfirmationPage = ({  auth, outcome, message, activeUser}) => {
         }, 20000) //20secs
 
         return (
-            <Container style= {{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <Typography style={{ textAlign: 'left'}}variant="h3"> {message} </Typography>
-                <Typography style={{ textAlign: 'left'}}>  Continue to Shop to browse our collection </Typography>
-                <a href='/shop'> Shop </a>
+            <Container style= {{ height: '70vh'}}>
+                <Typography style={{ textAlign: 'left'}}variant="h4"> {message} </Typography>
+                <Typography style={{ textAlign: 'left'}} variant="body2">  Continue to Shop to browse our collection. </Typography>
+                <Button style={{ background: 'rgba(151, 212, 136, 0.6)', marginTop: '30px'}} size="small" variant="contained" endIcon={<StorefrontIcon/>}>
+                    <a href='/shop' style={{ textDecoration: 'none', color: 'black'}}> Shop </a>
+                </Button>
             </Container>
         )
     }

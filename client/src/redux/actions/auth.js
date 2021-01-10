@@ -12,6 +12,9 @@ import {
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
+import setDispatchError from '../../utils/setDispatchError'
+
+
 // const apiUrl ="https://inphinityapi.herokuapp.com/api"
 const apiUrl = process.env.REACT_APP_API_URL
 
@@ -74,17 +77,12 @@ export const login = (formData) => async dispatch => {
 
     }catch(error){     
 
-        if (Object.keys(error.response.data.error).length !== 0){
+        if (Object.keys(error.response.data.error).length > 0){
             dispatch(setAlert(error.response.data.error, 'error'))
         }
 
-        dispatch({
-            type: LOGIN_FAIL,
-            payload: {
-                msg: error.response.data.error,
-                status: error.response.status
-            }
-        })
+        setDispatchError(dispatch, error, LOGIN_FAIL)
+
     }
 }
 
@@ -110,13 +108,11 @@ export const register = (formData)=> async dispatch => {
         dispatch(loadUser())
     }catch(error){
 
-        dispatch({
-            type: REGISTER_FAIL,
-            payload: {
-                msg: error.response.statusText,
-                status: error.response.status
-            }
-        })
+        if (Object.keys(error.response.data.error).length > 0){
+            dispatch(setAlert(error.response.data.error, 'error'))
+        }
+        setDispatchError(dispatch, error, REGISTER_FAIL)
+       
     }
 }
 

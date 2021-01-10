@@ -99,6 +99,7 @@ const useStyles = makeStyles(theme => ({
         }
       },
       filters: {
+          minHeight: '70vh'
         //   marginLeft: 20,
         //   backgound: 'inherit'
       },

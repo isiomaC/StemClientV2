@@ -1,17 +1,15 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom';
-import Container from '@material-ui/core/Container'
 import TextField from '@material-ui/core/TextField'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
-import AccountCircle from '@material-ui/icons/AccountCircle'
+import Typography from '@material-ui/core/Typography'
 import LockIcon from '@material-ui/icons/Lock'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
-import PersonIcon from '@material-ui/icons/Person';
 
 import EmailIcon from '@material-ui/icons/Email';
 import { makeStyles } from '@material-ui/core/styles' 
@@ -65,7 +63,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const SignUp = ({ register, loading, isAuthenticated}) => {
+const SignUp = ({ register, loading, isAuthenticated, alert}) => {
 
     const classes = useStyles()
     const [formData, setFormData] = useState({
@@ -154,6 +152,7 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
             <Box className={classes.container}>
               <Paper className={classes.paper}>
                 <h2 className={classes.header}>Sign Up</h2>
+                {alert.length > 0 && <Typography style={{ fontSize: '0.9rem', color: 'red'}}>{alert[0].msg + ', ' + 'please use the sign in page'}</Typography>}
                 <form className={classes.root} onSubmit={e => onSubmit(e)}>
                     {/* <div className={classes.div}> */}
                         {/* <TextField
@@ -300,12 +299,14 @@ const SignUp = ({ register, loading, isAuthenticated}) => {
 SignUp.propTypes = {
     register: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    alert: PropTypes.arrayOf(PropTypes.object)
 };
   
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
-    loading: state.auth.loading
+    loading: state.auth.loading,
+    alert: state.alert
 });
 
 export default connect(mapStateToProps, { register })(SignUp);
