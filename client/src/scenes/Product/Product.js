@@ -251,7 +251,7 @@ Product.propTypes = {
     loading: PropTypes.bool,
     getProduct: PropTypes.func,
     user: PropTypes.object,
-    alert: PropTypes.object,
+    alert: PropTypes.arrayOf(PropTypes.object),
 }
 
 const mapStateToProps = state => ({

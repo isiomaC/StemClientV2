@@ -20,7 +20,7 @@ export const ProductInfoCarousel = (props) => {
                     renderItem={item => <div style={{ background: "white",  }}>{item}</div>}
                >
                     {images && images.map((img, index) =>  
-                         <div style={{ background: ''}}>
+                         <div key={ index} style={{ background: ''}}>
                              <img src={img} key={index} width= '20%' alt={`Image${index} alt text`}/>
                          </div>
                      )}

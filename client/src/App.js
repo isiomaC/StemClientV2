@@ -102,7 +102,7 @@ function App() {
 
   useEffect(() => {
     // handleResize()
-    store.dispatch(loadUser())
+    store.dispatch(loadUser()).catch(console.log("User not authenticated"))
     // .then(data => {
     //   // console.log("[APP]", data)
     // });

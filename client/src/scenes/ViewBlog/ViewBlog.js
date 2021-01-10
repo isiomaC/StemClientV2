@@ -10,8 +10,6 @@ import { getBlog } from '../../redux/actions/blogactions'
 import Spinner from '../../Components/layout/Spinner'
 import { Divider, makeStyles } from '@material-ui/core'
 
-import logo from '../../img/Logo.png'
-import andrea from '../../img/Carousel/andrea.jpeg'
 import Section from './content/Section'
 
 const useStyles = makeStyles(theme => ({

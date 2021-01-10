@@ -9,11 +9,6 @@ import {
   LOGIN_FAIL,
   LOG_OUT,
   CLEAR_USER, 
-  ADMIN_LOGIN,
-  RESET_PASSWORD_EMAIL_SENT,
-  RESET_PASSWORD_EMAIL_SENT_ERROR,
-  RESET_PASSWORD_FINISH,
-  RESET_PASSWORD_FINISH_ERROR
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
