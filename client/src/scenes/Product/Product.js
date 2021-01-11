@@ -42,12 +42,12 @@ const Alert = (props) => {
 const useStyles = makeStyles(theme => ({
     root:{
         width: '100vw',
-        height: '60vh',
-        dispplay: 'flex',
+        // height: '100vh',
+        display: 'flex',
         alignItems: 'center', 
         justifyContent: 'center', 
         [theme.breakpoints.down('xs')]: {
-            height: '100vh'
+            // height: '100vh'
         }
     },
     rows: {
@@ -153,7 +153,7 @@ const Product = (props) => {
             <Spinner/>
         </div>
     ):(
-        <Box className={classes.root} style={{ flexGrow: 1}}>
+        <Box className={classes.root} style={{ }}>
 
             { (alert.length > 0 && alert[0].msg.success) &&
                 <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
@@ -171,11 +171,11 @@ const Product = (props) => {
                 </Snackbar>
             }
 
-            <Grid container style={{ height: ''}} spacing={0}>
-                <Grid item style={{ padding: 70 }} xs lg={5}>
+            <Grid container style={{ }} spacing={0}>
+                <Grid item style={{ padding: 70 }} xs md lg={5} >
                     <ProductInfoCarousel images={product.product.base64Images}/>
                 </Grid>
-                <Grid item style={{ display: 'inline-block', color: 'black',}} xs lg={7}>
+                <Grid item style={{ display: 'inline-block', color: 'black',}}xs md lg={7} >
                     <Typography className={classes.topRows} variant='h4'>
                         {product.product.name}
                     </Typography>
@@ -224,7 +224,7 @@ const Product = (props) => {
                         </Button>
                     </Box>
                     <Typography className={classes.rows} variant="body1">
-                        {product.product.benefits.split(/\<.*?\>/g)} 
+                        {product.product.benefits !== "undefined" && product.product.benefits.split(/\<.*?\>/g)} 
                     </Typography>
                     <Typography className={classes.rows} variant="body1">
                         Ingredients:{" "}{product.product.ingredients} 

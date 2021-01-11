@@ -63,6 +63,7 @@ const useStyles = makeStyles(theme => ({
     backgroundSize: 'cover',
     textAlign: 'center',
     backgroundPosition:  'center',
+    // overflow: 'hidden'
   },
   root2: { 
     background: 'rgba(255,255,255, 0.8)' ,

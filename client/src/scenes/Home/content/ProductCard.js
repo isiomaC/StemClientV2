@@ -48,6 +48,15 @@ const useStyles = makeStyles(theme=> ({
         // [theme.breakpoints.down('xs')]:{
         //     fontSize: '0.83em'
         // }
+    },
+    description: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        textAlign: 'left',
+        '-webkit-line-clamp': 2,
+         /* number of lines to show */
+        '-webkit-box-orient': 'vertical',
     }
 }));
 
@@ -72,7 +81,7 @@ const ProductCard = (props) => {
                         <Typography variant="h6"  align="left" className={classes.title} >
                             {props.title}
                         </Typography>
-                        <Typography variant="body2"  align="left" component="p"  component="p">
+                        <Typography className={classes.description} variant="body2"  align="left" component="p"  component="p">
                             {props.description}
                         </Typography>
                     </div>
