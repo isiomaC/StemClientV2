@@ -155,7 +155,7 @@ const Login = ({ alert, login, isAuthenticated, user , loading}) => {
       <Typography className={classes.headerText}>
         <i className='fas fa-user' /> Sign Into Your Account
       </Typography>
-      {alert.length !== 0 && <Typography style={{ fontSize: '0.9rem', color: 'red'}}>{alert[0].msg}</Typography>}
+      {alert.length > 0 && <Typography style={{ fontSize: '0.9rem', color: 'red'}}>{alert[0].msg}</Typography>}
       <form className={classes.root} onSubmit={e => onSubmit(e)}>
         <div className={classes.div}>
           <TextField

@@ -111,7 +111,6 @@ export const saveDetails = (shipping, user) => async dispatch=> {
 
     try{
 
-       
         const { firstname, lastname, email, phonenumber } = shipping
         if (user && user.email){
 

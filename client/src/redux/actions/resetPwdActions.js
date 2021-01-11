@@ -8,7 +8,7 @@ import setDispatchError from '../../utils/setDispatchError'
 import axios from 'axios'
 import { setAlert } from './alert';
 
-const apiUrl = "http://localhost:5000/api"
+const apiUrl = process.env.REACT_APP_API_URL
 
 export const resetpassword = (form) => async dispatch => {
     const config = {
