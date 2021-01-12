@@ -20,6 +20,8 @@ import { addToCart } from '../../../redux/actions/shoppingcart'
 
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
+import parse from 'html-react-parser';
+
 
 const useStyles = makeStyles(theme=> ({
     card: {
@@ -80,6 +82,8 @@ const ShopCard = (props) => {
     
     const { push } = useHistory()
 
+    // console.log(props.description)
+
     return (
         <Card elevation={0} className={classes.card}>
             {/* <CardActionArea > */}
@@ -98,13 +102,13 @@ const ShopCard = (props) => {
 
                         <Grid item style={{ display: 'inline'}} xs={12}>
                             <div style={{display: 'flex', alignItems: 'flex-start'}}>
-                                <Typography variant={isXSmall ? 'caption' : 'body1' } align="left">
+                                <Typography variant={isXSmall ? 'body2' : 'h6' } align="left">
                                     {props.title}
                                 </Typography>
                             </div>
-                            <Typography className={classes.description} variant="body2" align="left" component="p">
-                                {props.description}
-                            </Typography>
+                            <div className={classes.description} style={{ fontSize: isXSmall ? '11px' : '15px'}} >
+                                {props.description !== "undefined" && parse(props.description)}
+                            </div>
                         </Grid>
                         <Grid item xs={4}>
                             <Typography>€{props.price}</Typography>

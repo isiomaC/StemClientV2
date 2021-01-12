@@ -35,6 +35,9 @@ import ReviewDialog from './content/ReviewDialog'
 
 import approximatePrice from '../../utils/approximatePrice'
 
+import parse from 'html-react-parser';
+
+
 const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -87,12 +90,18 @@ const useStyles = makeStyles(theme => ({
         // boxShadow: theme.shadows[3],
         padding: theme.spacing(2, 4, 3),
       },
-      shareIcon: {
-          color: 'red',
-          '&:hover': {
-              cursor: 'pointer'
-          }
-      }
+    shareIcon: {
+        color: 'red',
+        '&:hover': {
+            cursor: 'pointer'
+        }
+    },
+    benefits:{
+        textAlign: 'left',
+        marginBottom: 10,
+        marginLeft: 10,
+        marginRight: 10
+    }
 }))
 
 const Product = (props) => {
@@ -223,11 +232,11 @@ const Product = (props) => {
                             Add To Cart
                         </Button>
                     </Box>
-                    <Typography className={classes.rows} variant="body1">
-                        {product.product.benefits !== "undefined" && product.product.benefits.split(/\<.*?\>/g)} 
-                    </Typography>
-                    <Typography className={classes.rows} variant="body1">
-                        Ingredients:{" "}{product.product.ingredients} 
+                    <div className={classes.benefits}>
+                      {product.product.benefits !== "undefined" && parse(product.product.benefits) }   {/* .split(/\<.*?\>/g) */}
+                    </div>
+                    <Typography className={classes.rows} style={{ textAlign: 'left'}} variant="body1">
+                        <i>INGREDIENTS:{" "}{product.product.ingredients} </i>
                     </Typography>
                     <Typography className={classes.topRows}>
                          {"Share:"} 

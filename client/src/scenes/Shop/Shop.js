@@ -34,6 +34,8 @@ import approximatePrice from '../../utils/approximatePrice'
 
 
 
+
+
 //Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 
 const asideWidth = 400;
@@ -188,7 +190,7 @@ const Shop = ({products, getProducts, loading, shoppingcart, getProduct, addToCa
                                             className={classes.paper} 
                                             variant="rounded" 
                                             title={stu.name} 
-                                            description={stu.benefits.split(/\<.*?\>/g)} 
+                                            description={stu.benefits} //.split(/\<.*?\>/g)
                                             price={approximatePrice(stu.price)} 
                                             image={ stu.base64 }
                                             product={stu}
@@ -237,7 +239,7 @@ const Shop = ({products, getProducts, loading, shoppingcart, getProduct, addToCa
                                                 className={classes.paper} 
                                                 variant="rounded" 
                                                 title={stu.name} 
-                                                description={stu.benefits.split(/\<.*?\>/g)} 
+                                                description={stu.benefits} //.split(/\<.*?\>/g)
                                                 price={approximatePrice(stu.price)} 
                                                 image={ stu.base64 }
                                                 product={stu}
