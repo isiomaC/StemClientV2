@@ -13,22 +13,20 @@ import Spinner from '../../../Components/layout/Spinner'
 //Icons
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
-//carousel Images
-
 
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
         height: '100%'
-        //height: '100vh',
-        // marginBottom: 50
     },
     toolbar: {
       ...theme.mixins.toolbar,
       visibility: 'visible'
     },
     carousel: {
-      height: '80vh'
+      [theme.breakpoints.down("sm")]: {
+        marginTop: '25px' ///check nav bar height
+      }
     },
     featured:{
       cursor: 'pointer',
@@ -41,58 +39,49 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Landing = ({ extras }) => {
-
+  
       const scrollRef = React.createRef(null)
       
       React.useEffect(() => {
 
-      }, [])
+      }, [extras])
 
       const classes = useStyles();
 
       const HandleScrolling = (event) =>{
         event.preventDefault();
         const featureddestination = document.querySelector('#featureddestination')
-        const innerText = event.target.innerText
+        // const innerText = event.target.innerText
 
-        // if (innerText === "Featured Products"){
-          setTimeout(() => { scrollRef.current.scrollIntoView({
-            top: featureddestination.offsetTop,
-            left: 0,
-            behavior: 'smooth'}) })
-        // }
+        setTimeout(() => { scrollRef.current.scrollIntoView({
+          top: featureddestination.offsetTop,
+          left: 0,
+          behavior: 'smooth'}) 
+        })
       }
 
-      const isExtrasEmpty = () => {
-        if (Object.keys(extras).length === 0) {
-          return true
-        }else{
-          return false
-        }
-      }
-
-      return isExtrasEmpty() === true ? (
+      return Object.keys(extras).length === 0 ? (
           <Spinner/>
-      ): (
+      ) : (
           <Box className={classes.root}>
             <Box >
-                  <Carousel className={classes.carousel} emulateTouch={true} showArrows={false} showIndicators={true} animation='fade'>
-                    {
-                       extras.map(landing => (landing.base64.map((item, i) => <CarouselItem bgImage={item} landingText={extras.landingText} key={i}/>)))
-                    }
-                  </Carousel>
+              <Carousel className={classes.carousel} emulateTouch={true} stopAutoPlayOnHover={true} showArrows={false} showIndicators={true} animation='fade'>
+                {
+                    extras[0].base64.map((item, i) => <CarouselItem bgImage={item} landingText={extras.landingText} key={i}/>)
+                }
+              </Carousel>
 
-                    <Box component="div" ref={scrollRef} className={classes.featured} onClick={HandleScrolling}>
-                      <div>
-                        <Typography variant="h5"> Featured Products </Typography>
-                        <div style={{ marginBottom: 0}}>
-                          <KeyboardArrowDownIcon />
-                        </div>
-                        <div style={{ marginTop: -15}}>
-                          <KeyboardArrowDownIcon />
-                        </div>
-                      </div>
-                    </Box>
+              <Box component="div" ref={scrollRef} className={classes.featured} onClick={HandleScrolling}>
+                <div>
+                  <Typography variant="h5"> Featured Products </Typography>
+                  <div style={{ marginBottom: 0}}>
+                    <KeyboardArrowDownIcon />
+                  </div>
+                  <div style={{ marginTop: -15}}>
+                    <KeyboardArrowDownIcon />
+                  </div>
+                </div>
+              </Box>
             </Box>
           </Box> 
       )

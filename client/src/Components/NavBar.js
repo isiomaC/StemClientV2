@@ -1,10 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 //Material ui components
-import Container from '@material-ui/core/Container';
 import Hidden from '@material-ui/core/Hidden';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,20 +12,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import SubjectRoundedIcon from '@material-ui/icons/SubjectRounded';
 import Box from '@material-ui/core/Box';
-import { red, green } from '@material-ui/core/colors'
-import Badge from '@material-ui/core/Badge';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import Divider from '@material-ui/core/Divider'
-import Button from '@material-ui/core/Button';
+import { red } from '@material-ui/core/colors'
 
-import QuantityStepper from '../scenes/Checkout/content/QuantityStepper'
-import approximatePrice from '../utils/approximatePrice'
 import QuickShop from '../Components/QuickShop'
 
 import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import Popover from '@material-ui/core/Popover'
 
 import getOrderTotal from '../utils/getOrderTotal'
 
@@ -36,9 +26,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 //Icons
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-
-import ShoppingCart from '../Components/ShoppingCart'
 
 import logo from '../img/InFiniC.png'
 import HandleScroll from '../Content/HandleScroll'
@@ -152,25 +139,19 @@ const useStyles = makeStyles(theme => ({
 
 const NavBar = (props) => {
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
-    // const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'))
+    
     const { isAuthenticated, logout, user, shoppingcart } = props
     const classes = useStyles();
     const theme = useTheme();
 
-
-    const [menuItems, setMenuItems] = React.useState(options)
     const ITEM_HEIGHT = 100
-
-    const arrowRef = React.useRef()
 
     const [mobileOpen, setMobileOpen] = React.useState(null);
     const open = Boolean(mobileOpen)
 
-    const [openNested, setOpenNested] = React.useState(false);
-
     const history = useHistory();
 
-    const adminLink = 'https://inphinityxx1.herokuapp.com/'
+    const adminLink = process.env.REACT_APP_ADMIN_LINK
 
     const handleClick = (event) => {
         //N:B - event.view very handy...
@@ -185,28 +166,7 @@ const NavBar = (props) => {
     const handleClose = (event) => {
         
         setMobileOpen(null)
-        // console.log(document.querySelector('#shopdestination').offsetTop)
-        const innerText = event.target.innerText
-
-        if (innerText === 'Shop'){
-            const projectdestination = document.querySelector('#shopdestination')
-           
-            //go to shop page
-        }else if(innerText === 'Blog'){
-            const aboutdestination = document.querySelector('#blogdestination')
-          
-            //go to blog page
-        }else if(innerText === 'AboutUs'){
-            const contactdestination = document.querySelector('#aboutusdestination')
-           
-            //go to about us
-        }else if(innerText === 'Search'){
-            const contactdestination = document.querySelector('#searchdestination')
-           
-            //open to search field 
-        }else{
-            setMobileOpen(null)
-        }
+       
     }
 
    

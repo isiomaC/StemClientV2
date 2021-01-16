@@ -1,8 +1,7 @@
 import React from 'react'
-//react router
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 //material ui components
+
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -10,7 +9,8 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 import approximatePrice from '../../../utils/approximatePrice'
-//COmponents
+
+//Components
 import ProductCard from '../content/ProductCard';
 
 const useStyles = makeStyles(theme=> ({

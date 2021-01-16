@@ -7,44 +7,29 @@ import { makeStyles } from '@material-ui/styles'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
+
 const useStyles = makeStyles(theme => ({
-    root:{
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat:'no-repeat',
-        height: '100vh',
-        width: '100vw',
+    innerImage: {
+        width: '100%',
+        height: '100%',
+        [theme.breakpoints.down('sm')]: {
+       
+        }
     },
-    root2: {
-        width: 'inherit', 
-        height:'inherit', 
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        background: 'linear-gradient(to right top, rgba(255,255,255,0), rgba(151,212,136,0.5))'
-    }
 }))
 
 const CarouselItem = ({bgImage, landingText}) => { 
     const classes = useStyles()
 
     return (
-        <Box style={{ background: `url(${bgImage})` }} className={classes.root}>
-            <Box className={classes.root2}>
-                <Paper elevation={0} style={{ marginLeft: 30, width: '30%', height: '30%', background: 'transparent'}}>
-                    <Typography style={{ color: 'rgba(200,0,0,0.5)'}} variant='h3'> {landingText}</Typography>
-                </Paper>
-            </Box>
+        
+        <img src={bgImage} className={classes.innerImage} alt={landingText}/>
     
-                {/* <Button variant='outlined' className="CheckButton">
-                    <Link style={{textDecoration: 'none', color: 'black'}} to={`/projects/${props.item.id}`}>
-                      Check it out!
-                    </Link>
-                </Button> */}
-        </Box>
+        /* <Button variant='outlined' className="CheckButton">
+            <Link style={{textDecoration: 'none', color: 'black'}} to={`/projects/${props.item.id}`}>
+                Check it out!
+            </Link>
+        </Button> */
     )
 }
 

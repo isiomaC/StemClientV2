@@ -8,10 +8,6 @@ import {
     LOG_OUT,
     CLEAR_USER,
     AUTH_ERROR,
-    RESET_PASSWORD_EMAIL_SENT,
-    RESET_PASSWORD_EMAIL_SENT_ERROR,
-    RESET_PASSWORD_FINISH,
-    RESET_PASSWORD_FINISH_ERROR
 } from '../actions/types'
 
 import { encrypt } from '../../utils/cryptoWrapper'

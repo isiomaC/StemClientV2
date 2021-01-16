@@ -2,16 +2,11 @@ import React from 'react'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import PropTypes from 'prop-types'
 
 //static Images
 import aboutUs from '../../img/aboutUs.jpeg'
-import owner from '../../img/owner.jpeg'
 import { makeStyles } from '@material-ui/core/styles'
 import Logo from '../../img/Logo.png'
-
-import screen_3x from '../../img/screen_3x.jpeg'
-
 
 
 const useStyles = makeStyles(theme => ({
@@ -23,15 +18,10 @@ const useStyles = makeStyles(theme => ({
     inner: {
         display: "flex",
         justifyContent: "center",
-        width: "inherit",
-        overflow: "hidden",
-        // backgroundRepeat: "no-repeat",
-        // backgroundSize: 'cover',
-        // background: `url(${aboutUs})`
     },
     innerImage: {
-        // width: '70%',
-        // height: '100%',
+        width: '100%',
+        height: '100%',
         backgroundPosition: 'center',
         backgroundSize: 'cover'
        
@@ -40,6 +30,7 @@ const useStyles = makeStyles(theme => ({
        display: 'block',
     },
     aboutUsHeader: {
+        margin: '10px 0',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -50,6 +41,10 @@ const useStyles = makeStyles(theme => ({
         backgroundRepeat: 'no-repeat',  
         width:"200px",
         height:"120px",
+        [theme.breakpoints.down('sm')]: {
+            width: "120px",
+            height: "80px"
+        }
     },
     InnerImgBg : {
         display: 'flex',
@@ -142,15 +137,5 @@ const useStyles = makeStyles(theme => ({
     )
 }
 
-const text = 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney' + 
-'College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from' +
-'sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,' + 
-'"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32' + 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney' + 
-'College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from' +
-'sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,' + 
-'"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32' + 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney' + 
-'College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from' +
-'sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,' + 
-'"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32';
 
 export default About 
