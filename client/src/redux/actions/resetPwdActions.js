@@ -9,6 +9,8 @@ import axios from 'axios'
 import { setAlert } from './alert';
 
 const apiUrl = process.env.REACT_APP_API_URL
+// const apiUrl = 'https://shrouded-hollows-95980.herokuapp.com/api'
+
 
 export const resetpassword = (form) => async dispatch => {
     const config = {

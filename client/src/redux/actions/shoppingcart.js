@@ -16,9 +16,9 @@ import axios from 'axios'
 
 //import { uuid } from 'uuid';
 
-// const apiUrl = process.env.REACT_APP_API_URL
+const apiUrl = process.env.REACT_APP_API_URL
 
-const apiUrl = 'https://shrouded-hollows-95980.herokuapp.com/api'
+// const apiUrl = 'https://shrouded-hollows-95980.herokuapp.com/api'
 
 
 export const addToCart = (product_idx, quantity, image, name, price, benefits, maxVal, category_id) => async dispatch => {
