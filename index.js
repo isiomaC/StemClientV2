@@ -2,6 +2,8 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
+
+app.use(cors())
 app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
