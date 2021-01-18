@@ -66,7 +66,6 @@ const ProductCard = (props) => {
     const classes = useStyles()
     const { push } = useHistory()
 
-
     return (
         <Card elevation={0} className={classes.card}>
             <CardActionArea onClick={() => push(`/product/${props.idx}`)} >
@@ -82,7 +81,7 @@ const ProductCard = (props) => {
                             {props.title}
                         </Typography>
                         <Typography className={classes.description} variant="body2"  align="left" component="p"  component="p">
-                            {props.description}
+                            {props.description !== 'undefined' && props.description.split(/\<.*?\>/g)}
                         </Typography>
                     </div>
                     <Typography variant="body2">€{props.price}</Typography>

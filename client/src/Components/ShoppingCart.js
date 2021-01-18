@@ -37,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
             width : 'calc(100%)'
         }
     },
-
     description: {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -67,7 +66,10 @@ const ShoppingCart = ({ cart, removeFromCart }) => {
                             <div>
                             <Typography style={{ fontSize: `${isXSmall ? 'small' : 'medium'}`, fontWeight: 'Bold'}} > {cart.name}</Typography>
                                 {/* <Typography style={{ fontSize: 'medium'}} > {cart.name}</Typography> */}
-                                <Typography style={{ maxWidth: `${isXSmall ? 'inherit' : '250px'}`, fontSize: 'small'}} className={classes.description} > {cart.benefits.split(/\<.*?\>/g)} </Typography>
+                            <Typography style={{ maxWidth: `${isXSmall ? 'inherit' : '250px'}`, fontSize: 'small'}} 
+                                        className={classes.description} >
+                                    {cart.benefits !== 'undefined' && cart.benefits.split(/\<.*?\>/g)}
+                            </Typography>
                             </div>
                             <DeleteIcon 
                                 onClick={() => {removeFromCart(cart.product_idx)}} 

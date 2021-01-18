@@ -163,7 +163,7 @@ const FeaturedProducts = ({products, variant}) => {
                             key={i}
                             variant={variant}
                             title={product.name} 
-                            description={product.benefits.split(/\<.*?\>/g)} 
+                            description={product.benefits} 
                             price={approximatePrice(product.price)} 
                             image={product.base64} 
                             idx={product.idx}

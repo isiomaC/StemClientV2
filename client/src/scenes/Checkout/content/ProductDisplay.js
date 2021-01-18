@@ -39,6 +39,15 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down("sm")]:{
             marginLeft: '25px',
         }
+    },
+    description: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        textAlign: 'left',
+        '-webkit-line-clamp': 2,
+         /* number of lines to show */
+        '-webkit-box-orient': 'vertical',
     }
 }))
 const ProductDisplay = ({ cart, dispatch }) => {
@@ -56,7 +65,9 @@ const ProductDisplay = ({ cart, dispatch }) => {
                 <Grid item className={classes.griddescritption} xs={9}>
                         <div className={ classes.productInfo}>
                             <Typography style={{ fontSize: 'medium', fontWeight: 'Bold'}} variant="body1">{cart.name}</Typography>
-                            <Typography style={{ fontSize: 'small'}} variant="caption">{cart.benefits.split(/\<.*?\>/g)}</Typography>
+                            <Typography style={{ fontSize: 'small'}} className={classes.description} variant="caption">
+                                {cart.benefits !== 'undefined' && cart.benefits.split(/\<.*?\>/g)}
+                            </Typography>
                             <Typography variant="body2">{cart.category}</Typography>
                         </div>
                     <div style={{ display: 'block', height: 'inherit' ,marginRight: '0px'}}>
