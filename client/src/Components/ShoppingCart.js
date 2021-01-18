@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
         width: 'inherit',
         height: '80px',
         marginBottom: '10px',
+        // [theme.breakpoints.up('md')]: {
+        //     // maxWidth: 'calc(100% - 50%)'
+        // }
     },
     stepper: {
         width: '10%'
@@ -64,7 +67,7 @@ const ShoppingCart = ({ cart, removeFromCart }) => {
                             <div>
                             <Typography style={{ fontSize: `${isXSmall ? 'small' : 'medium'}`, fontWeight: 'Bold'}} > {cart.name}</Typography>
                                 {/* <Typography style={{ fontSize: 'medium'}} > {cart.name}</Typography> */}
-                                <Typography style={{ fontSize: 'small'}} className={classes.description} > {cart.benefits.split(/\<.*?\>/g)} </Typography>
+                                <Typography style={{ maxWidth: `${isXSmall ? 'inherit' : '250px'}`, fontSize: 'small'}} className={classes.description} > {cart.benefits.split(/\<.*?\>/g)} </Typography>
                             </div>
                             <DeleteIcon 
                                 onClick={() => {removeFromCart(cart.product_idx)}} 
