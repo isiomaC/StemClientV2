@@ -26,7 +26,8 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 
 import PoliciesDialog from './PoliciesDialog'
 
-const apiUrl = 'http://localhost:5000/api'
+const apiUrl = process.env.REACT_APP_API_URL
+
 const useStyles = makeStyles(theme => ({
     stickToBottom: {
         borderTop: `5px solid ${theme.palette.divider}`,
