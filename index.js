@@ -20,16 +20,17 @@ app.use((err, req, res, next) => {
 
 if (process.env.NODE_ENV === 'production'){ 
 // app.use(express.static('client/build'))
+    app.options("*", (req, res) => {
+        res.status(200).send("Preflight request allowed");
+    });
     app.use(express.static(path.resolve(__dirname, 'client', 'build')))
     app.get('*', (req, res) => {
         // console.log(express.static(path.resolve(__dirname, 'client', 'build')))
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
         // res.sendFile(path.join(__dirname+'/client/build/index.html'));
     }) 
-    
-    app.options("*", (req, res) => {
-        res.status(200).send("Preflight request allowed");
-    });
+
+   
 }
 
 const port = process.env.PORT || 5000

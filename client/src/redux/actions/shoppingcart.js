@@ -10,9 +10,11 @@ import {
     SAVE_ADDRESS_ERROR,
     GET_DETAILS,
     GET_DETAILS_ERROR,
-    DETAILS_COMPLETE
+    DETAILS_COMPLETE,
+    INVALID_QTY
 } from './types';
 import axios from 'axios'
+import { setAlert } from './alert';
 
 //import { uuid } from 'uuid';
 
@@ -24,18 +26,38 @@ const apiUrl = process.env.REACT_APP_API_URL
 export const addToCart = (product_idx, quantity, image, name, price, benefits, maxVal, category_id) => async dispatch => {
 
     try{
-       
-        const res = await axios.get(`${apiUrl}/categories/${category_id}`);
 
-        let category = res.data.name
+        if (quantity > 0 ){
 
+            if (quantity > maxVal){
+                dispatch({
+                    type: INVALID_QTY,
+                    payload: {}
+                })
 
-        dispatch({
-            type: ADD_TO_CART,
-            payload: { product_idx, quantity, image, name, price, benefits, maxVal, category }
-        })
-      
+                dispatch(setAlert('Please use the stepper, selected quantity over stock', 'error'))
 
+            }else{
+                const res = await axios.get(`${apiUrl}/categories/${category_id}`);
+
+                let category = res.data.name
+    
+                dispatch({
+                    type: ADD_TO_CART,
+                    payload: { product_idx, quantity, image, name, price, benefits, maxVal, category }
+                })
+            }
+           
+        }else{
+
+            dispatch({
+                type: INVALID_QTY,
+                payload: {}
+            })
+
+            dispatch(setAlert('Please include a valid amount', 'error'))
+        }
+        
     }catch(error){
         dispatch({
             type: CART_ERROR,

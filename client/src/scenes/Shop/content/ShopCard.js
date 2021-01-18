@@ -60,7 +60,29 @@ const useStyles = makeStyles(theme=> ({
         display: 'flex', 
         justifyContent: 'space-around'
     },
-    description:{
+    // description:{
+    //     display: 'block', 
+    //     display: '-webkit-box',
+    //     overflow: 'hidden',
+    //     textOverflow: 'ellipsis',
+    //     maxHeight: 'calc(25px * 2.4 * 2)', //$font-size*$line-height*$lines-to-show; 
+    //     textAlign: 'left',
+    //     margin: '0 auto',
+    //     lineHeight: '2.4',
+    //     fontSize: '15px',
+    //     color: 'rgb(0,0,0)',
+    //     width: '100%',
+    //     // lineHeight: '1em',
+    //     // maxHeight: '3em',
+    //     '-webkit-line-clamp': 2,
+    //      /* number of lines to show */
+    //     '-webkit-box-orient': 'vertical',
+    //     [theme.breakpoints.down('xs')]:{
+    //         fontSize: '11px',
+    //     }
+    // }
+
+    description: {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         display: '-webkit-box',
@@ -107,7 +129,8 @@ const ShopCard = (props) => {
                                 </Typography>
                             </div>
                             <div className={classes.description} style={{ fontSize: isXSmall ? '11px' : '15px'}} >
-                                {props.description !== "undefined" && parse(props.description)}
+                                {/* {props.description !== "undefined" && parse(props.description)} */}
+                                {props.description !== "undefined" &&  props.description.split(/\<.*?\>/g)}
                             </div>
                         </Grid>
                         <Grid item xs={4}>

@@ -165,7 +165,7 @@ const Product = (props) => {
         <Box className={classes.root} style={{ }}>
 
             { (alert.length > 0 && alert[0].msg.success) &&
-                <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                <Snackbar open={true} autoHideDuration={6000} onClose={handleSnackbarClose}>
                     <Alert onClose={handleSnackbarClose} severity="success">
                         {alert[0].msg.message}
                     </Alert>
@@ -173,7 +173,7 @@ const Product = (props) => {
             }
 
             { (alert.length > 0 && alert[0].msg.success === false) &&
-                <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                <Snackbar open={true} autoHideDuration={6000} onClose={handleSnackbarClose}>
                     <Alert onClose={handleSnackbarClose} severity="error">
                         {alert[0].msg.message}
                     </Alert>
@@ -199,6 +199,7 @@ const Product = (props) => {
                     <Box className={classes.rows}>
                         €{approximatePrice(product.product.price)}
                     </Box> 
+                    {(alert.length > 0 && (typeof alert[0].msg === 'string' && alert[0].msg.startsWith('Please'))  ) && <Typography style={{color:'red', textAlign: 'left'}} variant='body2'> <b><i>{alert[0].msg}</i></b></Typography>}
                     <Box component='div' className={classes.rows}>  
                         <form className={classes.container} noValidate>
                             <TextField
@@ -214,12 +215,13 @@ const Product = (props) => {
                                 }}
                                 InputProps={{
                                     inputProps:{
-                                        min: 1, max: parseInt(product.product.stock)
+                                        min: 1,
+                                        max: parseInt(product.product.stock, 10),
                                     }
                                 }}
                                 onChange={(e) => handleChange(e)}
                             />
-                            { parseInt(product.product.stock) === 0 && <p style={{color:'red'}}>No Stock</p>}
+                            { parseInt(product.product.stock) === 0 && <p style={{color:'red'}}>Out Of Stock</p>}
                         </form> 
                         <Button 
                             disabled={parseInt(product.product.stock) === 0}

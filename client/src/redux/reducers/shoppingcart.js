@@ -7,7 +7,8 @@ import {
     SAVE_ADDRESS_ERROR,
     GET_DETAILS_ERROR,
     GET_DETAILS,
-    DETAILS_COMPLETE
+    DETAILS_COMPLETE,
+    INVALID_QTY
  } from '../actions/types';
 
 const initialState = JSON.parse(localStorage.getItem('cart')) || {
@@ -98,6 +99,8 @@ export default function(state = initialState, action) {
     case CART_ERROR: 
         localStorage.removeItem('cart')
         return initialState
+    case INVALID_QTY: 
+        return state
     case SAVE_ADDRESS:
         let mCart = JSON.parse(localStorage.getItem("cart"))
 

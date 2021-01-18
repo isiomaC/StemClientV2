@@ -33,7 +33,18 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down("sm")] : {
             width : 'calc(100%)'
         }
+    },
+
+    description: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        textAlign: 'left',
+        '-webkit-line-clamp': 2,
+         /* number of lines to show */
+        '-webkit-box-orient': 'vertical',
     }
+    
 }))
 
 const ShoppingCart = ({ cart, removeFromCart }) => {
@@ -53,7 +64,7 @@ const ShoppingCart = ({ cart, removeFromCart }) => {
                             <div>
                             <Typography style={{ fontSize: `${isXSmall ? 'small' : 'medium'}`, fontWeight: 'Bold'}} > {cart.name}</Typography>
                                 {/* <Typography style={{ fontSize: 'medium'}} > {cart.name}</Typography> */}
-                                <Typography style={{ fontSize: 'small'}} > {cart.benefits.split(/\<.*?\>/g)} </Typography>
+                                <Typography style={{ fontSize: 'small'}} className={classes.description} > {cart.benefits.split(/\<.*?\>/g)} </Typography>
                             </div>
                             <DeleteIcon 
                                 onClick={() => {removeFromCart(cart.product_idx)}} 
