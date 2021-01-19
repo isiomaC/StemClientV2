@@ -19,6 +19,7 @@ const Home = ({ getFeaturedProducts,products, getReviews,reviews, GetAll, getExt
     }, [])
 
     React.useEffect(() => {
+        
         // const fetchData = async () => {
         //     // await GetAll()
         //     await Promise.all([ getExtras(), getFeaturedProducts(), getReviews()])
