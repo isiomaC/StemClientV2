@@ -14,11 +14,11 @@ import {
   GET_PRODUCT_BY_CATEGORY,
   GET_NEW_PRODUCTS, 
   EXTRAS_ERROR,
-  REVIEWS_ERROR
+  REVIEWS_ERROR,
+  GET_ALL_ERROR
 } from './types';
 
 import setDispatchError from '../../utils/setDispatchError'
-
 
 // const apiUrl ="https://inphinityapi.herokuapp.com/api"
 const apiUrl =process.env.REACT_APP_API_URL
@@ -307,21 +307,63 @@ export const getExtras = () => async dispatch => {
     }
 }
 
-// export const GetAll = () => async dispatch => {
-//     try {
+const memo = callback => {
+    const cache = new Map();
+    return (...args) => {
+      const selector = JSON.stringify(args);
+      if (cache.has(selector)) return cache.get(selector);
+      const value = callback(...args);
+      cache.set(selector, value);
+      return value;
+    };
+ };
 
-        
+export const GetAll = () => async dispatch => {
+    try {
+        dispatch({
+            type: SET_LOADING,
+            payload: true
+        })
 
-//     }catch(error){
-//         dispatch({
-//             type: PRODUCT_ERROR,
-//             payload: {
-//                 msg: error.response.statusText,
-//                 status: error.response.status
-//             }
-//         })
-//     }
-// }
+        const memoizedGet = memo(axios.get)
+
+        const [resExtra, resFeatured, resReviews ] = await Promise.all([
+            await memoizedGet(`${apiUrl}/extra`),
+            await memoizedGet(`${apiUrl}/products?filter={"featured":"abc"}`),
+            await memoizedGet(`${apiUrl}/reviews`)
+        ])
+
+        dispatch({
+            type: GET_EXTRAS,
+            payload: resExtra.data
+        })
+
+        dispatch({
+            type: GET_REVIEWS,
+            payload: resReviews.data
+        })
+
+        dispatch({
+            type: GET_FEATURED_PRODUCTS,
+            payload: resFeatured.data
+        })
+
+        dispatch({
+            type: SET_LOADING,
+            payload: false
+        })
+
+    }catch(error){
+
+        dispatch({
+            type: SET_LOADING,
+            payload: false
+        })
+
+        setDispatchError(dispatch, error, GET_ALL_ERROR)
+
+    }
+}
 
 export const deleteAccount = () => async dispatch => {
     dispatch({

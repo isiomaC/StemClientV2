@@ -171,6 +171,11 @@ const Shop = ({products, getProducts, loading, shoppingcart, getProduct, addToCa
             <Divider/>
             <Box>
                 {isSmall && (  
+                    loading === true ? (
+                        <Container style={{ width: '100%', height: '50vh'}}>
+                             <Spinner/>
+                         </Container>
+                     ) : (
                     <Grid container className={classes.filters} spacing={3}>
                         <Grid item xs={12}>
                             <Box component='div' className={classes.gridButtonContainer}>
@@ -205,7 +210,7 @@ const Shop = ({products, getProducts, loading, shoppingcart, getProduct, addToCa
                             </Grid>
                         </Grid>
                     </Grid>
-                )}
+                ))}
 
                 {isBig && (
                     <Grid container className={classes.filters} spacing={3}>

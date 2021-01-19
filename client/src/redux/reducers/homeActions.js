@@ -11,7 +11,8 @@ import {
     GET_NEW_PRODUCTS,
     GET_PRODUCT_BY_CATEGORY,
     EXTRAS_ERROR,
-    REVIEWS_ERROR
+    REVIEWS_ERROR,
+    GET_ALL_ERROR
 } from '../actions/types'
 
 const initialState = {
@@ -78,6 +79,12 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 extras: payload,
+            }
+        }
+        case GET_ALL_ERROR:{
+            return{
+                ...state,
+                error: payload,
             }
         }
         case EXTRAS_ERROR:
