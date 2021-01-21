@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Paper, Typography, Box, Divider } from '@material-ui/core';
+import { Paper, Typography, Box, Divider } from '@material-ui/core';
 import ValidateEmail from '../Checkout/utils/ValidateEmail'
-
-import axios from 'axios'
 
 //actions
 import { resetpassword, resetpasswordfinish } from '../../redux/actions/resetPwdActions'
@@ -20,8 +18,6 @@ import LockIcon from '@material-ui/icons/Lock'
 //Icons
 import PersonIcon from '@material-ui/icons/Person';
 
-
-const apiUrl = 'http://localhost:5000/api'
 
 const useStyles = makeStyles(theme => ({
     rootForm: {
@@ -81,7 +77,6 @@ const ResetPassword = ({ alert, resetPwd, resetpassword, match, resetpasswordfin
         password2: ''
     })
     const [errors, setErrors] = useState(null)
-    const [response, setResponse] = useState([])
 
     const [token, setToken] = useState('')
 
@@ -98,7 +93,7 @@ const ResetPassword = ({ alert, resetPwd, resetpassword, match, resetpasswordfin
             setToken(match.params.token)
         }
 
-    }, [])
+    }, [match])
 
     const handleChange = (e) => {
         setFormData({

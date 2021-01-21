@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../redux/actions/auth';
@@ -18,7 +18,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import Visibility from '@material-ui/icons/Visibility';
 import IconButton from '@material-ui/core/IconButton';
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import ValidateEmail from '../Checkout/utils/ValidateEmail'
 

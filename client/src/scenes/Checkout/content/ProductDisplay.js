@@ -1,17 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/core/styles'
 
 //Testing Icons
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
-import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import DeleteIcon from '@material-ui/icons/Delete';
 //
-import Box from '@material-ui/core/Box'
 import { connect } from 'react-redux'
 
 import QuantityStepper from './QuantityStepper'
@@ -66,7 +62,7 @@ const ProductDisplay = ({ cart, dispatch }) => {
                         <div className={ classes.productInfo}>
                             <Typography style={{ fontSize: 'medium', fontWeight: 'Bold'}} variant="body1">{cart.name}</Typography>
                             <Typography style={{ fontSize: 'small'}} className={classes.description} variant="caption">
-                                {cart.benefits !== 'undefined' && cart.benefits.split(/\<.*?\>/g)}
+                                {cart.benefits !== 'undefined' && cart.benefits.split(/<.*?>/g)}
                             </Typography>
                             <Typography variant="body2">{cart.category}</Typography>
                         </div>

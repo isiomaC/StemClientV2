@@ -5,10 +5,7 @@ import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
-import Checkbox from '@material-ui/core/Checkbox';
-import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
 
 import { Divider, useMediaQuery } from '@material-ui/core'
 import Spinner from '../../Components/layout/Spinner'
@@ -29,11 +26,8 @@ import fourby from '../../img/icons/grid4x4.png'
 import ViewAgendaOutlinedcIon from '@material-ui/icons/ViewAgendaOutlined';
 
 import { makeStyles } from '@material-ui/core/styles'
-import useInfiniteScroll from '../../utils/useInfiniteScroll'
+// import useInfiniteScroll from '../../utils/useInfiniteScroll'
 import approximatePrice from '../../utils/approximatePrice'
-
-
-
 
 
 //Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
@@ -127,40 +121,36 @@ const Shop = ({products, getProducts, loading, shoppingcart, getProduct, addToCa
 
     const classes = useStyles();
 
-    const [productList, setProductList] = React.useState([])
+    // const [productList, setProductList] = React.useState([])
 
     const [grid, setGrid] = React.useState(6)
-    const [checked, setChecked] = React.useState(null)
+    // const [checked, setChecked] = React.useState(null)
 
-    const twobyRef = React.createRef(); 
-    const threebyRef = React.createRef(); 
-    const fourbyRef = React.createRef(); 
-
-    const fetchMoreListItems = () => {
-        setTimeout(async() => {
-            await getProducts()
-            //setProductList(prevState => ([...prevState, ...newData]));
-          setIsFetching(false);
-        }, 2000);
-      }
+    // const fetchMoreListItems = () => {
+    //     setTimeout(async() => {
+    //         await getProducts()
+    //         //setProductList(prevState => ([...prevState, ...newData]));
+    //       setIsFetching(false);
+    //     }, 2000);
+    //   }
 
     const changeGrid =(val) =>{
         setGrid(val);
     }
 
-    const [isFetching, setIsFetching] = useInfiniteScroll(fetchMoreListItems);
+    // const [isFetching, setIsFetching] = useInfiniteScroll(fetchMoreListItems);
 
-    const handleChecked = (event) => {
-        event.preventDefault();
-        setChecked(event.target.checked)
-    }
+    // const handleChecked = (event) => {
+    //     event.preventDefault();
+    //     setChecked(event.target.checked)
+    // }
 
     React.useEffect(() => {
         const fetchData = async () => {
             await getProducts()
         }
         fetchData()
-    }, [])
+    }, [getProducts])
 
 
     return (
@@ -202,11 +192,11 @@ const Shop = ({products, getProducts, loading, shoppingcart, getProduct, addToCa
                                             />         
                                     </Grid>
                                 )}
-                                {isFetching && 
+                                {/* {isFetching && 
                                     <Grid item xs={12}>
                                         <Spinner/>
                                     </Grid>
-                                }
+                                } */}
                             </Grid>
                         </Grid>
                     </Grid>
@@ -251,11 +241,11 @@ const Shop = ({products, getProducts, loading, shoppingcart, getProduct, addToCa
                                             />         
                                         </Grid>)
                                 ))}
-                                {isFetching && 
+                                {/* {isFetching && 
                                     <Grid item xs={12}>
                                         <Spinner/>
                                     </Grid>
-                                }
+                                } */}
                             </Grid>
                         </Grid>
                     </Grid>

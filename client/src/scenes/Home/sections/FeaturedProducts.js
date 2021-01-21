@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+// import Avatar from '@material-ui/core/Avatar';
+// import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+// import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 import approximatePrice from '../../../utils/approximatePrice'
 
@@ -101,58 +101,53 @@ const useStyles = makeStyles(theme=> ({
 }));
 
 
-const easeInOutQuad =(t, b, c, d) =>{
-    t /= d/2;
-    if (t < 1) return c/2*t*t + b;
-    t--;
-    return -c/2 * (t*(t-2) - 1) + b;
-};
+// const easeInOutQuad =(t, b, c, d) =>{
+//     t /= d/2;
+//     if (t < 1) return c/2*t*t + b;
+//     t--;
+//     return -c/2 * (t*(t-2) - 1) + b;
+// };
 
-const scrollLeft = (element, change, duration) => {
-    // console.log(element.scrollLeft)
-    var start = element.scrollLeft,
-        currentTime = 0,
-        increment = 20;
+// const scrollLeft = (element, change, duration) => {
+//     // console.log(element.scrollLeft)
+//     var start = element.scrollLeft,
+//         currentTime = 0,
+//         increment = 20;
         
         
-    var animateScroll = () => {        
-        currentTime += increment;
-        var val = easeInOutQuad(currentTime, start, change, duration);
-        element.scrollLeft = val;
-        if(currentTime < duration) {
-            setTimeout(animateScroll, increment);
-        }
-    };
-    animateScroll();
-}
+//     var animateScroll = () => {        
+//         currentTime += increment;
+//         var val = easeInOutQuad(currentTime, start, change, duration);
+//         element.scrollLeft = val;
+//         if(currentTime < duration) {
+//             setTimeout(animateScroll, increment);
+//         }
+//     };
+//     animateScroll();
+// }
 
 const FeaturedProducts = ({products, variant}) => {
     const classes = useStyles();
-    // const images =  [pro1, pro2, pro3];
-
-    const [show, setShow] = React.useState(false)
-
     const nextPrevRef = React.createRef(null);
 
-    const subText = "SUBSCRIBE TO OUR NEWSLETTER";
-    const tt = "Be One of the Fist to know about new releases";
+    // const [show, setShow] = React.useState(false)
 
-    const handleNav = (direction) => {
-        //add animation
-        if (direction === 'left'){
-            if (nextPrevRef !== null){
-                scrollLeft(nextPrevRef.current, -400, 400)
-            }
-        }else{
-            if (nextPrevRef !== null){
-                scrollLeft(nextPrevRef.current, 400, 400)
-            }
-        }
-    }
+    // const handleNav = (direction) => {
+    //     //add animation
+    //     if (direction === 'left'){
+    //         if (nextPrevRef !== null){
+    //             scrollLeft(nextPrevRef.current, -400, 400)
+    //         }
+    //     }else{
+    //         if (nextPrevRef !== null){
+    //             scrollLeft(nextPrevRef.current, 400, 400)
+    //         }
+    //     }
+    // }
 
-    const showArrows = () => {
-        setShow(val =>!val)
-    }
+    // const showArrows = () => {
+    //     setShow(val =>!val)
+    // }
     
     return (
         <Box component='div' id='featureddestination'  className={ classes.root } >

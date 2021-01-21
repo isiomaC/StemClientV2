@@ -1,4 +1,4 @@
-import React, { createRef, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
@@ -12,11 +12,9 @@ import Spinner from '../../Components/layout/Spinner';
 
 const Home = ({ getFeaturedProducts,products, getReviews,reviews, GetAll, getExtras, extras, loading, error }) => {
 
-    const elem = createRef()
-
     const getHomeData = useCallback( async () => {
         await Promise.all([ getExtras(), getFeaturedProducts(), getReviews()])
-    }, [])
+    }, [getExtras, getFeaturedProducts, getReviews])
 
     React.useEffect(() => {
         
@@ -29,7 +27,7 @@ const Home = ({ getFeaturedProducts,products, getReviews,reviews, GetAll, getExt
         getHomeData()
 
         window.scrollTo(0,0)
-    }, [  ]);
+    }, [getHomeData]);
 
     //stemclient (pid 12787) 
     return loading === true ? (

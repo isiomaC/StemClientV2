@@ -1,11 +1,9 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import { Button } from "@material-ui/core";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import getOrderTotal from '../../../utils/getOrderTotal';
 import approximatePrice from '../../../utils/approximatePrice';

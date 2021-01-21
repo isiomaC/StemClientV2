@@ -89,24 +89,20 @@ if (localStorage.token) {
 function App() {
 
   const classes= useStyles()
-  const [dimensions, setDimensions] = React.useState({ 
-    height: window.innerHeight,
-    width: window.innerWidth
-  })
+  // const [dimensions, setDimensions] = React.useState({ 
+  //   height: window.innerHeight,
+  //   width: window.innerWidth
+  // })
  
-  function handleResize() {
-    setDimensions({       
-       height: window.innerHeight,
-       width: window.innerWidth
-     })
-  }
+  // function handleResize() {
+  //   setDimensions({       
+  //      height: window.innerHeight,
+  //      width: window.innerWidth
+  //    })
+  // }
 
   useEffect(() => {
-    // handleResize()
-    store.dispatch(loadUser()).catch(console.log("User not authenticated"))
-    // .then(data => {
-    //   // console.log("[APP]", data)
-    // });
+    store.dispatch(loadUser()).catch(console.log("Guest"))
 
   }, []);
   

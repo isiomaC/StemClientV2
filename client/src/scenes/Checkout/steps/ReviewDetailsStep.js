@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { useMediaQuery } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import SimilarProduct from '../content/SimilarProduct'
 
 import axios from 'axios'
 import approximatePrice from '../../../utils/approximatePrice'
@@ -52,17 +51,16 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const ReviewDetailsStep = ({ handleClick, user, cart }) => {
+const ReviewDetailsStep = ({ handleClick, user, cart, checkOutError }) => {
 
     const classes = useStyles()
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'))
     const [shipping, setShipping] = useState(process.env.REACT_APP_SHIPPING_PRICE)
     const [error, setError] = useState(null)
 
-    const apiRoute = process.env.REACT_APP_API_URL
-
     useEffect(()=> {
         const fetchShipping = async () => {
+            const apiRoute = process.env.REACT_APP_API_URL
             try{
                 const res = await axios.get(`${apiRoute}/products?filter={"shipping": "yes"}`)
                 setShipping(res.data.price)
@@ -104,7 +102,11 @@ const ReviewDetailsStep = ({ handleClick, user, cart }) => {
                         <Container className={classes.deliveryInfo}>
                             <Typography style={{ fontWeight: 'bold', marginBottom: '8px'}}>Delivery</Typography>
 
-                            <Typography>€{approximatePrice(shipping)} for Orders Under €65.</Typography>
+                            {error ?  
+                                <Typography>€5.99 for Orders Under €65.</Typography> 
+                                :
+                                <Typography>€{approximatePrice(shipping)} for Orders Under €65.</Typography>
+                            }
 
                             <Typography>Free shipping on all orders over €65 in Ireland.</Typography>
 
@@ -130,6 +132,7 @@ const ReviewDetailsStep = ({ handleClick, user, cart }) => {
                 </Grid>
             </Grid>
             <Box style={{ margin: '20px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
+            {checkOutError && <Typography style={{ fontStyle: 'italic', color: 'red'}}> Something went wrong with the checkout session!!!! </Typography>}
             <Button 
                 className={classes.checkoutBtn} 
                 onClick={e => { 

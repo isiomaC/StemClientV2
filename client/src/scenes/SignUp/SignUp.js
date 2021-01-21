@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import {  Redirect } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
@@ -76,7 +76,7 @@ const SignUp = ({ register, loading, isAuthenticated, alert}) => {
 
     const [showPassword, setShowPassword] = useState(false)
 
-    const { firstname, lastname, email, password, password2 } = formData;
+    const { email, password, password2 } = formData;
 
     useEffect(() => {
         
@@ -152,7 +152,7 @@ const SignUp = ({ register, loading, isAuthenticated, alert}) => {
             <Box className={classes.container}>
               <Paper className={classes.paper}>
                 <h2 className={classes.header}>Sign Up</h2>
-                {alert.length > 0 && <Typography style={{ fontSize: '0.9rem', color: 'red'}}>{alert[0].msg + ', ' + 'please use the sign in page'}</Typography>}
+                {alert.length > 0 && <Typography style={{ fontSize: '0.9rem', color: 'red'}}>{ `${alert[0].msg}, please use the sign in page`}</Typography>}
                 <form className={classes.root} onSubmit={e => onSubmit(e)}>
                     {/* <div className={classes.div}> */}
                         {/* <TextField

@@ -1,22 +1,12 @@
-import React, { useRef, useEffect, createRef } from 'react';
-import Button from '@material-ui/core/Button';
+import React, { createRef } from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import Slide from '@material-ui/core/Slide';
 import PropTypes from 'prop-types'
-import { Box, Container } from '@material-ui/core';
-
-
-//import Rating from '../../Home/content/cRating'
-
-const apiUrl = 'http://localhost:5000/api'
 
 
 const useStyles = makeStyles(theme => ({
@@ -57,9 +47,6 @@ function PoliciesDialog({ open, handleClose, section}) {
   const contactEmail = 'info@inphinityx.com'
 
   const checkSection = () => {
-    console.log(section)
-    console.log(shippingRef.current)
-    console.log(returnsRef.current)
 
     switch(section){
       case "Shipping":

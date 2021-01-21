@@ -109,7 +109,7 @@ const QuickShop = ({ shoppingcart, goToCheckOut, getOrderTotal }) => {
                         variant='contained' 
                         onClick={navigateToCheckOut} 
                         className={classes.checkOutBtn}> 
-                            CheckOut
+                            Proceed to CheckOut
                     </Button>
                 </Container>
             </Popover>

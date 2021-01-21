@@ -6,13 +6,9 @@ import {
 } from './types';
 import axios from 'axios'
 
-//import { uuid } from 'uuid';
-
 import setDispatchError from '../../utils/setDispatchError'
 
 const apiUrl = process.env.REACT_APP_API_URL
-// const apiUrl = 'https://shrouded-hollows-95980.herokuapp.com/api'
-
 
 export const getBlogs = () => async dispatch => {
 

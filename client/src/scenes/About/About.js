@@ -71,7 +71,7 @@ const useStyles = makeStyles(theme => ({
     return (
         <Box className={classes.root} >
             <Box className={classes.inner}>
-                <img src={aboutUs} className={classes.innerImage} alt="About Us Image"/>
+                <img src={aboutUs} className={classes.innerImage} alt="About Us"/>
             </Box>
             <Container className={classes.inner2}>
                 <Box className={classes.aboutUsHeader}>

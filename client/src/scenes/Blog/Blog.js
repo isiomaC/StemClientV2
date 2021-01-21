@@ -21,7 +21,6 @@ import VisibilitySensor from "react-visibility-sensor";
 import { getBlogs } from '../../redux/actions/blogactions'
 
 //Statci Images 
-import blog from '../../img/blog.jpeg'
 import screen_3x from '../../img/screen_3x.jpeg'
 import Spinner from '../../Components/layout/Spinner';
 
@@ -104,7 +103,7 @@ const Blog = ({ blogs, getBlogs, loading, error}) => {
         }
 
         fetchBlogs()
-    }, [])
+    }, [getBlogs])
 
     if (error){
         return (<div style={{ width: '100vw', 

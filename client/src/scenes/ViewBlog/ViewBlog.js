@@ -65,7 +65,7 @@ const ViewBlog = (props) => {
             await getBlog(match.params.idx)
         }
         fetchBlog()
-    }, [])
+    }, [getBlog, match])
 
     if ( error ){
         return (<div style={{

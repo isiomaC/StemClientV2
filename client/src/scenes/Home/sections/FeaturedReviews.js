@@ -1,22 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 //pure react carousel
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import { CarouselProvider, Slider, Slide } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
 //material ui components
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { useMediaQuery } from '@material-ui/core';
-
 
 //Content
 import Review from '../content/Review';
-
-// Static Product Images
-import Spinner from '../../../Components/layout/Spinner';
 
 
 const useStyles = makeStyles(theme => ({
@@ -43,11 +37,10 @@ const useStyles = makeStyles(theme => ({
 }));
 const FeaturedReviews = ({ reviews, loading, error }) => {
 
-    const isSmall = useMediaQuery(theme => theme.breakpoints.down('xs'));
-    const isBig = useMediaQuery(theme => theme.breakpoints.up('sm'));
+    // const isSmall = useMediaQuery(theme => theme.breakpoints.down('xs'));
+    // const isBig = useMediaQuery(theme => theme.breakpoints.up('sm'));
 
     const classes = useStyles();
-    const data = [6];
 
     return (
         <div className = {classes.root}>

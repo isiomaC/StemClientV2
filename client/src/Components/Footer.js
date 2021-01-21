@@ -5,7 +5,6 @@ import axios from 'axios'
 
 //Components
 import Typography  from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container'
 import Box from '@material-ui/core/Box';
 import InputBase from '@material-ui/core/InputBase';
 import Grid from '@material-ui/core/Grid';
@@ -19,9 +18,7 @@ import logo from '../img/InFiniC.png'
 
 import InstagramIcon from '@material-ui/icons/Instagram';
 import PinterestIcon from '@material-ui/icons/Pinterest';
-import GitHubIcon from '@material-ui/icons/GitHub';
 import TwitterIcon from '@material-ui/icons/Twitter';
-import PublicIcon from '@material-ui/icons/Public';
 import FacebookIcon from '@material-ui/icons/Facebook';
 
 import PoliciesDialog from './PoliciesDialog'
@@ -67,7 +64,10 @@ const useStyles = makeStyles(theme => ({
         margin: '0px 20px',
         textDecoration: 'none',
         color: 'grey',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        [theme.breakpoints.down('xs')]: {
+            margin: '15px 20px',
+        }
     }
 }));
 
@@ -172,6 +172,19 @@ const Footer = () => {
                    {/* <div onClick={e => handleOpen('Cookies')}><Typography variant="caption" className={classes.bottom}> Cookies Policy</Typography></div> */}
                    <Typography style={{  color: 'grey',  margin: '0px 20px', }} variant="caption"> Websites by jfkmo3s</Typography>
                    {open && <PoliciesDialog open={open} handleClose={handleClose} section={section}/>}
+                </Hidden>
+
+                <Hidden smUp>
+                    <Box>
+                        <Hidden xsDown><Typography style={{ color: 'grey',  margin: '0px 20px',}} variant="caption" > &copy; 2020 jfk</Typography></Hidden>
+                        <div onClick={e => handleOpen('Privacy')}><Typography variant="caption" className={classes.bottom}> Privacy </Typography></div>
+                        <div onClick={e => handleOpen('Shipping')}><Typography variant="caption" className={classes.bottom} > Shipping&Gurantee</Typography></div>
+                        <div onClick={e => handleOpen('Returns')}><Typography variant="caption" className={classes.bottom}> Returns </Typography> </div>
+                        <div onClick={e => handleOpen('Terms')}><Typography variant="caption" className={classes.bottom}> Terms&Conditions</Typography></div>
+                        {/* <div onClick={e => handleOpen('Cookies')}><Typography variant="caption" className={classes.bottom}> Cookies Policy</Typography></div> */}
+                        <Typography style={{  color: 'grey',  margin: '0px 20px', }} variant="caption"> Websites by jfkmo3s</Typography>
+                        {open && <PoliciesDialog open={open} handleClose={handleClose} section={section}/>}
+                   </Box>
                 </Hidden>
             </Box>
         </Box>

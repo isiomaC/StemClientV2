@@ -14,7 +14,6 @@ import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 
 import approximatePrice  from '../../../utils/approximatePrice'
-import TableDisplay from '../content/TableDisplay'
 
 
 import PropTypes from 'prop-types'
@@ -94,8 +93,7 @@ const ConfirmationPage = ({  auth, outcome, message, activeUser}) => {
 
     const [loading, setLoading] = useState(false)
 
-    const apiUrl =  process.env.REACT_APP_API_URL 
-
+    
     const latestProps = useRef({auth, activeUser});
 
     useEffect(() => {
@@ -105,6 +103,8 @@ const ConfirmationPage = ({  auth, outcome, message, activeUser}) => {
     useEffect(() => {
 
         const confirmOrder = async () => {
+
+            const apiUrl =  process.env.REACT_APP_API_URL 
 
             const newSession = localStorage.getItem('sId')
 
@@ -158,7 +158,7 @@ const ConfirmationPage = ({  auth, outcome, message, activeUser}) => {
             }, 200000) //2min
         }
 
-    }, [auth, activeUser])
+    }, [auth, activeUser, outcome])
 
     if (!localStorage.getItem('sId')){
         return <Redirect to='/shop'/>

@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         width: '10%'
     },
     imageStyle: {
-        width: 'calc(15vh - 1rem)',
+        width: 'calc(18vh - 1rem)',
         height: '80px',
         [theme.breakpoints.down("sm")] : {
             width : 'calc(100%)'
@@ -58,7 +58,7 @@ const ShoppingCart = ({ cart, removeFromCart }) => {
         <Box className={classes.root}>
             <Grid container>
                 <Grid item style={{ }} xs={4}>
-                    <img src={cart.image} className={classes.imageStyle} />
+                    <img src={cart.image} className={classes.imageStyle} alt={`product ${cart.product_idx} display`} />
                 </Grid>
                 <Grid item style={{ display: 'flex', alignItems: 'center'}} xs={8}>
                     <Container style={{  }}>
@@ -68,7 +68,7 @@ const ShoppingCart = ({ cart, removeFromCart }) => {
                                 {/* <Typography style={{ fontSize: 'medium'}} > {cart.name}</Typography> */}
                             <Typography style={{ maxWidth: `${isXSmall ? 'inherit' : '250px'}`, fontSize: 'small'}} 
                                         className={classes.description} >
-                                    {cart.benefits !== 'undefined' && cart.benefits.split(/\<.*?\>/g)}
+                                    {cart.benefits !== 'undefined' && cart.benefits.split(/<.*?>/g)}
                             </Typography>
                             </div>
                             <DeleteIcon 

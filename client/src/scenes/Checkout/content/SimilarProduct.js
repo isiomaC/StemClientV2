@@ -57,7 +57,7 @@ const SimilarProduct = ({id, name, description, size, price, image }) => {
                         {name}
                     </Typography>
                     <Typography className={classes.description} variant="subtitle1" color="textSecondary">
-                        {description !== 'undefined' && description.split(/\<.*?\>/g)}
+                        {description !== 'undefined' && description.split(/<.*?>/g)}
                     </Typography>
                     {/* <Typography variant="subtitle1" color="textSecondary">
                         {size}

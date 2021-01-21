@@ -21,7 +21,7 @@ export const ProductInfoCarousel = (props) => {
                >
                     {images && images.map((img, index) =>  
                          <div key={ index} style={{ background: ''}}>
-                             <img src={img} key={index} width= '20%' alt={`Image${index} alt text`}/>
+                             <img src={img} key={index} width= '20%' alt={`carousel-${index} alt text`}/>
                          </div>
                      )}
             </Carousel>

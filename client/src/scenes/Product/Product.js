@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import axios from 'axios'
 
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
@@ -17,9 +16,6 @@ import MuiAlert from '@material-ui/lab/Alert';
 // import Rating from '@material-ui/lab/Rating';
 
 //Icons
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import YouTubeIcon from '@material-ui/icons/YouTube';
 import ShareIcon from '@material-ui/icons/Share';
 
 //Content
@@ -28,7 +24,7 @@ import Spinner from '../../Components/layout/Spinner'
 
 //actions
 import { getProduct } from '../../redux/actions/shopactions'
-import { addToCart, removeFromCart } from '../../redux/actions/shoppingcart'
+import { addToCart } from '../../redux/actions/shoppingcart'
 import { setAlert } from '../../redux/actions/alert'
 
 import ReviewDialog from './content/ReviewDialog'
@@ -106,13 +102,11 @@ const useStyles = makeStyles(theme => ({
 
 const Product = (props) => {
 
-    const { product, loading, getProduct, match, user, addToCart, alert, setAlert } = props
+    const { product, getProduct, match, user, addToCart, alert, setAlert } = props
 
     const [open, setOpen] = React.useState(false);
 
     const [snackOpen, setSnackOpen] = React.useState(false);
-
-    const [rating, setRating] = React.useState(0);//get product rating from db
 
     const [quantity, setQuantity] = React.useState(1);
 
@@ -151,7 +145,7 @@ const Product = (props) => {
 
         window.scrollTo(0,0)
 
-    }, []);
+    }, [match, getProduct]);
 
     // if (alert.length > 0){
     //     setSnackOpen(true)

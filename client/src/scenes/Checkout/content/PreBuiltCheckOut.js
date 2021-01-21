@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
 
 import { useStripe } from "@stripe/react-stripe-js";
 import axios from 'axios'
@@ -26,8 +25,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 import { encrypt } from '../../../utils/cryptoWrapper'
-import infinity from '../../../img/InFiniC.png'
-import bgLogo from '../../../img/Logo.png'
 
 
 const useStyles = makeStyles(theme => ({
@@ -69,9 +66,7 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, getDetails, shoppin
     const [error, setError] = useState(false)
     const [chkError, setchkError] = useState(false)
     const stripe = useStripe();
-
-    const apiUrl = process.env.REACT_APP_API_URL 
-
+  
     const [similarProducts, setSimilarProducts] = useState([])
 
     useEffect(() => {
@@ -99,7 +94,7 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, getDetails, shoppin
                 let uniq = a => [...new Set(a)];
                 let query = uniq(categoryNames)
 
-                const res = await axios.get(`${apiUrl}/products?filter={"category_names": ${JSON.stringify(query)}, "excludeIds": ${JSON.stringify(excludeIds)}}`)
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/products?filter={"category_names": ${JSON.stringify(query)}, "excludeIds": ${JSON.stringify(excludeIds)}}`)
                 if (res.data){
                     setSimilarProducts(similarProducts => [...res.data])
                 }
@@ -114,13 +109,13 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, getDetails, shoppin
                 // }
             }
         )()
-    }, []);
+    }, [shoppingcart]);
 
-    const Message = ({ message }) => (
-        <section className={classes.message}>
-          <p>{message}</p>
-        </section>
-    );
+    // const Message = ({ message }) => (
+    //     <section className={classes.message}>
+    //       <p>{message}</p>
+    //     </section>
+    // );
 
     const handleChange = (e) => {
         setError(false)
@@ -129,6 +124,7 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, getDetails, shoppin
     const handleCheckOut = async (event) => {
         // event.preventDefault()
         
+        const apiUrl = process.env.REACT_APP_API_URL 
         const config = {
             headers: {
                 'Content-Type': 'application/json'
@@ -221,6 +217,7 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, getDetails, shoppin
                         error={error}
                         cart={shoppingcart}
                         handleChange ={handleChange}
+                        checkOutError={chkError}
                         handleClick={handleCheckOut}/>
                 </>
             );

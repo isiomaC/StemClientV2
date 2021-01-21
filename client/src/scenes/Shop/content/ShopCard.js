@@ -20,8 +20,6 @@ import { addToCart } from '../../../redux/actions/shoppingcart'
 
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 
-import parse from 'html-react-parser';
-
 
 const useStyles = makeStyles(theme=> ({
     card: {
@@ -130,7 +128,7 @@ const ShopCard = (props) => {
                             </div>
                             <div className={classes.description} style={{ fontSize: isXSmall ? '11px' : '15px'}} >
                                 {/* {props.description !== "undefined" && parse(props.description)} */}
-                                {props.description !== "undefined" &&  props.description.split(/\<.*?\>/g)}
+                                {props.description !== "undefined" &&  props.description.split(/<.*?>/g)}
                             </div>
                         </Grid>
                         <Grid item xs={4}>

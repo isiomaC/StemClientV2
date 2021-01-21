@@ -22,11 +22,9 @@ import getOrderTotal from '../utils/getOrderTotal'
 
 //Transition elements
 import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 //Icons
-
 import logo from '../img/InFiniC.png'
 import HandleScroll from '../Content/HandleScroll'
 import { logout } from '../redux/actions/auth'
@@ -138,11 +136,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NavBar = (props) => {
-    const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
+    // const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
     
     const { isAuthenticated, logout, user, shoppingcart } = props
     const classes = useStyles();
-    const theme = useTheme();
+    // const theme = useTheme();
 
     const ITEM_HEIGHT = 100
 

@@ -80,8 +80,8 @@ const ProductCard = (props) => {
                         <Typography variant="h6"  align="left" className={classes.title} >
                             {props.title}
                         </Typography>
-                        <Typography className={classes.description} variant="body2"  align="left" component="p"  component="p">
-                            {props.description !== 'undefined' && props.description.split(/\<.*?\>/g)}
+                        <Typography className={classes.description} variant="body2"  align="left"  component="p">
+                            {props.description !== 'undefined' && props.description.split(/<.*?>/g)}
                         </Typography>
                     </div>
                     <Typography variant="body2">€{props.price}</Typography>

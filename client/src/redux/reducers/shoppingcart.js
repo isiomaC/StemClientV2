@@ -70,7 +70,7 @@ export default function(state = initialState, action) {
         cart.items.forEach(item => {
           if (item.product_idx === payload.id){
             if(item.quantity === payload.max){
-              item.quantity = item.quantity
+              item.quantity = payload.max
             }else{
               item.quantity++
             }
@@ -84,7 +84,7 @@ export default function(state = initialState, action) {
         cart.items.forEach(item => {
           if (item.product_idx === payload.id){
             if(item.quantity === 1){
-              item.quantity = item.quantity
+              item.quantity = 1
             }else{
               item.quantity--
             }
@@ -103,11 +103,10 @@ export default function(state = initialState, action) {
         return state
     case SAVE_ADDRESS:
         let mCart = JSON.parse(localStorage.getItem("cart"))
-
+        let add = {}
         if (mCart !== null){
             const { firstname, lastname, phonenumber, email } = payload  
-
-            let add = {}
+            
             add.firstname = firstname ? firstname : mCart.shippingAddress.firstname
             add.lastname = lastname ? lastname : mCart.shippingAddress.lastname
             // add.address = address ? address : mCart.shippingAddress.address
@@ -118,8 +117,8 @@ export default function(state = initialState, action) {
             mCart = {...state, shippingAddress: add}
 
             localStorage.setItem("cart", JSON.stringify(mCart))
-            return {...state, shippingAddress: add }
         }
+        return {...state, shippingAddress: add }
 
     case DETAILS_COMPLETE:
       return {

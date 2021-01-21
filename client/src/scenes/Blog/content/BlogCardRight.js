@@ -12,8 +12,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import moment from 'moment'
 
-import logo from '../../../img/Logo.png'
-
 const useStyles = makeStyles(theme=> ({
     card: {
         margin: '10px 20px',

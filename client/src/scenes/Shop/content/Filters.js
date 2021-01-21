@@ -75,7 +75,7 @@ const Filters = (props) => {
     const [searchTerm, setSearchTerm] = React.useState("")
     const [price, setPrice] = React.useState(1)
 
-    const { max, products, searchProducts, getProductByPrice, getHighestPrice, getProducts, getByCategory, getNewProducts } = props
+    const { max, searchProducts, getProductByPrice, getHighestPrice, getProducts, getByCategory, getNewProducts } = props
 
     const handleTextChange = async (e) => {
         setSearchTerm( e.target.value )
@@ -134,10 +134,6 @@ const Filters = (props) => {
         }
     }
 
-    const valuetext = (value) => {
-        return `£${value}`;
-    }
-
     React.useEffect(()=>{
 
         const fetchHighest = async () => {
@@ -145,7 +141,7 @@ const Filters = (props) => {
         }
 
         fetchHighest()
-    }, [])
+    }, [getHighestPrice])
     
     return (
         <Box component='div' className={classes.root}>

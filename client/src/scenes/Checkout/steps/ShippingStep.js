@@ -59,7 +59,7 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
             }
         }
         getDet()
-    }, [user])
+    }, [user, getDetails])
 
     const onChange = e =>{
         setShipping({ ...shipping, 
@@ -164,7 +164,7 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
                 
                 />
                 {
-                   !user || user.msg && <TextField
+                   (!user || user.msg) && <TextField
                     className={classes.textField}
                     id="outlined-textarea-1"
                     label="Email"
