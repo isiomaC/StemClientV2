@@ -204,7 +204,7 @@ export const getDetails = () => async dispatch => {
             payload: false
         })
 
-        if (res.data.success){
+        if (res.data.success && res.data.details ){  //&& res.data.details is not null/undefined
             dispatch({
                 type: GET_DETAILS,
                 payload: res.data.details
@@ -214,8 +214,18 @@ export const getDetails = () => async dispatch => {
                 type: DETAILS_COMPLETE,
                 payload: res.data.success
             })
+        }else{
+            dispatch({
+                type: GET_DETAILS,
+                payload: {}
+            })
         }
-        
+        //else{
+            // dispatch({
+            //     type: GET_DETAILS,
+            //     payload: {}
+            // })
+        //}
 
     }catch(e){
         dispatch({

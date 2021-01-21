@@ -50,16 +50,20 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
 
     const [errors, setErrors] = useState(null)
 
+    
+    useEffect(()=> {
+        // const getDet = async () => {
+        //     if (user && user.email){
+        //        await getDetails()
+        //        //setShipping(shoppingcart.shippingAddress)
+        //     }
+        // }
+        // getDet()
+        
+    }, [])
+
     const { firstname, lastname, email, phonenumber } = shipping
 
-    useEffect(()=> {
-        const getDet = async () => {
-            if (user && user.email){
-               await getDetails()
-            }
-        }
-        getDet()
-    }, [user, getDetails])
 
     const onChange = e =>{
         setShipping({ ...shipping, 
@@ -73,55 +77,81 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
         e.preventDefault()
         try{
 
-            if (email === '' && firstname === '' && lastname === '' && phonenumber === '') {
-                setErrors({
-                  firstname: 'firstname field is empty',
-                  lastname: 'lastname field is empty',
-                  email: 'email field is empty',
-                  phonenumber: 'Phone number field is empty'
-                })
-                return
+            if (user && user.email){
+                if (!firstname || firstname === '' ){
+                    setErrors({...errors,
+                        firstname: 'firstname field is empty'
+                    })
+                    return
+                }
+    
+                if (!lastname || lastname === '' ){
+                    setErrors({...errors,
+                        lastname: 'lastname field is empty'
+                    })
+                    return
+                }
+    
+                if (!phonenumber || phonenumber === '' ){
+                    setErrors({...errors,
+                        address: 'address field is empty'
+                    })
+                    return
+                }
+                await saveDetails(shipping, user)
+
+            }else{
+
+                if (email === '' && firstname === '' && lastname === '' && phonenumber === '') {
+                    setErrors({
+                    firstname: 'firstname field is empty',
+                    lastname: 'lastname field is empty',
+                    email: 'email field is empty',
+                    phonenumber: 'Phone number field is empty'
+                    })
+                    return
+                }
+
+                // if(user && user.msg){
+
+                // }
+
+                if (!email || email === '' ){
+                    setErrors({...errors,
+                        email: 'email field is empty'
+                    })
+                    return
+                }else if(ValidateEmail(email) === false){
+                    setErrors({...errors,
+                        email: 'please enter a valid email'
+                    })
+                    return
+                }
+
+                if (!firstname || firstname === '' ){
+                    setErrors({...errors,
+                        firstname: 'firstname field is empty'
+                    })
+                    return
+                }
+
+                if (!lastname || lastname === '' ){
+                    setErrors({...errors,
+                        lastname: 'lastname field is empty'
+                    })
+                    return
+                }
+
+                if (!phonenumber || phonenumber === '' ){
+                    setErrors({...errors,
+                        address: 'address field is empty'
+                    })
+                    return
+                }
+
+                await saveDetails(shipping, user)
+
             }
-
-            // if(user && user.msg){
-
-            // }
-
-            if (!email || email === '' ){
-                setErrors({...errors,
-                    email: 'email field is empty'
-                })
-                return
-            }else if(ValidateEmail(email) === false){
-                setErrors({...errors,
-                    email: 'please enter a valid email'
-                })
-                return
-            }
-
-            if (!firstname || firstname === '' ){
-                setErrors({...errors,
-                    firstname: 'firstname field is empty'
-                })
-                return
-            }
-
-            if (!lastname || lastname === '' ){
-                setErrors({...errors,
-                    lastname: 'lastname field is empty'
-                })
-                return
-            }
-
-            if (!phonenumber || phonenumber === '' ){
-                setErrors({...errors,
-                    address: 'address field is empty'
-                })
-                return
-            }
-
-            
-            await saveDetails(shipping, user)
 
         }catch(e){
             setErrors(e.message)
@@ -136,33 +166,33 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
             <Typography variant='body2'> Please include thesame name that will be used for checkout </Typography>
             <form className={classes.div} onSubmit={e => handleSubmit(e)}>
                 <TextField
-                className={classes.textField}
-                id="outlined-textarea-1"
-                label="First name"
-                placeholder="First name"
-                type="text"
-                name ="firstname"
-                value={firstname}
-                onChange={e => onChange(e)}
-                variant="outlined"
-                error={(errors && errors.firstname) && true}
-                helperText={(errors && errors.firstname) && errors.firstname}
-                
+                    className={classes.textField}
+                    id="outlined-textarea-1"
+                    label="First name"
+                    placeholder="First name"
+                    type="text"
+                    name ="firstname"
+                    value={firstname}
+                    onChange={e => onChange(e)}
+                    variant="outlined"
+                    error={(errors && errors.firstname) && true}
+                    helperText={(errors && errors.firstname) && errors.firstname}
                 />
-                  <TextField
-                className={classes.textField}
-                id="outlined-textarea-1"
-                label="Last name"
-                placeholder="Last name"
-                type="text"
-                name ="lastname"
-                value={lastname}
-                onChange={e => onChange(e)}
-                variant="outlined"
-                error={(errors && errors.lastname) && true}
-                helperText={(errors && errors.lastname) && errors.lastname}
-                
+
+                <TextField
+                    className={classes.textField}
+                    id="outlined-textarea-1"
+                    label="Last name"
+                    placeholder="Last name"
+                    type="text"
+                    name ="lastname"
+                    value={lastname}
+                    onChange={e => onChange(e)}
+                    variant="outlined"
+                    error={(errors && errors.lastname) && true}
+                    helperText={(errors && errors.lastname) && errors.lastname}
                 />
+
                 {
                    (!user || user.msg) && <TextField
                     className={classes.textField}

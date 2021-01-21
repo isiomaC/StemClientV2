@@ -102,14 +102,20 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, getDetails, shoppin
                 setSimilarProducts([])
             }
         }
+        
+        if (user && user.email){
+            getDetails()
+        }
+     
         (async () => {
                 await getRelatedProducts()
+                
                 // if (isAuthenticated) {
                 //     await getDetails()
                 // }
             }
         )()
-    }, [shoppingcart]);
+    }, [shoppingcart, user, getDetails]);
 
     // const Message = ({ message }) => (
     //     <section className={classes.message}>
