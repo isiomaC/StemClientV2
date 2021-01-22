@@ -61,37 +61,71 @@ const ShoppingCart = ({ cart, removeFromCart }) => {
                     <img src={cart.image} className={classes.imageStyle} alt={`product ${cart.product_idx} display`} />
                 </Grid>
                 <Grid item style={{ display: 'flex', alignItems: 'center'}} xs={8}>
-                    <Container style={{  }}>
-                        <Box style={{ display: 'flex', justifyContent: 'space-between',}}>
-                            <div>
-                            <Typography style={{ fontSize: `${isXSmall ? 'small' : 'medium'}`, fontWeight: 'Bold'}} > {cart.name}</Typography>
-                                {/* <Typography style={{ fontSize: 'medium'}} > {cart.name}</Typography> */}
-                            <Typography style={{ maxWidth: `${isXSmall ? 'inherit' : '250px'}`, fontSize: 'small'}} 
-                                        className={classes.description} >
-                                    {cart.benefits !== 'undefined' && cart.benefits.split(/<.*?>/g)}
-                            </Typography>
-                            </div>
-                            <DeleteIcon 
-                                onClick={() => {removeFromCart(cart.product_idx)}} 
-                                style={{ 
-                                    margin:5, 
-                                    color: 'rgba(255,0,0,0.5)',
-                                    cursor:'pointer'}}/>
+                    {isXSmall ? (
+                        <Box style={{  }}>
+                            <Box style={{ display: 'flex', justifyContent: 'space-around'}}>
+                                <div style={{ marginLeft: '10px', width: '70%'}}>
+                                    <Typography style={{ fontSize:  'small', fontWeight: 'Bold'}} > {cart.name}</Typography>
+                                        {/* <Typography style={{ fontSize: 'medium'}} > {cart.name}</Typography> */}
+                                    <Typography style={{  fontSize: '10px'}} 
+                                                className={classes.description} >
+                                            {cart.benefits !== 'undefined' && cart.benefits.split(/<.*?>/g)}
+                                    </Typography>
+                                </div>
+                                <div style={{ width: '30%' }}>
+                                    <DeleteIcon 
+                                        onClick={() => {removeFromCart(cart.product_idx)}} 
+                                        style={{ 
+                                            color: 'rgba(255,0,0,0.5)',
+                                            cursor:'pointer'}}/>
+                                </div>
+                            </Box>
+                            <Box style={{ display: 'flex', justifyContent:'space-around'}}>
+                                <div style={{ fontSize: 'small'}}>
+                                    <QuantityStepper 
+                                        amount={parseInt(cart.quantity, 10)} 
+                                        product_id={cart.product_idx} 
+                                        max={parseInt(cart.maxVal)} />
+                                </div>
+                                <div>
+                                    <Typography style={{ fontSize: 'small'}}>€{approximatePrice(cart.price)}</Typography>
+                                </div>
+                            </Box>
                         </Box>
-                        <Box style={{ display: 'flex', justifyContent:'space-between'}}>
-                            <div style={{ width: '45%', fontSize: 'small'}}>
-                                <QuantityStepper 
-                                    amount={parseInt(cart.quantity, 10)} 
-                                    product_id={cart.product_idx} 
-                                    max={parseInt(cart.maxVal)} />
-                            </div>
-                            {/* <div onClick={() => {removeFromCart(cart.product_idx)}} 
-                                style={{ textDecoration:'underline', fontSize: '0.7em', cursor:'pointer'}}>
-                                    remove
-                            </div> */}
-                            <Typography style={{ fontSize: 'small'}}>€{approximatePrice(cart.price)}</Typography>
-                        </Box>
-                    </Container>
+                    ): (
+                        <Container style={{  }}>
+                            <Box style={{ display: 'flex', justifyContent: 'space-between',}}>
+                                <div style={{ marginLeft: '5px'}}>
+                                    <Typography style={{ fontSize:  'medium', fontWeight: 'Bold'}} > {cart.name}</Typography>
+                                        {/* <Typography style={{ fontSize: 'medium'}} > {cart.name}</Typography> */}
+                                    <Typography style={{ maxWidth: '250px', fontSize: 'small'}} 
+                                                className={classes.description} >
+                                            {cart.benefits !== 'undefined' && cart.benefits.split(/<.*?>/g)}
+                                    </Typography>
+                                </div>
+                                <DeleteIcon 
+                                    onClick={() => {removeFromCart(cart.product_idx)}} 
+                                    style={{ 
+                                        margin:5, 
+                                        color: 'rgba(255,0,0,0.5)',
+                                        cursor:'pointer'}}/>
+                            </Box>
+                            <Box style={{ display: 'flex', justifyContent: 'space-between'}}>
+                                <div style={{ width: '45%', fontSize: 'small'}}>
+                                    <QuantityStepper 
+                                        amount={parseInt(cart.quantity, 10)} 
+                                        product_id={cart.product_idx} 
+                                        max={parseInt(cart.maxVal)} />
+                                </div>
+                                {/* <div onClick={() => {removeFromCart(cart.product_idx)}} 
+                                    style={{ textDecoration:'underline', fontSize: '0.7em', cursor:'pointer'}}>
+                                        remove
+                                </div> */}
+                                <Typography style={{ fontSize: 'small'}}>€{approximatePrice(cart.price)}</Typography>
+                            </Box>
+                        </Container>
+                    )}
+                    
                 </Grid>
             </Grid>
         </Box>
