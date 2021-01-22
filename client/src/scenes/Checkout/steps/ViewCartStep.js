@@ -97,7 +97,7 @@ const  ViewCartStep = ({ shoppingcart, similarProducts })=> {
                     </Box>
                     <Divider style={{ background: 'black' }} />
                 </Grid>
-                <Grid style={{ marginTop: '15px'}} item xs={12}>
+                <Grid style={{ marginTop: '15px', background: 'rgba(255,255,255,0.7)'}} item xs={12}>
                     <Typography variant="body2"> Things you might like...</Typography>
                     {similarProducts.map((item, index) => (
 

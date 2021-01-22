@@ -19,13 +19,18 @@ const useStyles = makeStyles(theme => ({
     details: {
         display: 'flex',
         flexDirection: 'column',
-        textAlign: 'left'
+        textAlign: 'left',
+        width: '60%'
+    },
+    cardMedia: {
+        width: '40%'
     },
     content: {
         flex: '1 0 auto',
     },
     cover: {
-        minWidth: 151,
+        width: '100%',
+        height: '100%'
     },
     description: {
         overflow: 'hidden',
@@ -53,24 +58,23 @@ const SimilarProduct = ({id, name, description, size, price, image }) => {
         <Card className={classes.root} onClick={() => push(`/product/${id}`)}>
             <div className={classes.details}>
                 <CardContent className={classes.content}>
-                    <Typography variant="body1">
+                    <Typography style={{ }} variant="body1">
                         {name}
                     </Typography>
-                    <Typography className={classes.description} variant="subtitle1" color="textSecondary">
+                    <Typography className={classes.description} variant="caption" color="textSecondary">
                         {description !== 'undefined' && description.split(/<.*?>/g)}
                     </Typography>
-                    {/* <Typography variant="subtitle1" color="textSecondary">
-                        {size}
-                    </Typography> */}
-                    <Typography variant="subtitle1" color="textSecondary">
+                    <Typography variant="caption" color="textSecondary">
                         €{approximatePrice(price)} 
                     </Typography>
                 </CardContent>
             </div>
-            <CardMedia
-                className={classes.cover}
-                image={image ? image : "https://i.imgur.com/EHyR2nP.png"}
-                title={name}/>
+            <div className={classes.cardMedia}>
+                <CardMedia
+                    className={classes.cover}
+                    image={image ? image : "https://i.imgur.com/EHyR2nP.png"}
+                    title={name}/>
+            </div>
         </Card>
     )
 }
