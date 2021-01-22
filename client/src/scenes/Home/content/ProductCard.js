@@ -11,6 +11,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Avatar from '@material-ui/core/Avatar';
+import { useMediaQuery } from '@material-ui/core/';
 
 const useStyles = makeStyles(theme=> ({
     card: {
@@ -41,15 +42,25 @@ const useStyles = makeStyles(theme=> ({
     },
     cardContent : {
         display: "flex",
-        justifyContent: "space-between"
-        // alignItems: "flex-start"
+        justifyContent: "space-between",
+        [theme.breakpoints.down('xs')]:{
+            display: 'block'
+        }
+    },
+    price: {
+        fontSize: '14px',
+        [theme.breakpoints.down('xs')]:{
+            fontSize: '10px'
+        }
     },
     title:{
-        // [theme.breakpoints.down('xs')]:{
-        //     fontSize: '0.83em'
-        // }
+        fontSize: '18px',
+        [theme.breakpoints.down('xs')]:{
+            fontSize: 'small'
+        }
     },
     description: {
+        fontSize: '14px',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         display: '-webkit-box',
@@ -57,6 +68,9 @@ const useStyles = makeStyles(theme=> ({
         '-webkit-line-clamp': 2,
          /* number of lines to show */
         '-webkit-box-orient': 'vertical',
+        [theme.breakpoints.down('xs')]:{
+            fontSize: '10px'
+        }
     }
 }));
 
@@ -65,6 +79,8 @@ const useStyles = makeStyles(theme=> ({
 const ProductCard = (props) => {
     const classes = useStyles()
     const { push } = useHistory()
+
+    const isXSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
     return (
         <Card elevation={0} className={classes.card}>
@@ -76,15 +92,17 @@ const ProductCard = (props) => {
                             <Avatar variant={props.variant} alt="Remy Sharp" className={classes.bigAvatar} src={props.image} />
                 </CardMedia>
                 <CardContent className={classes.cardContent}>
-                    <div style={{ display: "block"}}>
-                        <Typography variant="h6"  align="left" className={classes.title} >
+                    <div>
+                        <Typography  align="left" className={classes.title} >
                             {props.title}
                         </Typography>
-                        <Typography className={classes.description} variant="body2"  align="left"  component="p">
+                        <Typography className={classes.description}  align="left">
                             {props.description !== 'undefined' && props.description.split(/<.*?>/g)}
                         </Typography>
                     </div>
-                    <Typography variant="body2">€{props.price}</Typography>
+                    <div >
+                        <Typography className={classes.price} align="left">€{props.price}</Typography>
+                    </div>
                 </CardContent>
 
             </CardActionArea>

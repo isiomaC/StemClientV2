@@ -103,7 +103,6 @@ function App() {
 
   useEffect(() => {
     store.dispatch(loadUser()).catch(console.log("Guest"))
-
   }, []);
   
   return (

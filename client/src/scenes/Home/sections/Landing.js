@@ -73,7 +73,7 @@ const Landing = ({ extras }) => {
 
               <Box component="div" ref={scrollRef} className={classes.featured} onClick={HandleScrolling}>
                 <div>
-                  <Typography variant="h5"> Featured Products </Typography>
+                  <Typography variant="h6"> Featured Products </Typography>
                   <div style={{ marginBottom: 0}}>
                     <KeyboardArrowDownIcon />
                   </div>
