@@ -207,11 +207,8 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, getDetails, shoppin
         switch (step) {
           case 0:
             return (<ViewCartStep shoppingcart={shoppingcart}
-                        similarProducts={similarProducts} user={user} 
-                        isAuthenticated={isAuthenticated} 
-                        error={error} 
-                        handleChange ={handleChange}
-                        handleClick={handleCheckOut}/>
+                        similarProducts={similarProducts}
+                       />
                     );
           case 1:
             return (<ShippingStep user={user} getDetails={getDetails}/>)

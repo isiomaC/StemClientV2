@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const  ViewCartStep = ({ shoppingcart, similarProducts, user, isAuthenticated, error, guest, handleChange, handleClick})=> {
+const  ViewCartStep = ({ shoppingcart, similarProducts })=> {
 
     const isBig = useMediaQuery(theme => theme.breakpoints.up('md'));
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
@@ -42,9 +42,9 @@ const  ViewCartStep = ({ shoppingcart, similarProducts, user, isAuthenticated, e
                 <Grid item xs={8}>
 
                     {(shoppingcart && shoppingcart.items !== undefined ) ? shoppingcart.items.map((item, index) => 
-                    <>
-                        <ProductDisplay key={index} cart={item} />
-                    </>
+                        <>
+                            <ProductDisplay key={index} cart={item} />
+                        </>
                     ) : (
                         <p> Shopping Cart Empty</p>
                     )}
@@ -76,16 +76,29 @@ const  ViewCartStep = ({ shoppingcart, similarProducts, user, isAuthenticated, e
         {isSmall && (
             <Grid container style={{ marginTop: '20px' }}>
                 <Grid item xs={12}>
-                    {shoppingcart.items.map((item, index) => 
-                        <ProductDisplay key={index} cart={item} />
+                    {(shoppingcart && shoppingcart.items !== undefined ) ? shoppingcart.items.map((item, index) => 
+                        <>
+                            <ProductDisplay key={index} cart={item} />
+                        </>
+                    ) : (
+                        <p> Shopping Cart Empty</p>
                     )}
                     <br />
                     <br />
                     <br />
-                    <Divider />
+                    <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Link className={classes.continueShopping} to={'/shop'}>
+                            <div style={{ display: 'flex', cursor: 'pointer' }}>
+                                <ArrowBackIcon />
+                                <Typography variant="body2">Continue Shopping</Typography>
+                            </div>
+                        </Link>
+                        <Typography style={{ marginRight: '10px' }} variant="body2">Total: {approximatePrice(getOrderTotal(shoppingcart))}</Typography>
+                    </Box>
+                    <Divider style={{ background: 'black' }} />
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="body1"> Things you might like...</Typography>
+                <Grid style={{ marginTop: '15px'}} item xs={12}>
+                    <Typography variant="body2"> Things you might like...</Typography>
                     {similarProducts.map((item, index) => (
 
                         <SimilarProduct key={index} id={item.idx} name={item.name} description={item.benefits} size={item.size} price={item.price} image={item.base64} />

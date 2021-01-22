@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
         padding: '20px',
         [theme.breakpoints.down("sm")]:{
             marginBottom: '10px',
+            padding: 0
         }
     },
     griddescritption:{
@@ -32,8 +33,26 @@ const useStyles = makeStyles(theme => ({
     },
     productInfo: {
         textAlign: 'left',
+        width: '80%',
         [theme.breakpoints.down("sm")]:{
-            marginLeft: '25px',
+            width: '70%',
+            marginLeft: '5px'
+        }
+    },
+    controls: {
+        display: 'block',
+        height: 'inherit',
+        width: '20%',
+        [theme.breakpoints.down("sm")]:{
+            width: '30%',
+            // marginRight: '5px',
+        }
+    },
+    imageStyle: {
+        width: '100px',
+        height: '100px',
+        [theme.breakpoints.down("sm")] : {
+            width : 'calc(100%)'
         }
     },
     description: {
@@ -52,21 +71,22 @@ const ProductDisplay = ({ cart, dispatch }) => {
     return (
         <>
             <Grid container className={classes.grid}>
-                <Grid item style={ {width: 'inherit'} } xs={3}>
-                    <img width={"100px"} height="100px"
+                <Grid item xs={3}>
+                    <img 
+                        className={classes.imageStyle}
                         src={cart.image ? cart.image : "https://i.imgur.com/EHyR2nP.png"}
                         alt={cart.name}
                     />
                 </Grid>
                 <Grid item className={classes.griddescritption} xs={9}>
-                        <div className={ classes.productInfo}>
-                            <Typography style={{ fontSize: 'medium', fontWeight: 'Bold'}} variant="body1">{cart.name}</Typography>
-                            <Typography style={{ fontSize: 'small'}} className={classes.description} variant="caption">
-                                {cart.benefits !== 'undefined' && cart.benefits.split(/<.*?>/g)}
-                            </Typography>
-                            <Typography variant="body2">{cart.category}</Typography>
-                        </div>
-                    <div style={{ display: 'block', height: 'inherit' ,marginRight: '0px'}}>
+                    <div className={ classes.productInfo}>
+                        <Typography style={{ fontSize: 'medium', fontWeight: 'Bold'}} variant="body1">{cart.name}</Typography>
+                        <Typography style={{ fontSize: 'small'}} className={classes.description} variant="caption">
+                            {cart.benefits !== 'undefined' && cart.benefits.split(/<.*?>/g)}
+                        </Typography>
+                        <Typography variant="body2"><i><b>For: {cart.category}</b></i></Typography>
+                    </div>
+                    <div className ={ classes.controls} >
                         <DeleteIcon 
                                 onClick={() => {dispatch(removeFromCart(cart.product_idx))}} 
                                 style={{ 
