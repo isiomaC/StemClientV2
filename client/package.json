@@ -15,6 +15,7 @@
     "axios": "^0.21.1",
     "crypto-js": "^4.0.0",
     "html-react-parser": "^1.1.2",
+    "material-ui-phone-number": "^2.2.6",
     "moment": "^2.29.1",
     "nodemon": "^2.0.4",
     "prop-types": "^15.7.2",

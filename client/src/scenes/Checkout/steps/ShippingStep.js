@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { saveDetails } from '../../../redux/actions/shoppingcart'
 import ValidateEmail from '../utils/ValidateEmail'
+import MuiPhoneNumber from 'material-ui-phone-number'
 
 const useStyles = makeStyles(theme => ({
     div:{
@@ -49,7 +50,6 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
     });
 
     const [errors, setErrors] = useState(null)
-
     
     useEffect(()=> {
         // const getDet = async () => {
@@ -66,12 +66,24 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
 
 
     const onChange = e =>{
-        setShipping({ ...shipping, 
-          [e.target.name]: e.target.value 
-        });
+
+        if (typeof(e) === 'string'){
+            setShipping({ ...shipping,
+                phonenumber: e
+            })
+        }else{
+            setShipping({ ...shipping, 
+                [e.target.name]: e.target.value 
+            });
+        }
 
         setErrors(null)
     }
+
+    // const handleOnChange = (e)  =>{
+    //     console.log(e)
+    //    setPhone(e)
+    // }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -94,7 +106,7 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
     
                 if (!phonenumber || phonenumber === '' ){
                     setErrors({...errors,
-                        address: 'address field is empty'
+                        address: 'Phone number is empty'
                     })
                     return
                 }
@@ -104,10 +116,10 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
 
                 if (email === '' && firstname === '' && lastname === '' && phonenumber === '') {
                     setErrors({
-                    firstname: 'firstname field is empty',
-                    lastname: 'lastname field is empty',
-                    email: 'email field is empty',
-                    phonenumber: 'Phone number field is empty'
+                        firstname: 'firstname field is empty',
+                        lastname: 'lastname field is empty',
+                        email: 'email field is empty',
+                        phonenumber: 'Phone number is empty'
                     })
                     return
                 }
@@ -144,7 +156,7 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
 
                 if (!phonenumber || phonenumber === '' ){
                     setErrors({...errors,
-                        address: 'address field is empty'
+                        address: 'Phone number is empty'
                     })
                     return
                 }
@@ -207,7 +219,21 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
                     error={(errors && errors.email) && true}
                     helperText={(errors && errors.email) && errors.email}/>
                 }
-                <TextField
+                <MuiPhoneNumber 
+                    className={classes.textField}
+                    id="phone-number-1"
+                    label="Phone Number"
+                    placeholder="Phone Number"
+                    name="phonenumber"
+                    value={phonenumber}
+                    onlyCountries={['ie', 'gb']}
+                    defaultCountry='ie'
+                    onChange={value => onChange(value)}
+                    variant="outlined"
+                    error={(errors && errors.phonenumber) && true}
+                    helperText={(errors && errors.phonenumber) && errors.phonenumber}
+                />
+                {/* <TextField
                     className={classes.textField}
                     id="outlined-textarea-2"
                     label="Phone Number"
@@ -219,7 +245,7 @@ const ShippingStep = ({ shoppingcart, dispatch, user, saveDetails, getDetails}) 
                     variant="outlined"
                     error={(errors && errors.phonenumber) && true}
                     helperText={(errors && errors.phonenumber) && errors.phonenumber}
-                />
+                /> */}
                 {/* <TextField
                     className={classes.textField}
                     id="outlined-textarea-3"
