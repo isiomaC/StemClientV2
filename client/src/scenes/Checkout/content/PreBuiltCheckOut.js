@@ -115,7 +115,7 @@ const PreBuiltCheckOut = ({user, isAuthenticated, clearCart, getDetails, shoppin
                 // }
             }
         )()
-    }, [shoppingcart, user, getDetails]);
+    }, [shoppingcart.items, user, getDetails]);
 
     // const Message = ({ message }) => (
     //     <section className={classes.message}>
