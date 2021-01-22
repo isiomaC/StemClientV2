@@ -102,50 +102,47 @@ const ShopCard = (props) => {
     
     const { push } = useHistory()
 
-    // console.log(props.description)
-
     return (
         <Card elevation={0} className={classes.card}>
-            {/* <CardActionArea > */}
-                <CardMedia component="div" 
-                        alt="Preview Image"
-                        title={props.title}
-                        className={classes.cardMedia}
-                        onClick={() => {
-                            push(`/product/${id}`)
-                        }}>
-                            <Avatar  variant={props.variant} alt="Remy Sharp" className={classes.bigAvatar} src={props.image} />
-                </CardMedia>
-                <CardContent className={classes.cardContent}>
-                    <div className={classes.div} 
-                         onClick={() => push(`/product/${id}`)}>
+            <CardMedia component="div" 
+                    alt="Preview Image"
+                    title={props.title}
+                    className={classes.cardMedia}
+                    onClick={() => {
+                        push(`/product/${id}`)
+                    }}>
+                        <Avatar  variant={props.variant} alt="Remy Sharp" className={classes.bigAvatar} src={props.image} />
+            </CardMedia>
+            <CardContent className={classes.cardContent}>
+                <div className={classes.div} 
+                        onClick={() => push(`/product/${id}`)}>
 
-                        <Grid item style={{ display: 'inline'}} xs={12}>
-                            <div style={{display: 'flex', alignItems: 'flex-start'}}>
-                                <Typography variant={isXSmall ? 'body2' : 'h6' } align="left">
-                                    {props.title}
-                                </Typography>
-                            </div>
-                            <div className={classes.description} style={{ fontSize: isXSmall ? '11px' : '15px'}} >
-                                {/* {props.description !== "undefined" && parse(props.description)} */}
-                                {props.description !== "undefined" &&  props.description.split(/<.*?>/g)}
-                            </div>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Typography>€{props.price}</Typography>
-                        </Grid>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center'}}>
-                        <Button
-                            variant="outlined"
-                            onClick={() =>
-                                 addToCart(product.idx, 1, product.base64, product.name, product.price, product.benefits, parseInt(product.stock, 10), product.category_id )
-                            }
-                            className={classes.button}
-                            startIcon={<ShoppingBasketIcon/>}>
-                        </Button>
-                    </div>
-                </CardContent>
+                    <Grid item style={{ display: 'inline'}} xs={9}>
+                        <div style={{display: 'flex', alignItems: 'flex-start'}}>
+                            <Typography variant={isXSmall ? 'body2' : 'h6' } align="left">
+                                {props.title}
+                            </Typography>
+                        </div>
+                        <div className={classes.description} style={{ fontSize: isXSmall ? '11px' : '15px'}} >
+                            {/* {props.description !== "undefined" && parse(props.description)} */}
+                            {props.description !== "undefined" &&  props.description.split(/<.*?>/g)}
+                        </div>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Typography style={{ fontSize: isXSmall ? '11px' : '15px'}}>€{props.price}</Typography>
+                    </Grid>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center'}}>
+                    <Button
+                        variant="outlined"
+                        onClick={() =>
+                                addToCart(product.idx, 1, product.base64, product.name, product.price, product.benefits, parseInt(product.stock, 10), product.category_id )
+                        }
+                        className={classes.button}
+                        startIcon={<ShoppingBasketIcon/>}>
+                    </Button>
+                </div>
+            </CardContent>
         </Card>
     )
 }

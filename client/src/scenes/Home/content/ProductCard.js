@@ -11,7 +11,6 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Avatar from '@material-ui/core/Avatar';
-import { useMediaQuery } from '@material-ui/core/';
 
 const useStyles = makeStyles(theme=> ({
     card: {
@@ -79,8 +78,6 @@ const useStyles = makeStyles(theme=> ({
 const ProductCard = (props) => {
     const classes = useStyles()
     const { push } = useHistory()
-
-    const isXSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
     return (
         <Card elevation={0} className={classes.card}>
