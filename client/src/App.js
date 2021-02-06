@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 //Importing material UI tools
@@ -7,6 +7,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+
+//Contents
+import NewsLetterDialog from './Content/NewsLetterDialog'
+
 //Background Image
 import centerlg from './img/Logo.png';
 
@@ -86,9 +91,15 @@ if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
 
-function App() {
 
+
+function App() {
   const classes= useStyles()
+
+  const [openDialog, setOpenDialog] = useState(false)
+
+  const [subscribe, setSubscribed] = useState(JSON.parse(localStorage.getItem("subscribed")))
+
   // const [dimensions, setDimensions] = React.useState({ 
   //   height: window.innerHeight,
   //   width: window.innerWidth
@@ -101,6 +112,20 @@ function App() {
   //    })
   // }
 
+  useEffect( () => {
+    if (subscribe){
+      console.log("subscribed")
+    }else{
+      const timer = setTimeout(() => {
+        setOpenDialog(true)
+      }, 6000); //after 6 seconds
+    }
+  }, [])
+
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
+  
   useEffect(() => {
     store.dispatch(loadUser()).catch(console.log("Guest"))
   }, []);
@@ -112,24 +137,24 @@ function App() {
             <div className = {classes.root} style={{ backgroundAttachment: 'fixed' }} >
               <Box className={classes.root2}>
               {/*<DevNavBar/>*/}
-              <NavBar />
-              <Switch>
-                <Route exact path='/' render={(props) => <Home {...props}/>}/>
-                <Route  path='/product/:idx' render={(props) => <Product {...props}/>}/>
-                <Route  path='/login' component={Login}/>
-                <Route  path='/register' component={SignUp}/>
-                <Route  path='/shop' render={(props) => <Shop {...props}/>}/>
-                <Route  path='/blogs' render={(props) => <Blog {...props}/>}/>
-                <Route  path='/blog/:idx' render={(props) => <ViewBlog {...props}/>}/>
-                <Route  path='/checkout' render={(props) => <Checkout {...props}/>}/>
-                <Route  path='/aboutus' render={(props) => <About {...props}/>}/>
-                <Route  path='/resetpassword/:token?' render={(props) => <ResetPassword {...props}/>}/>
-                
-                {/* <PrivateRoute exact path='/admin/addproduct' component={AddBlog}/> */}
-                {/* <PrivateRoute exact path='/admin/addblog' component={AddBlog}/> */}
-              </Switch>
-
-              <Footer/>
+                <NavBar />
+                <Switch>
+                  <Route exact path='/' render={(props) => <Home {...props}/>}/>
+                  <Route  path='/product/:idx' render={(props) => <Product {...props}/>}/>
+                  <Route  path='/login' component={Login}/>
+                  <Route  path='/register' component={SignUp}/>
+                  <Route  path='/shop' render={(props) => <Shop {...props}/>}/>
+                  <Route  path='/blogs' render={(props) => <Blog {...props}/>}/>
+                  <Route  path='/blog/:idx' render={(props) => <ViewBlog {...props}/>}/>
+                  <Route  path='/checkout' render={(props) => <Checkout {...props}/>}/>
+                  <Route  path='/aboutus' render={(props) => <About {...props}/>}/>
+                  <Route  path='/resetpassword/:token?' render={(props) => <ResetPassword {...props}/>}/>
+                  
+                  {/* <PrivateRoute exact path='/admin/addproduct' component={AddBlog}/> */}
+                  {/* <PrivateRoute exact path='/admin/addblog' component={AddBlog}/> */}
+                </Switch>
+                <NewsLetterDialog open={openDialog} handleClose={handleClose} />
+                <Footer/>
               </Box>
             </div>
           </ThemeProvider>

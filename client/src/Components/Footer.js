@@ -74,7 +74,7 @@ const useStyles = makeStyles(theme => ({
 const Footer = () => {
     const classes = useStyles();
     const subText = "SUBSCRIBE TO OUR NEWSLETTER";
-    const tt = "Be One of the First to know about new releases";
+    const tt = "Be one of the first to know about new releases";
 
     const [email, setEmail] = useState('')
     const [open, setOpen] = useState(false)

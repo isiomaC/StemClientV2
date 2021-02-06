@@ -232,11 +232,11 @@ const Product = (props) => {
                       {product.product.benefits !== "undefined" && parse(product.product.benefits) }   {/* .split(/\<.*?\>/g) */}
                     </div>
                     <Typography className={classes.rows} style={{ textAlign: 'left'}} variant="body1">
-                        <i>INGREDIENTS:{" "}{product.product.ingredients} </i>
+                        <i>INGREDIENTS:{" "}{product.product.ingredients.split(/<.*?>/g)} </i>
                     </Typography>
                     <Typography className={classes.topRows}>
                          {"Share:"} 
-                         
+                          {/* <Hidden><Typography>{window.location.href}</Typography></Hidden> */}
                           <ShareIcon onClick={() => copyToClipBoard() } style={{ marginLeft: 20}} className={classes.shareIcon}/> 
                           { alert.length > 0 &&  <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
                                                     <Alert onClose={handleSnackbarClose} >
