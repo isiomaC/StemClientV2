@@ -98,7 +98,9 @@ function App() {
 
   const [openDialog, setOpenDialog] = useState(false)
 
-  const [subscribe, setSubscribed] = useState(JSON.parse(localStorage.getItem("subscribed")))
+  // const [subscribe, setSubscribed] = useState(JSON.parse(localStorage.getItem("subscribed")))
+
+  const [visited, setVisited] = useState(JSON.parse(localStorage.getItem("visited")))
 
   // const [dimensions, setDimensions] = React.useState({ 
   //   height: window.innerHeight,
@@ -113,8 +115,8 @@ function App() {
   // }
 
   useEffect( () => {
-    if (subscribe){
-      console.log("subscribed")
+    if (visited){
+      console.log("visited")
     }else{
       const timer = setTimeout(() => {
         setOpenDialog(true)
@@ -124,6 +126,7 @@ function App() {
 
   const handleClose = () => {
     setOpenDialog(false);
+    localStorage.setItem("visited", JSON.stringify(true))
   };
   
   useEffect(() => {

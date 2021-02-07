@@ -1,4 +1,5 @@
 //Material UI COmponents
+import { useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -7,7 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container'
-import { useState } from 'react'
 
 //Icons
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -41,7 +41,8 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '12px'
+        padding: '12px',
+        fontFamily: 'Big Shoulders Display'
     },
     rightTextContainer: {
         margin: '10px 0',
@@ -82,7 +83,7 @@ const NewsLetterDialog = ({ open, handleClose }) => {
                 if (res.data.success){
                     alert('Sign up Complete') 
                     setEmail('')
-                    localStorage.setItem("subscribed", JSON.stringify(true))
+                    localStorage.setItem("visited", JSON.stringify(true))
                     //dispatch(setVisited)
                 }
             }
@@ -91,7 +92,7 @@ const NewsLetterDialog = ({ open, handleClose }) => {
     
             if(e.response.data.subscribed){
                 alert('Already Subcribed')
-                localStorage.setItem("subscribed", JSON.stringify(true))
+                localStorage.setItem("visited", JSON.stringify(true))
                 setEmail('')
             }else if (e.response.data.errors[0].msg){
                 alert(e.response.data.errors[0].msg)
