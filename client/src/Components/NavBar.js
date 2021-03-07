@@ -26,6 +26,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 //Icons
 import logo from '../img/InFiniC.png'
+import NewLogo from '../img/New02.png'
+
 import HandleScroll from '../Content/HandleScroll'
 import { logout } from '../redux/actions/auth'
 
@@ -210,7 +212,7 @@ const NavBar = (props) => {
                                     color="inherit"
                                     aria-label="open drawer"
                                     edge="end">
-                                    <img src={logo} alt="logo" className={classes.logo}  />
+                                    <img src={NewLogo} alt="logo" className={classes.logo}  />
                                 </IconButton>
                             </a>
                         </div>

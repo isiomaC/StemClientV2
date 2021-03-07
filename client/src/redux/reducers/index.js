@@ -6,6 +6,7 @@ import shopactions from './shopactions';
 import shoppingcart from './shoppingcart';
 import blogactions from './blogactions';
 import resetPwdReducer from './resetPwdReducer';
+import reviewActions from './reviewActions'
 
 
 export default combineReducers({
@@ -15,5 +16,6 @@ export default combineReducers({
   shopactions,
   shoppingcart,
   blogactions,
-  resetPwdReducer
+  resetPwdReducer,
+  reviewActions
 });

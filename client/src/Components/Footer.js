@@ -15,6 +15,7 @@ import Hidden from '@material-ui/core/Hidden';
 
 //Logo Image
 import logo from '../img/InFiniC.png'
+import NewLogo from '../img/New02.png'
 
 import InstagramIcon from '@material-ui/icons/Instagram';
 import PinterestIcon from '@material-ui/icons/Pinterest';
@@ -159,7 +160,7 @@ const Footer = () => {
             </Box>
             <Box display='flex' justifyContent='center' style={{ marginTop: '30px', marginBottom: '30px'}}>
                 <Link to={'/'} >
-                    <img src={logo} alt="logo" className={classes.logo}  />
+                    <img src={NewLogo} alt="logo" className={classes.logo}  />
                 </Link>
             </Box>
             <Box style={{  marginTop: '30px'  }} display='flex' justifyContent='center' color='textSecondary' component="div">

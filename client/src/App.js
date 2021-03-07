@@ -15,6 +15,7 @@ import NewsLetterDialog from './Content/NewsLetterDialog'
 //Background Image
 import centerlg from './img/Logo.png';
 
+
 //Components
 import Footer from './Components/Footer';
 import NavBar from './Components/NavBar'
@@ -36,7 +37,6 @@ import  store  from './store';
 
 import setAuthToken from './utils/setAuthToken'
 import { loadUser } from './redux/actions/auth'
-
 
 
 const theme = createMuiTheme({

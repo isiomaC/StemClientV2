@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import ProductInfoCarousel from '../../Content/ProductInfoCarousel'
-import { Typography } from '@material-ui/core'
+import { Container, Typography } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 
@@ -34,6 +34,9 @@ import approximatePrice from '../../utils/approximatePrice'
 import parse from 'html-react-parser';
 
 
+import { getReviewsForProduct } from '../../redux/actions/reviewActions'
+import FeaturedReviews from '../Home/sections/FeaturedReviews'
+
 const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -42,9 +45,7 @@ const useStyles = makeStyles(theme => ({
     root:{
         width: '100vw',
         // height: '100vh',
-        display: 'flex',
-        alignItems: 'center', 
-        justifyContent: 'center', 
+        display: 'block',
         [theme.breakpoints.down('xs')]: {
             // height: '100vh'
         }
@@ -102,7 +103,7 @@ const useStyles = makeStyles(theme => ({
 
 const Product = (props) => {
 
-    const { product, getProduct, match, user, addToCart, alert, setAlert } = props
+    const { product, getProduct, match, user, addToCart, alert, setAlert, getReviewsForProduct, reviews, error, loading } = props
 
     const [open, setOpen] = React.useState(false);
 
@@ -140,13 +141,14 @@ const Product = (props) => {
     React.useEffect(() => {
        
         (async () => {
-            await getProduct(match.params.idx)
+            await Promise.all([ getProduct(match.params.idx), getReviewsForProduct(match.params.idx)])
         })()
 
         window.scrollTo(0,0)
 
     }, [match, getProduct]);
 
+    console.log(reviews)
     // if (alert.length > 0){
     //     setSnackOpen(true)
     // }
@@ -245,8 +247,13 @@ const Product = (props) => {
                                                 </Snackbar> }
                         
                      </Typography>
+                     <br/>
+                     
                 </Grid>
             </Grid>
+            <Container>
+               <FeaturedReviews reviews={reviews} loading={loading}/>
+            </Container>
         </Box>
     )
 }
@@ -257,13 +264,17 @@ Product.propTypes = {
     getProduct: PropTypes.func,
     user: PropTypes.object,
     alert: PropTypes.arrayOf(PropTypes.object),
+    reviews: PropTypes.arrayOf(PropTypes.object)
 }
 
 const mapStateToProps = state => ({
     product: state.shopactions.product,
     loading: state.shopactions.loading,
     user: state.auth.user,
-    alert: state.alert
+    alert: state.alert,
+    reviews: state.reviewActions.reviews,
+    error: state.reviewActions.error,
+    loading: state.reviewActions.loading
 })
 
-export default connect(mapStateToProps, { getProduct, addToCart, setAlert })(Product);
+export default connect(mapStateToProps, { getProduct, addToCart, setAlert, getReviewsForProduct })(Product);

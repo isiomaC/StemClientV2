@@ -2,17 +2,14 @@ import {
     ADD_REVIEWS,
     ADD_REVIEWS_ERROR, 
     SET_LOADING,
+    GET_REVIEWS_FOR_PRODUCT,
+    REVIEWS_ERROR
 } from './types';
+
+import setDispatchError from '../../utils/setDispatchError'
 import axios from 'axios'
 
-//import { uuid } from 'uuid';
-
-// const apiUrl ="https://inphinityapi.herokuapp.com/api"
 const apiUrl = process.env.REACT_APP_API_URL
-
-// const apiUrl = 'https://shrouded-hollows-95980.herokuapp.com/api'
-
-
 
 export const addReviews = (rating, product_id, comment) => async dispatch => {
 
@@ -56,4 +53,36 @@ export const addReviews = (rating, product_id, comment) => async dispatch => {
        
     }
   };
+
+  export const getReviewsForProduct = (product_id) => async dispatch => {
+    try{
+
+        dispatch({
+            type: SET_LOADING,
+            payload: true
+        })
+
+        const res = await axios.get(`${apiUrl}/reviews?filter={"product_id" : ${product_id}}`)
+
+        dispatch({
+            type: SET_LOADING,
+            payload: false
+        })
+
+        dispatch({
+            type: GET_REVIEWS_FOR_PRODUCT,
+            payload: res.data
+        })
+        
+    }catch(error){
+
+        dispatch({
+            type: SET_LOADING,
+            payload: false
+        })
+
+        setDispatchError(dispatch, error, REVIEWS_ERROR)
+        
+    }
+}
   
