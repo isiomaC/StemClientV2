@@ -237,7 +237,7 @@ const Product = (props) => {
                       {product.product.benefits !== "undefined" && parse(product.product.benefits) }   {/* .split(/\<.*?\>/g) */}
                     </div>
                     {
-                        product.product.ingredients.toLowerCase() !== "accessory"  &&
+                        product.product.ingredients.trim().toLowerCase() !== "accessory"  &&
                         <Typography className={classes.rows} style={{ textAlign: 'left'}} variant="body1">
                             <i>INGREDIENTS:{" "}{product.product.ingredients.split(/<.*?>/g)} </i>
                         </Typography>
