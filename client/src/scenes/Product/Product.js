@@ -195,7 +195,10 @@ const Product = (props) => {
                     <Box className={classes.rows}>
                         €{approximatePrice(product.product.price)}
                     </Box> 
-                    {(alert.length > 0 && (typeof alert[0].msg === 'string' && alert[0].msg.startsWith('Please'))  ) && <Typography style={{color:'red', textAlign: 'left'}} variant='body2'> <b><i>{alert[0].msg}</i></b></Typography>}
+                    {(alert.length > 0 && (typeof alert[0].msg === 'string' && alert[0].msg.startsWith('Please'))  ) 
+                    && <Typography style={{color:'red', textAlign: 'left'}} variant='body2'> 
+                        <b><i>{alert[0].msg}</i></b>
+                    </Typography>}
                     <Box component='div' className={classes.rows}>  
                         <form className={classes.container} noValidate>
                             <TextField
@@ -233,9 +236,12 @@ const Product = (props) => {
                     <div className={classes.benefits}>
                       {product.product.benefits !== "undefined" && parse(product.product.benefits) }   {/* .split(/\<.*?\>/g) */}
                     </div>
-                    <Typography className={classes.rows} style={{ textAlign: 'left'}} variant="body1">
-                        <i>INGREDIENTS:{" "}{product.product.ingredients.split(/<.*?>/g)} </i>
-                    </Typography>
+                    {
+                        product.product.ingredients.toLowerCase() !== "accessory"  &&
+                        <Typography className={classes.rows} style={{ textAlign: 'left'}} variant="body1">
+                            <i>INGREDIENTS:{" "}{product.product.ingredients.split(/<.*?>/g)} </i>
+                        </Typography>
+                    }
                     <Typography className={classes.topRows}>
                          {"Share:"} 
                           {/* <Hidden><Typography>{window.location.href}</Typography></Hidden> */}
